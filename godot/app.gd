@@ -7,6 +7,7 @@ var levels: Array = []
 var current_index := 0
 var extreme := false                 # current run is Extreme (1.5x speed)
 var cleared_3star: Dictionary = {}   # level index -> true once 3-star cleared
+var best_score: Dictionary = {}      # "<index>" / "<index>_ex" -> high score
 
 
 func _ready() -> void:
@@ -17,16 +18,27 @@ func _ready() -> void:
 
 func _load_progress() -> void:
 	var cf := ConfigFile.new()
-	if cf.load("user://progress.cfg") == OK and cf.has_section("clears"):
+	if cf.load("user://progress.cfg") != OK:
+		return
+	if cf.has_section("clears"):
 		for k in cf.get_section_keys("clears"):
 			cleared_3star[int(k)] = true
+	if cf.has_section("best"):
+		for k in cf.get_section_keys("best"):
+			best_score[k] = int(cf.get_value("best", k))
 
 
 func _save_progress() -> void:
 	var cf := ConfigFile.new()
 	for k in cleared_3star:
 		cf.set_value("clears", str(k), true)
+	for k in best_score:
+		cf.set_value("best", k, best_score[k])
 	cf.save("user://progress.cfg")
+
+
+func _best_key(index: int) -> String:
+	return "%d%s" % [index, "_ex" if extreme else ""]
 
 
 ## Called by a level on a win. 3-star (no hearts lost) unlocks Extreme mode.
@@ -34,6 +46,20 @@ func record_result(index: int, hearts_lost: int) -> void:
 	if hearts_lost <= 0 and not cleared_3star.get(index, false):
 		cleared_3star[index] = true
 		_save_progress()
+
+
+## Records a run's score; returns true if it's a new personal best.
+func record_score(index: int, score: int) -> bool:
+	var key := _best_key(index)
+	if score > int(best_score.get(key, 0)):
+		best_score[key] = score
+		_save_progress()
+		return true
+	return false
+
+
+func get_best(index: int) -> int:
+	return int(best_score.get(_best_key(index), 0))
 
 
 func is_3star(index: int) -> bool:

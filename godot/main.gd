@@ -50,6 +50,11 @@ var health := 3
 var score := 0
 var combo := 0
 var combo_scale := 1.0
+var fever_gauge := 0.0
+var fever_active := false
+var fever_time := 0.0
+var notes_hit := 0
+var notes_missed := 0
 var current_beat := 0
 var last_judged_beat := -1
 var current_beat_data: Dictionary = {}
@@ -80,8 +85,13 @@ var combo_count: Label
 var feedback_label: Label
 var countdown_label: Label
 var hit_button: Button
+var fever_overlay: ColorRect
+var fever_label: Label
+var fever_bar_bg: Panel
+var fever_bar_fill: ColorRect
 var result_layer: ColorRect
 var result_title: Label
+var result_grade: Label
 var result_eval: Label
 var result_score: Label
 var tutorial_layer: Control
@@ -197,8 +207,45 @@ func _build_ui() -> void:
 	beat_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.add_child(beat_flash)
 
+	_build_fever()
 	_build_result()
 	_build_tutorial()
+
+
+func _build_fever() -> void:
+	fever_overlay = ColorRect.new()
+	fever_overlay.color = Color(1.0, 0.78, 0.2, 0.0)
+	fever_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	fever_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(fever_overlay)
+
+	fever_bar_bg = Panel.new()
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0, 0, 0, 0.3)
+	sb.set_corner_radius_all(7)
+	fever_bar_bg.add_theme_stylebox_override("panel", sb)
+	fever_bar_bg.position = Vector2(490, 56)
+	fever_bar_bg.size = Vector2(300, 14)
+	fever_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(fever_bar_bg)
+	fever_bar_fill = ColorRect.new()
+	fever_bar_fill.color = COL_GOLD
+	fever_bar_fill.position = Vector2(2, 2)
+	fever_bar_fill.size = Vector2(0, 10)
+	fever_bar_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fever_bar_bg.add_child(fever_bar_fill)
+
+	fever_label = Label.new()
+	fever_label.text = "FEVER!!"
+	fever_label.add_theme_font_size_override("font_size", 72)
+	fever_label.add_theme_color_override("font_color", Color("ff7a1a"))
+	fever_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	fever_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	fever_label.offset_top = 96
+	fever_label.pivot_offset = Vector2(640, 130)
+	fever_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fever_label.visible = false
+	add_child(fever_label)
 
 
 func _build_hud() -> void:
@@ -432,9 +479,9 @@ func _build_result() -> void:
 	sb.set_border_width_all(2)
 	sb.border_color = Color("252525")
 	card.add_theme_stylebox_override("panel", sb)
-	card.custom_minimum_size = Vector2(480, 330)
+	card.custom_minimum_size = Vector2(480, 430)
 	card.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	card.position = Vector2(-240, -165)
+	card.position = Vector2(-240, -215)
 	result_layer.add_child(card)
 
 	var vb := VBoxContainer.new()
@@ -447,9 +494,14 @@ func _build_result() -> void:
 	vb.alignment = BoxContainer.ALIGNMENT_CENTER
 	card.add_child(vb)
 
+	result_grade = Label.new()
+	result_grade.add_theme_font_size_override("font_size", 72)
+	result_grade.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vb.add_child(result_grade)
+
 	result_title = Label.new()
 	result_title.text = "PERFECT"
-	result_title.add_theme_font_size_override("font_size", 40)
+	result_title.add_theme_font_size_override("font_size", 32)
 	result_title.add_theme_color_override("font_color", COL_GOLD)
 	result_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(result_title)
@@ -613,8 +665,9 @@ func miss_or_skip_if_needed() -> void:
 
 
 func reward(kind: String, points: int) -> void:
-	score += points
+	score += points * (2 if fever_active else 1)   # Fever doubles
 	combo += 1
+	_fever_hit()
 	beat_outcome = "hit"
 	play_sfx(snd_hit)
 	flash_bar(COL_GOLD)
@@ -624,9 +677,29 @@ func reward(kind: String, points: int) -> void:
 	set_feedback(kind, COL_GOLD if kind == "Perfect" else COL_GREEN)
 
 
+func _fever_hit() -> void:
+	notes_hit += 1
+	if not fever_active:
+		fever_gauge = minf(1.0, fever_gauge + 0.06)
+		if fever_gauge >= 1.0:
+			fever_active = true
+			fever_time = 6.0
+			fever_label.visible = true
+			set_feedback("FEVER!", Color("ff7a1a"))
+
+
+func _end_fever() -> void:
+	fever_active = false
+	fever_gauge = 0.0
+	fever_label.visible = false
+
+
 func apply_penalty(text: String, outcome: String) -> void:
 	health -= 1
 	combo = 0
+	notes_missed += 1
+	if fever_active:
+		_end_fever()
 	beat_outcome = outcome
 	play_sfx(snd_miss)
 	flash_bar(COL_ACCENT)
@@ -726,6 +799,18 @@ func _process(_delta: float) -> void:
 	elif phase == "tutorial" and is_instance_valid(tutorial_arrow):
 		tutorial_arrow.position.y = tutorial_arrow_base_y + sin(Time.get_ticks_msec() * 0.006) * 11.0
 
+	# Fever timer + visuals.
+	var fp := conductor.pulse() if conductor.running else 0.0
+	if fever_active:
+		fever_time -= _delta
+		if fever_time <= 0.0:
+			_end_fever()
+	fever_overlay.color.a = (0.10 + 0.12 * fp) if fever_active else 0.0
+	fever_bar_fill.size.x = clampf(fever_gauge, 0.0, 1.0) * 296.0
+	fever_bar_fill.color = Color("ff7a1a") if fever_active else COL_GOLD
+	if fever_active:
+		fever_label.scale = Vector2.ONE * (1.0 + 0.18 * fp)
+
 	_update_juice(_delta)
 
 
@@ -769,6 +854,11 @@ func start_game() -> void:
 	health = 3
 	score = 0
 	combo = 0
+	fever_gauge = 0.0
+	fever_active = false
+	fever_label.visible = false
+	notes_hit = 0
+	notes_missed = 0
 	current_beat = 0
 	last_judged_beat = -1
 	beat_outcome = "neutral"
@@ -993,7 +1083,23 @@ func end_game(won: bool) -> void:
 	result_title.text = rank
 	result_title.add_theme_color_override("font_color", rank_col)
 	result_eval.text = verdict
-	result_score.text = "Score %d" % score
+	# Letter grade from accuracy + personal best.
+	var acc := float(notes_hit) / maxf(float(notes_hit + notes_missed), 1.0)
+	var grade := "D"
+	var gcol := COL_ACCENT
+	if acc >= 0.97: grade = "S"; gcol = Color("ff7a1a")
+	elif acc >= 0.88: grade = "A"; gcol = COL_GOLD
+	elif acc >= 0.75: grade = "B"; gcol = COL_GREEN
+	elif acc >= 0.55: grade = "C"; gcol = COL_INK
+	result_grade.text = grade
+	result_grade.add_theme_color_override("font_color", gcol)
+	var new_best := false
+	var best := score
+	if app:
+		new_best = app.record_score(app.current_index, score)
+		best = app.get_best(app.current_index)
+	var best_tag := "  ★NEW!" if new_best else ""
+	result_score.text = "Score %d　命中 %d%%　最高 %d%s" % [score, roundi(acc * 100.0), best, best_tag]
 	result_layer.visible = true
 
 

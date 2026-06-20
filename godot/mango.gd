@@ -65,6 +65,11 @@ var countdown_step := -1
 var health := 3
 var score := 0
 var combo := 0
+var fever_gauge := 0.0   # 0..1; full -> Fever (x2 score + visuals)
+var fever_active := false
+var fever_time := 0.0
+var notes_hit := 0       # for the end-screen accuracy + rank
+var notes_missed := 0
 var current_beat := 0
 var last_judged_beat := -1
 var current_beat_data: Dictionary = {}
@@ -118,8 +123,13 @@ var hearts: Array = []
 var feedback_label: Label
 var countdown_label: Label
 var hit_button: Button
+var fever_overlay: ColorRect
+var fever_label: Label
+var fever_bar_bg: Panel
+var fever_bar_fill: ColorRect
 var result_layer: ColorRect
 var result_title: Label
+var result_grade: Label
 var result_eval: Label
 var result_score: Label
 
@@ -169,8 +179,48 @@ func _ready() -> void:
 	_build_world()
 	_build_hud()
 	_build_button()
+	_build_fever()
 	_build_result()
 	start_game()
+
+
+func _build_fever() -> void:
+	# Full-screen warm tint that pulses during Fever.
+	fever_overlay = ColorRect.new()
+	fever_overlay.color = Color(1.0, 0.62, 0.12, 0.0)
+	fever_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	fever_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(fever_overlay)
+
+	# Fever gauge bar (top-center).
+	fever_bar_bg = Panel.new()
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0, 0, 0, 0.35)
+	sb.set_corner_radius_all(7)
+	fever_bar_bg.add_theme_stylebox_override("panel", sb)
+	fever_bar_bg.position = Vector2(490, 56)
+	fever_bar_bg.size = Vector2(300, 14)
+	fever_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(fever_bar_bg)
+	fever_bar_fill = ColorRect.new()
+	fever_bar_fill.color = Color("ffcf52")
+	fever_bar_fill.position = Vector2(2, 2)
+	fever_bar_fill.size = Vector2(0, 10)
+	fever_bar_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fever_bar_bg.add_child(fever_bar_fill)
+
+	# "FEVER!" banner.
+	fever_label = Label.new()
+	fever_label.text = "FEVER!!"
+	fever_label.add_theme_font_size_override("font_size", 72)
+	fever_label.add_theme_color_override("font_color", Color("ff7a1a"))
+	fever_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	fever_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	fever_label.offset_top = 92
+	fever_label.pivot_offset = Vector2(640, 130)
+	fever_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fever_label.visible = false
+	add_child(fever_label)
 
 
 # ===========================================================================
@@ -348,9 +398,9 @@ func _build_result() -> void:
 	sb.border_color = COL_MANGO
 	sb.set_corner_radius_all(10)
 	card.add_theme_stylebox_override("panel", sb)
-	card.custom_minimum_size = Vector2(480, 330)
+	card.custom_minimum_size = Vector2(480, 430)
 	card.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	card.position = Vector2(-240, -165)
+	card.position = Vector2(-240, -215)
 	result_layer.add_child(card)
 
 	var vb := VBoxContainer.new()
@@ -363,8 +413,14 @@ func _build_result() -> void:
 	vb.alignment = BoxContainer.ALIGNMENT_CENTER
 	card.add_child(vb)
 
+	# Big letter grade (S/A/B/C/D from accuracy).
+	result_grade = Label.new()
+	result_grade.add_theme_font_size_override("font_size", 72)
+	result_grade.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vb.add_child(result_grade)
+
 	result_title = Label.new()
-	result_title.add_theme_font_size_override("font_size", 40)
+	result_title.add_theme_font_size_override("font_size", 32)
 	result_title.add_theme_color_override("font_color", COL_MANGO_DK)
 	result_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(result_title)
@@ -563,6 +619,9 @@ func _press_up() -> void:
 	if not tail_reached:
 		hold_active = false
 		combo = 0
+		notes_missed += 1
+		if fever_active:
+			_end_fever()
 		update_hud()
 		set_feedback("回味中断", COL_WATER_DK)
 
@@ -573,6 +632,7 @@ func _judge_delta() -> float:
 
 func _start_hold() -> void:
 	_add_score(100)
+	_fever_hit()
 	play_sfx(snd_bite)
 	set_feedback("回味!", COL_MANGO_DK)
 	_hit_feedback(MANGO)
@@ -600,6 +660,7 @@ func _resolve_boundary() -> void:
 			last_judged_beat = current_beat
 			if hold_active:
 				_add_score(60)
+				_fever_hit()
 				play_sfx(snd_bite, -6.0)
 				set_feedback("回味…", COL_GREEN)
 				_hit_feedback(MANGO)
@@ -618,6 +679,7 @@ func _resolve_boundary() -> void:
 func reward(kind: String, points: int) -> void:
 	var k := int(current_beat_data["top"])
 	_add_score(points)
+	_fever_hit()
 	play_sfx(snd_bite)
 	set_feedback(kind, COL_MANGO_DK if kind == "Perfect" else COL_GREEN)
 	_hit_feedback(k)
@@ -647,9 +709,31 @@ func _spawn_fx(kind: int, pos: Vector2) -> void:
 
 
 func _add_score(points: int) -> void:
-	score += points
+	score += points * (2 if fever_active else 1)   # Fever doubles
 	combo += 1
 	update_hud()
+
+
+## A clean hit: count it (for accuracy) and charge the Fever gauge.
+func _fever_hit() -> void:
+	notes_hit += 1
+	if not fever_active:
+		fever_gauge = minf(1.0, fever_gauge + 0.06)
+		if fever_gauge >= 1.0:
+			_enter_fever()
+
+
+func _enter_fever() -> void:
+	fever_active = true
+	fever_time = 6.0
+	fever_label.visible = true
+	set_feedback("FEVER!", Color("ff7a1a"))
+
+
+func _end_fever() -> void:
+	fever_active = false
+	fever_gauge = 0.0
+	fever_label.visible = false
 
 
 ## Mango bite — step out of the shower: zoom in (and STAY) + clear the droplets.
@@ -669,6 +753,9 @@ func _step_in() -> void:
 func apply_penalty(text: String) -> void:
 	health -= 1
 	combo = 0
+	notes_missed += 1
+	if fever_active:
+		_end_fever()   # a miss kills Fever
 	play_sfx(snd_miss)
 	shake = maxf(shake, 9.0)
 	bar_color = COL_RED
@@ -825,6 +912,17 @@ func _process(delta: float) -> void:
 	hit_pop = move_toward(hit_pop, 0.0, delta * 6.0)
 	hold_head_pop = move_toward(hold_head_pop, 0.0, delta * 4.0)
 
+	# Fever: timed; the screen tints + pulses and the banner throbs.
+	if fever_active:
+		fever_time -= delta
+		if fever_time <= 0.0:
+			_end_fever()
+	fever_overlay.color.a = (0.10 + 0.12 * p) if fever_active else 0.0
+	fever_bar_fill.size.x = clampf(fever_gauge, 0.0, 1.0) * 296.0
+	fever_bar_fill.color = Color("ff7a1a") if fever_active else Color("ffcf52")
+	if fever_active:
+		fever_label.scale = Vector2.ONE * (1.0 + 0.18 * p)
+
 
 func _on_cycle_advance(_cycle_index: int) -> void:
 	if phase != "running":
@@ -868,6 +966,11 @@ func start_game() -> void:
 	health = 3
 	score = 0
 	combo = 0
+	fever_gauge = 0.0
+	fever_active = false
+	fever_label.visible = false
+	notes_hit = 0
+	notes_missed = 0
 	current_beat = 0
 	last_judged_beat = -1
 	conductor.stop()
@@ -922,6 +1025,7 @@ func _start_outro() -> void:
 		return
 	phase = "outro"
 	conductor.stop()
+	_end_fever()
 	lofi.play_outro()
 	set_feedback("吃完啦~", COL_MANGO_DK)
 	wetness = 0.0
@@ -962,7 +1066,23 @@ func end_game(won: bool) -> void:
 		result_title.add_theme_color_override("font_color", COL_WATER_DK)
 	result_title.text = rank
 	result_eval.text = verdict
-	result_score.text = "爽度 %d" % score
+	# Letter grade from accuracy + personal best.
+	var acc := float(notes_hit) / maxf(float(notes_hit + notes_missed), 1.0)
+	var grade := "D"
+	var gcol := COL_WATER_DK
+	if acc >= 0.97: grade = "S"; gcol = Color("ff7a1a")
+	elif acc >= 0.88: grade = "A"; gcol = COL_MANGO_DK
+	elif acc >= 0.75: grade = "B"; gcol = COL_GREEN
+	elif acc >= 0.55: grade = "C"; gcol = COL_TEXT
+	result_grade.text = grade
+	result_grade.add_theme_color_override("font_color", gcol)
+	var new_best := false
+	var best := score
+	if app:
+		new_best = app.record_score(app.current_index, score)
+		best = app.get_best(app.current_index)
+	var best_tag := "  ★新纪录!" if new_best else ""
+	result_score.text = "爽度 %d　命中 %d%%　最高 %d%s" % [score, roundi(acc * 100.0), best, best_tag]
 	result_layer.visible = true
 
 
