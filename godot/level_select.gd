@@ -20,8 +20,16 @@ const NODE_POS := [
 ]
 const SHIP_POS := Vector2(64, 430)
 
+## Mango "being eaten" sheet (5 frames of 150px). Looped on the level buttons.
+const MANGO_FRAMES := [0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 4, 4, 3, 2, 1]
+
 var _term_label: Label
 var _term_t := 0.0
+var _mango_tex: Texture2D
+var _anim_t := 0.0
+var _unlocked: Array = []
+var _armed := false   # ignore clicks for a moment so a leftover release from
+                      # the previous scene can't immediately launch a level
 
 
 func _ready() -> void:
@@ -35,14 +43,17 @@ func _ready() -> void:
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
 
+	_mango_tex = _load_tex("res://assets/mango.png")
+	# Terminal first so it sits BEHIND the level nodes/buttons (it used to cover
+	# and block 1-1's Extreme button).
+	_build_terminal()
 	var levels: Array = app.levels if app else []
 	for i in NODE_POS.size():
 		var lvl_name := str(levels[i]["name"]) if i < levels.size() else ""
 		var lvl_id := str(levels[i]["id"]) if i < levels.size() else "1-%d" % (i + 1)
 		var unlocked := bool(levels[i]["unlocked"]) if i < levels.size() else (i == 0)
+		_unlocked.append(unlocked)
 		_add_node(i, NODE_POS[i], lvl_name, lvl_id, unlocked)
-
-	_build_terminal()
 
 	var hint := Label.new()
 	hint.text = "ESC 返回标题"
@@ -53,9 +64,12 @@ func _ready() -> void:
 	add_child(hint)
 
 	queue_redraw()
+	get_tree().create_timer(0.25).timeout.connect(func() -> void: _armed = true)
 
 
 func _process(delta: float) -> void:
+	_anim_t += delta
+	queue_redraw()   # animate the mango icons
 	# Keep the binary terminal alive.
 	_term_t += delta
 	if _term_t >= 0.35:
@@ -95,18 +109,68 @@ func _add_node(index: int, center: Vector2, lvl_name: String, lvl_id: String, un
 	add_child(id_lbl)
 
 	if unlocked:
+		id_lbl.pivot_offset = id_lbl.size * 0.5
+		name_lbl.pivot_offset = name_lbl.size * 0.5
 		var btn := Button.new()
 		btn.flat = true
 		btn.size = Vector2(220, 100)
 		btn.position = center + Vector2(-110, -66)
+		btn.focus_mode = Control.FOCUS_NONE
+		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		var empty := StyleBoxEmpty.new()
 		for s in ["normal", "hover", "pressed", "focus"]:
 			btn.add_theme_stylebox_override(s, empty)
+		# Hover / press feedback animates the level node itself.
+		btn.mouse_entered.connect(func() -> void: _node_hover(id_lbl, name_lbl, true))
+		btn.mouse_exited.connect(func() -> void: _node_hover(id_lbl, name_lbl, false))
+		btn.button_down.connect(func() -> void: _node_scale(id_lbl, name_lbl, 0.92))
+		btn.button_up.connect(func() -> void: _node_scale(id_lbl, name_lbl, 1.14))
 		btn.pressed.connect(func() -> void:
 			var app = get_node_or_null("/root/App")
-			if app:
+			if app and _armed:
 				app.play_level(index))
 		add_child(btn)
+
+		# Extreme-mode button appears once the level is 3-star cleared.
+		var app2 = get_node_or_null("/root/App")
+		if app2 and app2.is_3star(index):
+			var ex := Button.new()
+			ex.text = "极限 1.5×"
+			ex.custom_minimum_size = Vector2(120, 38)
+			ex.position = center + Vector2(-60, 40)
+			ex.add_theme_font_size_override("font_size", 18)
+			var ec := StyleBoxFlat.new()
+			ec.bg_color = Color("3a0c0c")
+			ec.set_border_width_all(2)
+			ec.border_color = COL_ACCENT
+			ec.set_corner_radius_all(8)
+			ex.add_theme_stylebox_override("normal", ec)
+			var eh := ec.duplicate()
+			eh.bg_color = COL_ACCENT
+			ex.add_theme_stylebox_override("hover", eh)
+			ex.add_theme_stylebox_override("pressed", eh)
+			ex.add_theme_color_override("font_color", COL_ACCENT)
+			ex.add_theme_color_override("font_hover_color", Color.WHITE)
+			ex.focus_mode = Control.FOCUS_NONE
+			ex.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+			ex.pressed.connect(func() -> void:
+				var app = get_node_or_null("/root/App")
+				if app and _armed:
+					app.play_level(index, true))
+			add_child(ex)
+
+
+func _node_hover(id_lbl: Label, name_lbl: Label, on: bool) -> void:
+	var col := COL_ACCENT if on else COL_INK
+	id_lbl.add_theme_color_override("font_color", col)
+	name_lbl.add_theme_color_override("font_color", col)
+	_node_scale(id_lbl, name_lbl, 1.14 if on else 1.0)
+
+
+func _node_scale(id_lbl: Label, name_lbl: Label, to: float) -> void:
+	var tw := create_tween().set_parallel()
+	tw.tween_property(id_lbl, "scale", Vector2.ONE * to, 0.1)
+	tw.tween_property(name_lbl, "scale", Vector2.ONE * to, 0.1)
 
 
 func _build_terminal() -> void:
@@ -116,9 +180,11 @@ func _build_terminal() -> void:
 	box.add_theme_stylebox_override("panel", sb)
 	box.size = Vector2(150, 120)
 	box.position = NODE_POS[0] + Vector2(-65, 30)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE   # decorative — never block clicks
 	add_child(box)
 
 	_term_label = Label.new()
+	_term_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_term_label.add_theme_font_size_override("font_size", 16)
 	_term_label.add_theme_color_override("font_color", COL_TERM_GREEN)
 	_term_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -152,6 +218,38 @@ func _draw() -> void:
 		SHIP_POS + Vector2(14, 0),
 		SHIP_POS + Vector2(30, 28),
 	]), COL_INK)
+
+	# Animated mango on every level node (the button graphic).
+	for i in NODE_POS.size():
+		var on: bool = _unlocked[i] if i < _unlocked.size() else (i == 0)
+		_mango_icon(NODE_POS[i] + Vector2(0, -104), on)
+
+
+func _mango_icon(center: Vector2, unlocked: bool) -> void:
+	var s := 84.0
+	if _mango_tex:
+		var frame: int = MANGO_FRAMES[int(_anim_t * 9.0) % MANGO_FRAMES.size()]
+		var a := 1.0 if unlocked else 0.4
+		draw_texture_rect_region(_mango_tex, Rect2(center - Vector2(s, s) * 0.5, Vector2(s, s)),
+			Rect2(frame * 150, 0, 150, 150), Color(1, 1, 1, a))
+	else:
+		var body := PackedVector2Array()
+		for i in 26:
+			var ang := TAU * i / 26.0
+			body.append(center + Vector2(cos(ang) * 30.0, sin(ang) * 22.0))
+		draw_colored_polygon(body, Color("f3c200"))
+
+
+func _load_tex(path: String) -> Texture2D:
+	if ResourceLoader.exists(path):
+		var res := load(path)
+		if res is Texture2D:
+			return res
+	if FileAccess.file_exists(path):
+		var img := Image.new()
+		if img.load(path) == OK:
+			return ImageTexture.create_from_image(img)
+	return null
 
 
 func _dashed(a: Vector2, b: Vector2, dash := 20.0, gap := 14.0, width := 7.0) -> void:

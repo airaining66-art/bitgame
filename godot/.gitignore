@@ -1,6 +1,11 @@
 # Godot 4+ import cache / editor-generated files (regenerated on open).
 .godot/
 
-# Exported builds.
+# Exported builds (too large for git — distribute via Releases instead).
 /build/
 /export/
+*.exe
+bitgame.exe
+
+# Local debug/scratch.
+err.log

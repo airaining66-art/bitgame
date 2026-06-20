@@ -36,6 +36,7 @@ const TUTORIAL := [
 ]
 
 # --- systems ----------------------------------------------------------------
+var app
 var level: Dictionary
 var conductor: Conductor
 var chiptune: Chiptune
@@ -135,10 +136,12 @@ func _apply_cjk_font() -> void:
 
 # ===========================================================================
 func _ready() -> void:
-	var app = get_node_or_null("/root/App")
+	app = get_node_or_null("/root/App")
 	if app:
 		theme = app.ui_theme
-		level = app.current_level()["cfg"]
+		level = app.active_cfg()
+		if level.is_empty():
+			level = make_level_1()
 	else:
 		_apply_cjk_font()
 		level = make_level_1()
@@ -390,15 +393,21 @@ func _build_button() -> void:
 	hit_button.text = "PRESS"
 	hit_button.custom_minimum_size = Vector2(240, 96)
 	hit_button.add_theme_font_size_override("font_size", 30)
+	hit_button.focus_mode = Control.FOCUS_NONE
+	hit_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	var normal := StyleBoxFlat.new()
 	normal.bg_color = Color.WHITE
 	normal.set_border_width_all(16)
 	normal.border_color = COL_ACCENT
 	normal.set_corner_radius_all(48)
 	hit_button.add_theme_stylebox_override("normal", normal)
-	hit_button.add_theme_stylebox_override("hover", normal)
+	var hover := normal.duplicate()
+	hover.bg_color = Color("fff4f4")     # subtle warm tint on hover
+	hover.border_color = Color("e8242b")
+	hit_button.add_theme_stylebox_override("hover", hover)
 	var pressed := normal.duplicate()
-	pressed.bg_color = Color("fff0f0")
+	pressed.bg_color = Color("ffe0e0")   # clearly pushed
+	pressed.border_color = Color("b3151b")
 	hit_button.add_theme_stylebox_override("pressed", pressed)
 	hit_button.add_theme_color_override("font_color", COL_ACCENT)
 	hit_button.add_theme_color_override("font_hover_color", COL_ACCENT)
@@ -484,6 +493,8 @@ func _build_result() -> void:
 	again.custom_minimum_size = Vector2(180, 50)
 	again.add_theme_font_size_override("font_size", 19)
 	again.pressed.connect(start_game)
+	if app:
+		app.style_button(again, "default")
 	buttons.add_child(again)
 
 	var back := Button.new()
@@ -491,6 +502,8 @@ func _build_result() -> void:
 	back.custom_minimum_size = Vector2(180, 50)
 	back.add_theme_font_size_override("font_size", 19)
 	back.pressed.connect(_on_back_to_levels)
+	if app:
+		app.style_button(back, "default")
 	buttons.add_child(back)
 
 
@@ -522,6 +535,9 @@ func _on_press_button() -> void:
 ## never get long clumps of the same type (the failure mode of plain coin
 ## flips). Keeps the chart even but still varied. Tunable per level.
 func make_beat() -> Dictionary:
+	# Quiet wind-down at the very end so the last press is clearly the last.
+	if conductor.running and conductor.progress() > 0.9:
+		return {"top": 0, "bottom": 1, "should_press": false}
 	var should_press: bool
 	if skip_run >= int(level.get("max_skip_run", 2)):
 		should_press = true
@@ -724,6 +740,8 @@ func _on_cycle_advance(_cycle_index: int) -> void:
 	current_beat_data = queue.pop_front()
 	ensure_queue()
 	current_beat += 1
+	if conductor.progress() > 0.85:
+		chiptune.finale = true   # audible wind-down before the level ends
 
 
 func update_countdown(now: float) -> void:
@@ -949,6 +967,8 @@ func _on_level_finished() -> void:
 func end_game(won: bool) -> void:
 	phase = "won" if won else "lost"
 	conductor.stop()
+	if won and app:
+		app.record_result(app.current_index, 3 - health)   # 0 lost -> unlock Extreme
 	var rank := ""
 	var rank_col := COL_INK
 	var verdict := ""

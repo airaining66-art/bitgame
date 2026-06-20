@@ -49,14 +49,9 @@ func _menu_button(text: String, cb: Callable) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.add_theme_font_size_override("font_size", 38)
-	b.add_theme_color_override("font_color", COL_INK)
-	b.add_theme_color_override("font_hover_color", COL_ACCENT)
-	b.add_theme_color_override("font_pressed_color", COL_ACCENT)
-	b.add_theme_color_override("font_focus_color", COL_INK)
-	# Flat, box-less menu item.
-	var empty := StyleBoxEmpty.new()
-	for s in ["normal", "hover", "pressed", "focus", "disabled"]:
-		b.add_theme_stylebox_override(s, empty)
+	var app = get_node_or_null("/root/App")
+	if app:
+		app.style_button(b, "menu")
 	b.pressed.connect(cb)
 	return b
 
@@ -80,14 +75,23 @@ class RedButton:
 	const BODY := Color("d71920")
 	const BODY_DARK := Color("9c1016")
 	const TOP := Color("e8242b")
+	const TOP_HOVER := Color("ff3b42")
 	const OUTLINE := Color("141414")
 
 	var on_press := Callable()
 	var pressed_down := false
+	var hovering := false
 
 	func _ready() -> void:
 		custom_minimum_size = Vector2(280, 210)
 		size = custom_minimum_size
+		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		mouse_entered.connect(func() -> void:
+			hovering = true
+			queue_redraw())
+		mouse_exited.connect(func() -> void:
+			hovering = false
+			queue_redraw())
 
 	func _gui_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -137,7 +141,7 @@ class RedButton:
 		draw_line(Vector2(cx - rx, top_y), Vector2(cx - rx, bottom_y), OUTLINE, 5.0)
 		draw_line(Vector2(cx + rx, top_y), Vector2(cx + rx, bottom_y), OUTLINE, 5.0)
 
-		# Red cap.
+		# Red cap (brighter on hover).
 		var cap := _ellipse(Vector2(cx, top_y), rx, ry)
-		draw_colored_polygon(cap, TOP)
+		draw_colored_polygon(cap, TOP_HOVER if (hovering and not pressed_down) else TOP)
 		_outline(cap, OUTLINE, 6.0)

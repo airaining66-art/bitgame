@@ -35,6 +35,7 @@ const MELODY := [
 ]
 
 var enabled := true
+var finale := false   # last phrase wind-down
 var players: Array[AudioStreamPlayer] = []
 var pi := 0
 var arp_step := 0
@@ -65,6 +66,7 @@ func setup(conductor: Conductor) -> void:
 
 func reset() -> void:
 	arp_step = 0
+	finale = false
 
 
 func _on_subdivision(cycle_index: int, sub: int) -> void:
@@ -73,6 +75,15 @@ func _on_subdivision(cycle_index: int, sub: int) -> void:
 	var bar := int(cycle_index / 4.0)
 	var chord: Dictionary = CHORDS[bar % CHORDS.size()]
 	var arp: Array = chord["arp"]
+
+	# Finale: drop the busy bed, ring out the root + a kick so the end is heard.
+	if finale:
+		if sub == 0:
+			_play(s_bass, semi_to_pitch(chord["root"]), -7.0)
+			if cycle_index % 2 == 0:
+				_play(s_kick, 1.0, -4.0)
+				_play(s_square, semi_to_pitch(chord["arp"][0]), -13.0)
+		return
 
 	# Arp alternates ascending / descending each bar so the bed keeps moving.
 	var idx := arp_step % arp.size()
