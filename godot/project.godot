@@ -24,8 +24,9 @@ App="*res://app.gd"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/stretch/aspect="keep"
 
 [rendering]
 
 environment/defaults/default_clear_color=Color(0.96078, 0.96078, 0.94902, 1)
+textures/vram_compression/import_etc2_astc=true

@@ -32,9 +32,12 @@ const TILE := 120.0
 const SPACING := 150.0        # pixels per eighth-note of continuous scroll
 const LEAD := 6               # eighth-notes of lead-in before the first tick
 const JUDGE_E := 1.5          # eighths a tick leads the clock (on-beats hit the kick)
-const MIN_PERFECT_MS := 80.0
-const MIN_GOOD_MS := 135.0
+const MIN_PERFECT_MS := 100.0
+const MIN_GOOD_MS := 190.0
+const MIN_TRAP_MS := 125.0
 const COUNTDOWN_BEATS := ["3", "2", "1", "START"]
+const BABY_SPEED_SCALE := 1.5
+const BABY_RAMP_PER_SEC := 2.8
 
 # Icon cell states / lane categories (also the sprite-sheet row).
 const NONE := 0
@@ -46,6 +49,7 @@ const FACE := 1
 const K_NORMAL := 0
 const K_HOLD := 1
 const K_ROLL := 2
+const K_BABY := 3
 # emoji.png frames (top→bottom): heart / speechless / smiley.
 const EMO_HEART := 0
 const EMO_AWKWARD := 1
@@ -56,24 +60,24 @@ const EMO_SMILE := 2
 ## lane), or "E" (end). Difficulty steps up past 1-1/1-2: denser, more traps,
 ## plus holds and 連打 rolls.
 const CHART := [
-	# teach (brief)
-	"c..", "...", ".c.", "...", "c..", ".c.", "...", "c.c",
+	# date-night jitters: staggered face/food calls rather than 1-1 style singles
+	"c..", "...", "..c", ".c.", "c.c", "...", "..x", ".cc", "c..",
 	# off-beats & double-taps
-	".cc", "c..", ".cc", "...", "c.c", ".cc", "c..", ".cc",
+	"..c", "c.c", ".c.", "...", "..x", ".cc", "...", "c..", "..c", ".cc",
 	# traps you must NOT press
-	".x.", "c..", "cx.", ".c.", "xc.", ".cc", ".x.", "c..",
-	"x..", ".c.", "cx.", ".cc",
-	# 长按: both lanes held together, then a breather
-	"HOLD:3", "...", "c..", ".c.",
-	# fixed-beat 連打 (precise consecutive eighths)
-	".cc", ".cc", ".cc", "...",
+	".x.", "c.c", "cx.", "...", "..x", "..c", "x.c", ".cc", "c.x", "...",
+	"x..", ".c.", "cx.", "...", "..x", "..c", "...", "BABY:6", "...",
+	# 长按: both lanes held together (clean entry), then a breather
+	"HOLD:3", "...", "..c", "c.c",
+	# fixed-beat 連打 (precise consecutive eighths), with a visible pickup
+	"c..", ".cc", ".cc", "...", "..x", "..c", "...",
 	# free 連打-roll box (mash!)
-	"ROLL:3", "...", "c..", ".c.",
+	"ROLL:3", "...", "c.c", "..x", "..c", "BABY:6", "...",
 	# climax: traps + doubles + a shorter hold
-	".cc", "cx.", ".cc", "xc.", "c.c", ".x.", ".cc", "c..",
-	"HOLD:2", ".cc", "...",
+	"..c", "cx.", "...", "..x", ".cc", "x.c", "c.c", ".x.", "c.x", "..c",
+	"HOLD:2", ".cc", "...", "..x", "BABY:6", "...",
 	# finale wind-down
-	"...", "c..", "...", ".c.", "...", "c..", "E",
+	"c.c", "...", "..x", "..c", ".c.", "...", "c..", "E",
 ]
 
 # --- random draw (today's date + favourite) ---------------------------------
@@ -86,6 +90,7 @@ var food_correct := 0
 var food_wrong := 1
 var girls_tex: Texture2D
 var emoji_tex: Texture2D
+var baby_tex: Texture2D
 
 # --- grid (built from CHART) ------------------------------------------------
 var g_top: Array[int] = []
@@ -97,9 +102,12 @@ var n_ticks := 0
 var pass_g := 0
 var hold_segs: Array = []       # [{s,e}] inclusive tick range
 var roll_segs: Array = []
+var baby_segs: Array = []
 var hold_done: Array[bool] = []
 var hold_started: Array[bool] = []
 var roll_done: Array[bool] = []
+var baby_done: Array[bool] = []
+var baby_started: Array[bool] = []
 
 # --- state ------------------------------------------------------------------
 var app
@@ -128,6 +136,10 @@ var bot_flash_col := COL_JUDGE
 var btn_pop := 0.0
 var key_held := false
 var btn_held := false
+var extreme_baby_mode := false
+var baby_active := false
+var baby_idx := -1
+var baby_flash := 0.0
 
 # hold / roll runtime
 var hold_active := false
@@ -149,6 +161,9 @@ var stage: Control
 var dinner: _Dinner
 var rings: _Rings
 var caps: _Caps
+var baby_overlay: ColorRect
+var baby_avatar: _BabyIcon
+var baby_tiles: Array = []
 var bubble_l: _Bubble
 var bubble_r: _Bubble
 var beat_flash: ColorRect
@@ -209,9 +224,11 @@ func _ready() -> void:
 			level = make_cfg()
 	else:
 		level = make_cfg()
+	extreme_baby_mode = bool(level.get("extreme_baby_mode", false))
 
 	conductor = Conductor.new()
 	conductor.setup(level)
+	conductor.auto_finish = false   # the chart (pass_g >= n_ticks) ends the level, not the clock
 	add_child(conductor)
 	conductor.level_finished.connect(_on_level_finished)
 	conductor.downbeat.connect(_on_downbeat)
@@ -241,9 +258,22 @@ func _build_grid() -> void:
 	g_kind = []
 	hold_segs = []
 	roll_segs = []
+	baby_segs = []
 	for entry in CHART:
 		if entry == "E":
 			break
+		if entry.begins_with("BABY:"):
+			if not extreme_baby_mode:
+				continue
+			var n := int(entry.substr(5))
+			var s := g_top.size()
+			for b in n:
+				for half in 2:
+					g_top.append(CORRECT)
+					g_bot.append(CORRECT if half == 0 else NONE)
+					g_kind.append(K_BABY)
+			baby_segs.append({"s": s, "e": g_top.size() - 1})
+			continue
 		if entry.begins_with("HOLD:"):
 			var n := int(entry.substr(5))
 			var s := g_top.size()
@@ -275,7 +305,9 @@ func _build_grid() -> void:
 	g_press = []
 	judged = []
 	for g in n_ticks:
-		if g_kind[g] != K_NORMAL:
+		if g_kind[g] == K_BABY:
+			g_press.append(true)
+		elif g_kind[g] != K_NORMAL:
 			g_press.append(false)   # holds/rolls judged separately
 		else:
 			var hc := g_top[g] == CORRECT or g_bot[g] == CORRECT
@@ -290,6 +322,11 @@ func _build_grid() -> void:
 	roll_done = []
 	for i in roll_segs.size():
 		roll_done.append(false)
+	baby_done = []
+	baby_started = []
+	for i in baby_segs.size():
+		baby_done.append(false)
+		baby_started.append(false)
 
 
 func _tok(c: String) -> int:
@@ -311,6 +348,7 @@ func _build_scene() -> void:
 
 	girls_tex = _load_tex(["res://assets/girlsphoto.png"])
 	emoji_tex = _load_tex(["res://assets/emoji.png"])
+	baby_tex = _load_tex(["res://assets/baby.png"])
 
 	stage = Control.new()
 	stage.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -353,6 +391,33 @@ func _build_scene() -> void:
 	caps.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	caps.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.add_child(caps)
+
+	baby_overlay = ColorRect.new()
+	baby_overlay.color = Color(0, 0, 0, 0)
+	baby_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	baby_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stage.add_child(baby_overlay)
+
+	baby_avatar = _BabyIcon.new()
+	baby_avatar.sheet = baby_tex
+	baby_avatar.variant = 0
+	baby_avatar.size = Vector2(TILE, TILE)
+	baby_avatar.pivot_offset = Vector2(TILE, TILE) * 0.5
+	baby_avatar.position = Vector2(CENTER_X - TILE * 0.5, BOT_Y - TILE * 0.5)
+	baby_avatar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	baby_avatar.visible = false
+	stage.add_child(baby_avatar)
+
+	for i in 14:
+		var bt := _BabyIcon.new()
+		bt.sheet = baby_tex
+		bt.variant = 1
+		bt.size = Vector2(TILE, TILE)
+		bt.pivot_offset = Vector2(TILE, TILE) * 0.5
+		bt.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		bt.visible = false
+		stage.add_child(bt)
+		baby_tiles.append(bt)
 
 	for i in 8:
 		var fx := _HeartFx.new()
@@ -766,7 +831,11 @@ func perfect_window() -> float:
 
 
 func good_window() -> float:
-	return maxf(MIN_GOOD_MS, eighth_dur_ms() * 0.42)
+	return maxf(MIN_GOOD_MS, eighth_dur_ms() * 0.48)
+
+
+func trap_window() -> float:
+	return maxf(MIN_TRAP_MS, eighth_dur_ms() * 0.32)
 
 
 func _press_down() -> void:
@@ -797,17 +866,13 @@ func _press_down() -> void:
 		update_hud()
 		return
 
-	# 2) start a 长按 hold if its head is right here.
-	var hi := _current_hold()
-	if hi >= 0 and not hold_done[hi]:
-		if absf(cross_e(hold_segs[hi]["s"]) - clock_e()) <= 1.2:
-			_start_hold(hi)
-			return
-
-	# 3) normal precise judging.
+	# 2) route the press to whichever is NEARER — a normal note or the hold head
+	#    (both gated by the good window). This stops a press meant for a note
+	#    sitting beside a hold from accidentally grabbing the hold.
 	var e := clock_e()
 	var g := roundi(e - LEAD - JUDGE_E)
 	var gw := good_window()
+	var tw := trap_window()
 	var best := -1
 	var best_err := 1e9
 	for cand in [g - 1, g, g + 1]:
@@ -817,16 +882,26 @@ func _press_down() -> void:
 		if err <= gw and err < best_err:
 			best = cand
 			best_err = err
-	if best >= 0:
+
+	var hi := _current_hold()
+	var hold_err := 1e9
+	if hi >= 0 and not hold_done[hi] and not hold_started[hi]:
+		hold_err = absf(cross_e(hold_segs[hi]["s"]) - e) * eighth_dur_ms()
+
+	if best >= 0 and best_err <= hold_err:
 		judged[best] = true
 		_hit(best, best_err <= perfect_window())
 		return
+	if hold_err <= gw:
+		_start_hold(hi)
+		return
 
+	# 3) a wrong / un-pressable icon sat at center -> you blurted it.
 	for cand in [g - 1, g, g + 1]:
 		if cand < 0 or cand >= n_ticks or judged[cand] or g_kind[cand] != K_NORMAL:
 			continue
 		var err: float = absf(cross_e(cand) - e) * eighth_dur_ms()
-		if err <= gw and (g_top[cand] != NONE or g_bot[cand] != NONE):
+		if err <= tw and (g_top[cand] != NONE or g_bot[cand] != NONE):
 			judged[cand] = true
 			apply_penalty("喊错名字!")
 			return
@@ -853,6 +928,23 @@ func _press_up() -> void:
 
 
 func _hit(g: int, perfect: bool) -> void:
+	if g_kind[g] == K_BABY:
+		var bi := _baby_index_for_tick(g)
+		var is_head := bi >= 0 and g == int(baby_segs[bi]["s"])
+		if is_head:
+			baby_started[bi] = true
+			baby_active = true
+			baby_idx = bi
+		_add_score(180 if perfect else 120)
+		_fever_hit()
+		play_sfx(snd_say, -2.0)
+		set_feedback("宝宝模式!" if is_head else ("喂奶!" if perfect else "奶瓶!"), COL_GOLD)
+		zoom_punch = maxf(zoom_punch, 0.07 if perfect else 0.045)
+		baby_flash = 1.0
+		br_kind = "heart"
+		br_timer = 0.35
+		_pop_heart(Vector2(CENTER_X, BOT_Y if is_head else TOP_Y))
+		return
 	_add_score(150 if perfect else 95)
 	_fever_hit()
 	play_sfx(snd_say)
@@ -956,6 +1048,20 @@ func _current_roll() -> int:
 	return -1
 
 
+func _current_baby() -> int:
+	for bi in baby_segs.size():
+		if not baby_done[bi]:
+			return bi
+	return -1
+
+
+func _baby_index_for_tick(g: int) -> int:
+	for bi in baby_segs.size():
+		if g >= int(baby_segs[bi]["s"]) and g <= int(baby_segs[bi]["e"]):
+			return bi
+	return -1
+
+
 func _start_hold(hi: int) -> void:
 	hold_active = true
 	hold_idx = hi
@@ -1035,6 +1141,27 @@ func _update_roll() -> void:
 		roll_taps = 0
 
 
+func _update_baby(delta: float) -> void:
+	baby_active = false
+	baby_idx = -1
+	var target_scale := 1.0
+	var bi := _current_baby()
+	if bi >= 0:
+		var e := clock_e()
+		var s: int = baby_segs[bi]["s"]
+		var en: int = baby_segs[bi]["e"]
+		var margin := _margin_e()
+		var u_tail := cross_e(en) - e
+		if baby_started[bi] and u_tail >= -margin:
+			baby_active = true
+			baby_idx = bi
+			target_scale = BABY_SPEED_SCALE
+		if u_tail < -margin:
+			baby_done[bi] = true
+	conductor.tempo_scale = move_toward(conductor.tempo_scale, target_scale, delta * BABY_RAMP_PER_SEC)
+	baby_flash = move_toward(baby_flash, 0.0, delta * 4.0)
+
+
 # ===========================================================================
 # HUD
 # ===========================================================================
@@ -1074,7 +1201,61 @@ func layout() -> void:
 		top_tiles[i].visible = false
 	for i in range(bi, bot_tiles.size()):
 		bot_tiles[i].visible = false
+	_layout_baby(e)
 	_layout_caps(e)
+
+
+func _layout_baby(e: float) -> void:
+	if not extreme_baby_mode:
+		return
+	var visible_baby := false
+	var next_baby := _current_baby()
+	var ti := 0
+	for g in n_ticks:
+		if g_kind[g] != K_BABY:
+			continue
+		var seg_i := _baby_index_for_tick(g)
+		if seg_i < 0:
+			continue
+		var seg_head: int = baby_segs[seg_i]["s"]
+		var is_head := g == seg_head
+		if not is_head and not baby_started[seg_i]:
+			continue
+		var u := cross_e(g) - e
+		if u < -1.0 or u > 9.5:
+			continue
+		visible_baby = true
+		if not (judged[g] and u < 0.65) and ti < baby_tiles.size():
+			var tile: _BabyIcon = baby_tiles[ti]
+			tile.variant = 0 if is_head else 1
+			tile.visible = true
+			var near: float = clampf(1.0 - absf(u), 0.0, 1.0)
+			tile.scale = Vector2.ONE * (1.0 + near * 0.18)
+			tile.modulate = Color.WHITE.lerp(COL_GOLD, maxf(near, baby_flash) * 0.35)
+			var cx := CENTER_X + u * SPACING if is_head else CENTER_X - u * SPACING
+			var cy := BOT_Y if is_head else TOP_Y
+			tile.position = Vector2(cx - TILE * 0.5, cy - TILE * 0.5)
+			ti += 1
+	for i in range(ti, baby_tiles.size()):
+		baby_tiles[i].visible = false
+
+	if next_baby >= 0:
+		var s: int = baby_segs[next_baby]["s"]
+		var en: int = baby_segs[next_baby]["e"]
+		var u_head := cross_e(s) - e
+		var u_tail := cross_e(en) - e
+		visible_baby = visible_baby or (baby_started[next_baby] and u_head < 2.5 and u_tail > -1.0)
+	if baby_avatar:
+		baby_avatar.visible = false
+	if baby_overlay:
+		var danger := 1.0 if baby_active else 0.0
+		var end_flash := 0.0
+		if baby_idx >= 0:
+			var en2: int = baby_segs[baby_idx]["e"]
+			var left_e := cross_e(en2) - e
+			if left_e < 2.0:
+				end_flash = absf(sin(t * 18.0)) * 0.12
+		baby_overlay.color.a = 0.16 * danger + end_flash + baby_flash * 0.08
 
 
 ## Build the hold/roll capsule bars and feed them to the _Caps node.
@@ -1090,14 +1271,16 @@ func _layout_caps(e: float) -> void:
 		if u_tail < -1.0 or u_head > 9.5:
 			continue
 		var hot: bool = hold_active and hold_idx == hi
-		# top lane (food, from the left): head clamps at center, tail scrolls in
+		# top lane (food, from the left): head clamps at center, tail scrolls in.
+		# Late-release leniency can make the tail pass the center; keep the visual
+		# pinned at the judgement line instead of growing back in the wrong direction.
 		var th := CENTER_X - maxf(0.0, u_head) * SPACING
-		var tt := CENTER_X - u_tail * SPACING
+		var tt := minf(CENTER_X, CENTER_X - u_tail * SPACING)
 		hbars.append({"x0": minf(th, tt), "x1": maxf(th, tt), "y": TOP_Y, "head": th,
 			"reg": _region(FOOD, food_correct), "hot": hot})
 		# bottom lane (face, from the right)
 		var bh := CENTER_X + maxf(0.0, u_head) * SPACING
-		var bt := CENTER_X + u_tail * SPACING
+		var bt := maxf(CENTER_X, CENTER_X + u_tail * SPACING)
 		hbars.append({"x0": minf(bh, bt), "x1": maxf(bh, bt), "y": BOT_Y, "head": bh,
 			"reg": _region(FACE, face_correct), "hot": hot})
 	var rbars := []
@@ -1112,7 +1295,7 @@ func _layout_caps(e: float) -> void:
 			continue
 		var rhot: bool = roll_active and roll_idx == ri
 		var rth := CENTER_X - maxf(0.0, ruh) * SPACING
-		var rtt := CENTER_X - rut * SPACING
+		var rtt := minf(CENTER_X, CENTER_X - rut * SPACING)
 		rbars.append({"x0": minf(rth, rtt), "x1": maxf(rth, rtt), "y": TOP_Y, "head": rth,
 			"reg": _region(FOOD, food_correct), "hot": rhot, "taps": roll_taps})
 	caps.set_data(hbars, rbars, conductor.pulse() if conductor.running else 0.0)
@@ -1148,6 +1331,12 @@ func set_tiles_visible(v: bool) -> void:
 		tile.visible = v
 	if not v:
 		caps.set_data([], [], 0.0)
+	for tile in baby_tiles:
+		tile.visible = false
+	if baby_avatar:
+		baby_avatar.visible = false
+	if baby_overlay:
+		baby_overlay.color.a = 0.0
 
 
 # ===========================================================================
@@ -1158,6 +1347,7 @@ func _process(delta: float) -> void:
 	if phase == "countdown":
 		update_countdown(now_ms())
 	elif phase == "running":
+		_update_baby(delta)
 		_update_roll()
 		_update_hold()
 		_sweep_misses()
@@ -1224,6 +1414,14 @@ func _sweep_misses() -> void:
 	while pass_g < n_ticks and e > cross_e(pass_g) + margin:
 		if g_press[pass_g] and not judged[pass_g]:
 			judged[pass_g] = true
+			if g_kind[pass_g] == K_BABY:
+				var bi := _baby_index_for_tick(pass_g)
+				if bi >= 0 and pass_g == int(baby_segs[bi]["s"]) and not baby_started[bi]:
+					for bg in range(int(baby_segs[bi]["s"]), int(baby_segs[bi]["e"]) + 1):
+						judged[bg] = true
+					baby_done[bi] = true
+					baby_active = false
+					baby_idx = -1
 			apply_penalty("错过")
 			if phase != "running":
 				return
@@ -1271,14 +1469,22 @@ func start_game() -> void:
 		hold_started[i] = false
 	for i in roll_done.size():
 		roll_done[i] = false
+	for i in baby_done.size():
+		baby_done[i] = false
+		baby_started[i] = false
 	hold_active = false
 	hold_idx = -1
 	hold_savor_g = -1
 	roll_active = false
+	roll_idx = -1
 	roll_taps = 0
+	baby_active = false
+	baby_idx = -1
+	baby_flash = 0.0
 	key_held = false
 	btn_held = false
 	conductor.stop()
+	conductor.tempo_scale = 1.0
 	if music:
 		music.reset()
 	shake = 0.0
@@ -1306,7 +1512,10 @@ func _draw_today() -> void:
 	hint_label.text = "%s\n爱吃%s" % [FACE_DATA[face_correct]["name"], FOOD_DATA[food_correct]["name"]]
 	intro_face.set_icon(FACE, face_correct)
 	intro_food.set_icon(FOOD, food_correct)
-	intro_text.text = "[center]你约了心爱的女孩共进晚餐，\n她叫[color=#ffd24a]%s[/color]，她喜欢吃[color=#ffd24a]%s[/color]。\n[color=#e2584f]千万不要乱说话！[/color][/center]" % [FACE_DATA[face_correct]["name"], FOOD_DATA[food_correct]["name"]]
+	if extreme_baby_mode:
+		intro_text.text = "[center]你和[color=#ffd24a]%s[/color]已经结婚三年了，\n她最喜欢吃[color=#ffd24a]%s[/color]。\n现在你们有了一个宝宝，\n[color=#e2584f]如果他饿了，赶紧给他喂奶！[/color][/center]" % [FACE_DATA[face_correct]["name"], FOOD_DATA[food_correct]["name"]]
+	else:
+		intro_text.text = "[center]你约了心爱的女孩共进晚餐，\n她叫[color=#ffd24a]%s[/color]，她喜欢吃[color=#ffd24a]%s[/color]。\n[color=#e2584f]千万不要乱说话！[/color][/center]" % [FACE_DATA[face_correct]["name"], FOOD_DATA[food_correct]["name"]]
 
 
 func _enter_intro() -> void:
@@ -1349,6 +1558,7 @@ func _start_outro() -> void:
 		return
 	phase = "outro"
 	conductor.stop()
+	conductor.tempo_scale = 1.0
 	_end_fever()
 	music.play_outro()
 	set_feedback("说出口了…", COL_ROSE)
@@ -1373,26 +1583,43 @@ func _start_outro() -> void:
 func end_game(won: bool) -> void:
 	phase = "won" if won else "lost"
 	conductor.stop()
+	conductor.tempo_scale = 1.0
 	set_tiles_visible(false)
 	if won and app:
 		app.record_result(app.current_index, 3 - health)
 	var rank := ""
 	var verdict := ""
-	if won:
+	if won and app and app.extreme:
+		match 3 - health:
+			0:
+				rank = "平衡大师"
+				verdict = "人有两只手，平衡家庭绰绰有余。"
+			1:
+				rank = "新奇体验"
+				verdict = "咱们今天换个菜尝尝。"
+			_:
+				rank = "亡羊补牢"
+				verdict = "擦擦地板的事儿，别影响心情^^"
+		result_title.add_theme_color_override("font_color", COL_GOLD)
+	elif won:
 		match 3 - health:
 			0:
 				rank = "告白成功"
-				verdict = "她说「我也是」。全程没喊错名字,稳如老狗。"
+				verdict = "她说「我也是」❤全程甜蜜，稳得一批。"
 			1:
 				rank = "她答应了"
-				verdict = "中途走神了一下,好在及时收住。"
+				verdict = "喜欢的心是藏不住的♥"
 			_:
 				rank = "勉强过关"
-				verdict = "气氛一度尴尬,但她还是点了头。"
+				verdict = "心率180，这么紧张应该被看出来了"
 		result_title.add_theme_color_override("font_color", COL_GOLD)
 	else:
-		rank = "当场社死"
-		verdict = "你喊出了别人的名字……改天再约吧。"
+		if app and app.extreme:
+			rank = "为时已晚"
+			verdict = "你不要把奶吐到桌子上的汤里啊！"
+		else:
+			rank = "当场社死"
+			verdict = "你喊出了别人的名字……改天再约吧。"
 		result_title.add_theme_color_override("font_color", COL_RED)
 	result_title.text = rank
 	result_eval.text = verdict
@@ -1558,8 +1785,42 @@ class _Rings:
 		t += delta
 
 	func _draw() -> void:
+		_judge_frame()
 		_ring(Vector2(640, TOP_Y), top_color)
 		_ring(Vector2(640, BOT_Y), bot_color)
+
+	func _judge_frame() -> void:
+		# An "align here" column connecting the two judge rings. Instead of a flat
+		# bordered box (reads as a pasted-on UI panel), use a soft spotlight beam +
+		# a faint plumb line + crisp pixel corner brackets — intentional, in-style.
+		var pr := clampf(pulse, 0.0, 1.0)
+		var warm := Color(1.0, 0.92, 0.68)
+		var hw := 58.0
+		var y0 := TOP_Y - 78.0
+		var y1 := BOT_Y + 78.0
+		# Soft vertical light beam: brightest at center, fading out (no hard edges).
+		var strips := 7
+		for i in range(strips):
+			var f := (float(i) + 0.5) / float(strips)   # 0..1 across the half-width
+			var a := (0.05 + pr * 0.05) * (1.0 - f) * 0.5
+			draw_rect(Rect2(640.0 - hw * f, y0, hw * 2.0 * f, y1 - y0), Color(warm.r, warm.g, warm.b, a))
+		# Faint plumb line down the center.
+		draw_line(Vector2(640.0, y0 + 8.0), Vector2(640.0, y1 - 8.0),
+			Color(warm.r, warm.g, warm.b, 0.10 + pr * 0.14), 2.0)
+		# Pixel corner brackets — crisp marks, breathe with the beat.
+		var bcol := Color(warm.r, warm.g, warm.b, 0.5 + pr * 0.32)
+		_bracket(Vector2(640.0 - hw, y0), 1.0, 1.0, bcol)
+		_bracket(Vector2(640.0 + hw, y0), -1.0, 1.0, bcol)
+		_bracket(Vector2(640.0 - hw, y1), 1.0, -1.0, bcol)
+		_bracket(Vector2(640.0 + hw, y1), -1.0, -1.0, bcol)
+
+	func _bracket(corner: Vector2, hdir: float, vdir: float, col: Color) -> void:
+		var arm := 24.0
+		var th := 6.0
+		var hx := corner.x if hdir > 0.0 else corner.x - arm
+		draw_rect(Rect2(hx, corner.y - th * 0.5, arm, th), col)            # horizontal arm
+		var vy := corner.y if vdir > 0.0 else corner.y - arm
+		draw_rect(Rect2(corner.x - th * 0.5, vy, th, arm), col)            # vertical arm
 
 	func _ring(center: Vector2, col: Color) -> void:
 		var pr := clampf(pulse, 0.0, 1.0)
@@ -1675,11 +1936,12 @@ class _Caps:
 		var ch := emoji.get_height() / 3.0
 		var ew := float(emoji.get_width())
 		var reg := Rect2(0, EMO_HEART * ch, ew, ch)
+		var hh := 36.0
+		var hw := hh * ew / ch     # keep the heart's aspect ratio
 		var n := 3
 		for i in n:
 			var fx: float = lerpf(x0 + 40.0, x1 - 40.0, float(i + 1) / float(n + 1))
-			var hs := 30.0
-			draw_texture_rect_region(emoji, Rect2(Vector2(fx, y - 64.0) - Vector2(hs, hs) * 0.5, Vector2(hs, hs)), reg)
+			draw_texture_rect_region(emoji, Rect2(Vector2(fx, y - 66.0) - Vector2(hw, hh) * 0.5, Vector2(hw, hh)), reg)
 
 
 ## A speech bubble above a diner. Shows idle "..." or an emoji / your ♥ press.
@@ -1720,7 +1982,7 @@ class _Bubble:
 				for i in 3:
 					draw_circle(c + Vector2((i - 1) * 16.0, 0), 5.0, COL_INK)
 			"press":
-				_heart(c, 18.0, Color("e0708a"))
+				_heart(c, 27.0, Color("e0708a"))
 			"smile":
 				_emoji(c, 2)
 			"awkward":
@@ -1730,12 +1992,14 @@ class _Bubble:
 
 	func _emoji(c: Vector2, frame: int) -> void:
 		if sheet == null:
-			_heart(c, 18.0, Color("e0708a"))
+			_heart(c, 26.0, Color("e0708a"))
 			return
 		var ch := sheet.get_height() / 3.0
 		var ew := float(sheet.get_width())
-		var s := 44.0
-		draw_texture_rect_region(sheet, Rect2(c - Vector2(s, s) * 0.5, Vector2(s, s)),
+		# Bigger, and keep the source frame's aspect ratio so it isn't stretched.
+		var dh := 56.0
+		var dw := dh * ew / ch
+		draw_texture_rect_region(sheet, Rect2(c - Vector2(dw, dh) * 0.5, Vector2(dw, dh)),
 			Rect2(0, frame * ch, ew, ch))
 
 	func _heart(c: Vector2, r: float, col: Color) -> void:
@@ -1785,6 +2049,26 @@ class _HeartFx:
 		draw_colored_polygon(PackedVector2Array([
 			c + Vector2(-r * 0.92, 0.0), c + Vector2(r * 0.92, 0.0), c + Vector2(0, r),
 		]), col)
+
+
+## baby.png: 1x2 horizontal sheet, left = baby, right = bottle.
+class _BabyIcon:
+	extends Control
+
+	var sheet: Texture2D
+	var variant := 0
+
+	func _init() -> void:
+		texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+
+	func _draw() -> void:
+		if sheet:
+			var cw := sheet.get_width() * 0.5
+			var ch := float(sheet.get_height())
+			draw_texture_rect_region(sheet, Rect2(Vector2.ZERO, size),
+				Rect2(variant * cw, 0, cw, ch))
+			return
+		draw_rect(Rect2(Vector2.ZERO, size), Color("fdf6ea"))
 
 
 ## Heart "health" icon.

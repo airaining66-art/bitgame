@@ -132,6 +132,8 @@ var result_title: Label
 var result_grade: Label
 var result_eval: Label
 var result_score: Label
+var intro_layer: ColorRect
+var intro_label: Label
 
 # --- sfx --------------------------------------------------------------------
 var sfx_players: Array[AudioStreamPlayer] = []
@@ -180,6 +182,7 @@ func _ready() -> void:
 	_build_hud()
 	_build_button()
 	_build_fever()
+	_build_intro()
 	_build_result()
 	start_game()
 
@@ -474,6 +477,46 @@ func _build_result() -> void:
 	buttons.add_child(back)
 
 
+func _build_intro() -> void:
+	intro_layer = ColorRect.new()
+	intro_layer.color = Color(0, 0, 0, 0.55)
+	intro_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	intro_layer.visible = false
+	add_child(intro_layer)
+
+	var card := Panel.new()
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color("fff5cc")
+	sb.set_border_width_all(4)
+	sb.border_color = COL_MANGO_DK
+	sb.set_corner_radius_all(10)
+	card.add_theme_stylebox_override("panel", sb)
+	card.custom_minimum_size = Vector2(640, 220)
+	card.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	card.position = Vector2(-320, -110)
+	intro_layer.add_child(card)
+
+	intro_label = Label.new()
+	intro_label.add_theme_font_size_override("font_size", 30)
+	intro_label.add_theme_color_override("font_color", COL_TEXT)
+	intro_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	intro_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	intro_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	intro_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	intro_label.offset_left = 34
+	intro_label.offset_right = -34
+	card.add_child(intro_label)
+
+	var hint := Label.new()
+	hint.text = "空格 / 点击 开始"
+	hint.add_theme_font_size_override("font_size", 16)
+	hint.add_theme_color_override("font_color", COL_MUTED)
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	hint.offset_top = -34
+	intro_layer.add_child(hint)
+
+
 # ===========================================================================
 # Input
 # ===========================================================================
@@ -483,7 +526,10 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			if event.pressed:
 				key_held = true
-				_press_down()
+				if phase == "intro":
+					_enter_countdown()
+				else:
+					_press_down()
 			else:
 				key_held = false
 				_press_up()
@@ -491,6 +537,9 @@ func _input(event: InputEvent) -> void:
 			start_game()
 		elif event.pressed and event.keycode == KEY_ESCAPE and app:
 			app.goto_levels()
+	elif event is InputEventMouseButton and event.pressed \
+			and event.button_index == MOUSE_BUTTON_LEFT and phase == "intro":
+		_enter_countdown()
 
 
 # ===========================================================================
@@ -990,11 +1039,23 @@ func start_game() -> void:
 	result_layer.visible = false
 	bpm_label.text = str(int(level["start_bpm"]))
 	update_hud()
-	_enter_countdown()
+	_enter_intro()
+
+
+func _enter_intro() -> void:
+	phase = "intro"
+	intro_label.text = "我又下单了一箱，根本停不下来！" if (app and app.extreme) else "网上说边洗澡边吃芒果很爽，我看看怎么回事儿"
+	intro_layer.visible = true
+	countdown_label.visible = false
+	hold_frame.visible = false
+	set_tiles_visible(false)
+	set_feedback("", COL_MUTED)
 
 
 func _enter_countdown() -> void:
 	phase = "countdown"
+	if intro_layer:
+		intro_layer.visible = false
 	countdown_start = now_ms()
 	countdown_step = -1
 	countdown_label.visible = true
@@ -1048,21 +1109,37 @@ func end_game(won: bool) -> void:
 		app.record_result(app.current_index, 3 - health)   # 0 lost -> unlock Extreme
 	var rank := ""
 	var verdict := ""
-	if won:
+	if won and app and app.extreme:
 		match 3 - health:
 			0:
-				rank = "PERFECT"
-				verdict = "淋浴配芒果，人生巅峰享受"
+				rank = "是淋浴还是淋雨"
+				verdict = "I'm singin' in the rain, just singin' in the rain"
 			1:
-				rank = "GREAT"
+				rank = "umbrella"
+				verdict = "Maybe in magazines, but you'll still be my star"
+			_:
+				rank = "血糖战士"
+				verdict = "有点齁住了，看来一天最多吃两个。"
+		result_title.add_theme_color_override("font_color", COL_MANGO_DK)
+	elif won:
+		match 3 - health:
+			0:
+				rank = "淋浴战神"
+				verdict = "我就是山里最灵活的猴"
+			1:
+				rank = "宣的很"
 				verdict = "差一口就上天了，明天还能上班"
 			_:
-				rank = "CLEAR"
-				verdict = "至少芒果没掉地上"
+				rank = "节约粮食"
+				verdict = "淋了点水，还能吃"
 		result_title.add_theme_color_override("font_color", COL_MANGO_DK)
 	else:
-		rank = "GAME OVER"
-		verdict = "芒果都凉了，重新来过吧"
+		if app and app.extreme:
+			rank = "量变累积质变"
+			verdict = "不好，起疹子了，这怕不是过敏啊"
+		else:
+			rank = "手滑了一下"
+			verdict = "不是哥们你咋掉地上了QAQ"
 		result_title.add_theme_color_override("font_color", COL_WATER_DK)
 	result_title.text = rank
 	result_eval.text = verdict

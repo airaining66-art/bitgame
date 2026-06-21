@@ -1,0 +1,2 @@
+# Export build outputs (binaries — distribute via GitHub Releases, not git)
+/builds/

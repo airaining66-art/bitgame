@@ -17,6 +17,8 @@ const JUDGE_OFFSET := 0.75
 
 var level: Dictionary = {}
 var subdivisions := 4
+var tempo_scale := 1.0      # runtime tempo multiplier (1.5 during a baby burst)
+var auto_finish := true     # if false, never auto-stop at duration (the chart drives the end)
 
 var running := false
 var finished := false
@@ -65,7 +67,7 @@ func bpm_at(elapsed_ms: float) -> float:
 	var e := float(level.get("end_bpm", 100.0))
 	var k := float(level.get("bpm_curve_exp", 1.0))
 	var t: float = pow(clampf(elapsed_ms / duration_ms(), 0.0, 1.0), k)
-	return s + (e - s) * t
+	return (s + (e - s) * t) * tempo_scale
 
 
 func bpm() -> float:
@@ -116,7 +118,7 @@ func _process(_delta: float) -> void:
 		if sub == 0:
 			downbeat.emit(cycle_index)
 
-	if not finished and progress() >= 1.0:
+	if auto_finish and not finished and progress() >= 1.0:
 		finished = true
 		running = false
 		level_finished.emit()

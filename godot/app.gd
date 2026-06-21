@@ -70,6 +70,9 @@ func is_3star(index: int) -> bool:
 func active_cfg() -> Dictionary:
 	var cfg: Dictionary = current_level().get("cfg", {}).duplicate()
 	if extreme:
+		if str(current_level().get("scene", "")) == "res://schrodinger.tscn":
+			cfg["extreme_baby_mode"] = true
+			return cfg
 		cfg["start_bpm"] = float(cfg.get("start_bpm", 50.0)) * 1.5
 		cfg["end_bpm"] = float(cfg.get("end_bpm", 100.0)) * 1.5
 		cfg["duration_ms"] = float(cfg.get("duration_ms", 45000.0)) / 1.5

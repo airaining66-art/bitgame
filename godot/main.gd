@@ -34,6 +34,9 @@ const TUTORIAL := [
 	{"style": "player", "text": "我保证完成任务！！\n绝不给组长丢脸！！"},
 	{"style": "instruction", "bbcode": "[center]当[color=#d71920]上下数字重合[/color]并[color=#d71920]相同[/color]的时候\n按下下方的按钮吧\n[color=#d71920]不一样[/color]时千万[color=#d71920]不要[/color]按哦[/center]"},
 ]
+const EXTREME_TUTORIAL := [
+	{"style": "player", "text": "DDL是今晚12点，燃烧我的腱鞘炎！"},
+]
 
 # --- systems ----------------------------------------------------------------
 var app
@@ -98,6 +101,7 @@ var tutorial_layer: Control
 var tutorial_holder: Control
 var tutorial_index := 0
 var tutorial_armed := false
+var tutorial_steps: Array = []
 var tutorial_arrow: Node2D
 var tutorial_arrow_base_y := 0.0
 var top_tiles: Array = []
@@ -155,6 +159,7 @@ func _ready() -> void:
 	else:
 		_apply_cjk_font()
 		level = make_level_1()
+	tutorial_steps = EXTREME_TUTORIAL if (app and app.extreme) else TUTORIAL
 	tutorial_armed = (app.current_index == 0) if app else true
 
 	conductor = Conductor.new()
@@ -947,7 +952,7 @@ func _on_tutorial_input(event: InputEvent) -> void:
 
 func _advance_tutorial() -> void:
 	tutorial_index += 1
-	if tutorial_index >= TUTORIAL.size():
+	if tutorial_index >= tutorial_steps.size():
 		tutorial_layer.visible = false
 		_enter_countdown()
 	else:
@@ -958,7 +963,7 @@ func _show_tutorial_step(i: int) -> void:
 	for c in tutorial_holder.get_children():
 		c.queue_free()
 	tutorial_arrow = null
-	var step: Dictionary = TUTORIAL[i]
+	var step: Dictionary = tutorial_steps[i]
 	match step["style"]:
 		"boss":
 			_tut_box(step["text"], Color.BLACK, Color.WHITE, false,
@@ -1062,7 +1067,21 @@ func end_game(won: bool) -> void:
 	var rank := ""
 	var rank_col := COL_INK
 	var verdict := ""
-	if won:
+	if won and app and app.extreme:
+		match 3 - health:
+			0:
+				rank = "PERFECT"
+				rank_col = COL_GOLD
+				verdict = "成功上线，组织会记住你的好"
+			1:
+				rank = "GREAT"
+				rank_col = COL_GREEN
+				verdict = "12：00：59也算12点，不超时"
+			_:
+				rank = "CLEAR"
+				rank_col = COL_INK
+				verdict = "管它怎么跑，能跑就行"
+	elif won:
 		match 3 - health:  # hearts lost
 			0:
 				rank = "PERFECT"
@@ -1079,7 +1098,7 @@ func end_game(won: bool) -> void:
 	else:
 		rank = "GAME OVER"
 		rank_col = COL_ACCENT
-		verdict = "内核崩溃，重新编译再来一次"
+		verdict = "这是新来的claude，你明天不用来上班了" if (app and app.extreme) else "内核崩溃，重新编译再来一次"
 	result_title.text = rank
 	result_title.add_theme_color_override("font_color", rank_col)
 	result_eval.text = verdict
