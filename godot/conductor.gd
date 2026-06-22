@@ -27,6 +27,8 @@ var cycle_index := 0
 var cycle_start := 0.0      # ms, start of the current cycle
 var cycle_duration := 600.0 # ms
 var _last_sub := -1
+var paused := false
+var _pause_us := 0
 
 
 func setup(level_data: Dictionary) -> void:
@@ -38,6 +40,7 @@ func setup(level_data: Dictionary) -> void:
 func start() -> void:
 	start_us = Time.get_ticks_usec()
 	running = true
+	paused = false
 	finished = false
 	cycle_index = 0
 	cycle_start = 0.0
@@ -49,9 +52,27 @@ func stop() -> void:
 	running = false
 
 
+## Pause/resume freeze the beat clock seamlessly: time_ms() holds while paused,
+## and on resume the start origin is shifted forward by the paused duration so
+## the chart picks up exactly where it left off (no note jump).
+func pause() -> void:
+	if running and not paused:
+		paused = true
+		_pause_us = Time.get_ticks_usec()
+
+
+func resume() -> void:
+	if running and paused:
+		paused = false
+		start_us += Time.get_ticks_usec() - _pause_us
+
+
 # --- time / tempo -----------------------------------------------------------
 func time_ms() -> float:
-	return (Time.get_ticks_usec() - start_us) / 1000.0
+	var now := Time.get_ticks_usec()
+	if paused:
+		now = _pause_us
+	return (now - start_us) / 1000.0
 
 
 func duration_ms() -> float:
@@ -98,7 +119,7 @@ func pulse(sharpness := 3.0) -> float:
 
 
 func _process(_delta: float) -> void:
-	if not running:
+	if not running or paused:
 		return
 	var t := time_ms()
 

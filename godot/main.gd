@@ -1,4 +1,4 @@
-extends Control
+extends LevelBase
 ## Bit Reaction Rhythm — Level 1.
 ## Two bits slide to center each beat; press if they match, hold off if they
 ## differ. Timing -> Perfect / Good / Bad. Everything pulses to the Conductor.
@@ -19,7 +19,6 @@ const COL_TILE_BORDER := Color(0.129, 0.090, 0.051, 0.95)
 const SLIDE_RATIO := 0.5
 const MIN_PERFECT_MS := 140.0
 const MIN_GOOD_MS := 260.0
-const COUNTDOWN_BEATS := ["3", "2", "1", "START"]
 
 const TILE_W := 142.0
 const TILE_H := 174.0
@@ -39,32 +38,18 @@ const EXTREME_TUTORIAL := [
 ]
 
 # --- systems ----------------------------------------------------------------
-var app
-var level: Dictionary
-var conductor: Conductor
 var chiptune: Chiptune
 var binary_stream: BinaryStream
 
-# --- game state -------------------------------------------------------------
-var phase := "idle"            # idle | countdown | running | won | lost
-var countdown_start := 0.0
-var countdown_step := -1
-var health := 3
-var score := 0
-var combo := 0
+# --- game state (level-specific) --------------------------------------------
 var combo_scale := 1.0
-var fever_gauge := 0.0
-var fever_active := false
-var fever_time := 0.0
-var notes_hit := 0
-var notes_missed := 0
 var current_beat := 0
 var last_judged_beat := -1
 var current_beat_data: Dictionary = {}
 var queue: Array[Dictionary] = []
 var beat_outcome := "neutral"  # outcome of the current beat for the binary stream
-var skip_run := 0              # consecutive non-press beats generated
-var press_run := 0             # consecutive press beats generated
+var skip_run := 0
+var press_run := 0
 
 # --- juice ------------------------------------------------------------------
 var zoom_punch := 0.0
@@ -76,8 +61,6 @@ var bar_color := Color.WHITE
 var stage: Control
 var fx_layer: Node2D
 var beat_flash: ColorRect
-var score_label: Label
-var bpm_label: Label
 var hearts_box: HBoxContainer
 var heart_nodes: Array[Panel] = []
 var playfield: Panel
@@ -85,18 +68,7 @@ var hit_column: ColorRect
 var combo_panel: Control
 var combo_word: Label
 var combo_count: Label
-var feedback_label: Label
-var countdown_label: Label
 var hit_button: Button
-var fever_overlay: ColorRect
-var fever_label: Label
-var fever_bar_bg: Panel
-var fever_bar_fill: ColorRect
-var result_layer: ColorRect
-var result_title: Label
-var result_grade: Label
-var result_eval: Label
-var result_score: Label
 var tutorial_layer: Control
 var tutorial_holder: Control
 var tutorial_index := 0
@@ -111,70 +83,46 @@ var particles: Array[CPUParticles2D] = []
 var particle_i := 0
 
 # --- hit feedback sfx (separate from music) ---------------------------------
-var sfx_players: Array[AudioStreamPlayer] = []
-var sfx_i := 0
 var snd_hit: AudioStreamWAV
 var snd_miss: AudioStreamWAV
 
 
-func now_ms() -> float:
-	return Time.get_ticks_usec() / 1000.0
-
-
-func make_level_1() -> Dictionary:
+func make_cfg() -> Dictionary:
 	return {
-		"duration_ms": 45000.0,   # 45s level
-		"start_bpm": 50.0,
-		"end_bpm": 100.0,
-		"bpm_curve_exp": 1.6,     # >1 => ramps up faster toward the end
-		"subdivisions": 4,
-		"press_ratio": 0.6,       # target share of beats that need a press
-		"max_skip_run": 2,        # at most N non-press beats in a row
-		"max_press_run": 3,       # at most N press beats in a row
+		"duration_ms": 45000.0, "start_bpm": 50.0, "end_bpm": 100.0,
+		"bpm_curve_exp": 1.6, "subdivisions": 4,
+		"press_ratio": 0.6, "max_skip_run": 2, "max_press_run": 3,
 	}
 
 
-## Loads a CJK system font so Chinese UI text renders (Godot's default font is
-## Latin-only). Applied as the root theme's default font -> inherited by all.
-func _apply_cjk_font() -> void:
-	for path in ["C:/Windows/Fonts/msyh.ttc", "C:/Windows/Fonts/msyhl.ttc",
-			"C:/Windows/Fonts/simhei.ttf", "C:/Windows/Fonts/simsun.ttc"]:
-		if FileAccess.file_exists(path):
-			var f := FontFile.new()
-			f.data = FileAccess.get_file_as_bytes(path)
-			var th := Theme.new()
-			th.default_font = f
-			theme = th
-			return
-
-
 # ===========================================================================
-func _ready() -> void:
-	app = get_node_or_null("/root/App")
-	if app:
-		theme = app.ui_theme
-		level = app.active_cfg()
-		if level.is_empty():
-			level = make_level_1()
-	else:
-		_apply_cjk_font()
-		level = make_level_1()
+# LevelBase hooks
+# ===========================================================================
+func _make_music() -> Node:
+	chiptune = Chiptune.new()
+	return chiptune
+
+
+func _conf() -> Dictionary:
+	return {
+		"score_caption": "SCORE",
+		"text_col": COL_INK, "muted_col": COL_MUTED,
+		"countdown_col": COL_INK, "penalty_col": COL_ACCENT,
+		"fever_text": "FEVER!!", "fever_font": 72, "fever_col": Color("ff7a1a"), "fever_fill": COL_GOLD,
+		"fever_overlay": Color(1.0, 0.78, 0.2), "fever_overlay_a": 0.10,
+		"result_bg": Color.WHITE, "result_border": Color("252525"),
+		"title_col": COL_GOLD, "lose_col": COL_ACCENT,
+		"eval_bg": Color("faf8f3"), "eval_border": COL_GRID,
+		"again_label": "再来一局",
+		"score_fmt": "Score %d　命中 %d%%　最高 %d%s",
+		"grade_cols": {"S": Color("ff7a1a"), "A": COL_GOLD, "B": COL_GREEN, "C": COL_INK, "D": COL_ACCENT},
+	}
+
+
+func _build_level() -> void:
 	tutorial_steps = EXTREME_TUTORIAL if (app and app.extreme) else TUTORIAL
 	tutorial_armed = (app.current_index == 0) if app else true
-
-	conductor = Conductor.new()
-	conductor.setup(level)
-	add_child(conductor)
-	conductor.beat.connect(_on_cycle_advance)
-	conductor.level_finished.connect(_on_level_finished)
-
-	chiptune = Chiptune.new()
-	add_child(chiptune)
-	chiptune.setup(conductor)
-
-	_build_sfx()
 	_build_ui()
-	start_game()
 
 
 # ===========================================================================
@@ -194,7 +142,6 @@ func _build_ui() -> void:
 	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(stage)
 
-	_build_hud()
 	_build_playfield()
 	_build_button()
 
@@ -212,45 +159,7 @@ func _build_ui() -> void:
 	beat_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.add_child(beat_flash)
 
-	_build_fever()
-	_build_result()
 	_build_tutorial()
-
-
-func _build_fever() -> void:
-	fever_overlay = ColorRect.new()
-	fever_overlay.color = Color(1.0, 0.78, 0.2, 0.0)
-	fever_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	fever_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(fever_overlay)
-
-	fever_bar_bg = Panel.new()
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(0, 0, 0, 0.3)
-	sb.set_corner_radius_all(7)
-	fever_bar_bg.add_theme_stylebox_override("panel", sb)
-	fever_bar_bg.position = Vector2(490, 56)
-	fever_bar_bg.size = Vector2(300, 14)
-	fever_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(fever_bar_bg)
-	fever_bar_fill = ColorRect.new()
-	fever_bar_fill.color = COL_GOLD
-	fever_bar_fill.position = Vector2(2, 2)
-	fever_bar_fill.size = Vector2(0, 10)
-	fever_bar_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	fever_bar_bg.add_child(fever_bar_fill)
-
-	fever_label = Label.new()
-	fever_label.text = "FEVER!!"
-	fever_label.add_theme_font_size_override("font_size", 72)
-	fever_label.add_theme_color_override("font_color", Color("ff7a1a"))
-	fever_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	fever_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
-	fever_label.offset_top = 96
-	fever_label.pivot_offset = Vector2(640, 130)
-	fever_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	fever_label.visible = false
-	add_child(fever_label)
 
 
 func _build_hud() -> void:
@@ -471,114 +380,21 @@ func _build_button() -> void:
 	stage.add_child(hit_button)
 
 
-func _build_result() -> void:
-	result_layer = ColorRect.new()
-	result_layer.color = Color(0, 0, 0, 0.55)  # dim the game behind the card
-	result_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	result_layer.visible = false
-	add_child(result_layer)
-
-	var card := Panel.new()
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color.WHITE
-	sb.set_border_width_all(2)
-	sb.border_color = Color("252525")
-	card.add_theme_stylebox_override("panel", sb)
-	card.custom_minimum_size = Vector2(480, 430)
-	card.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	card.position = Vector2(-240, -215)
-	result_layer.add_child(card)
-
-	var vb := VBoxContainer.new()
-	vb.add_theme_constant_override("separation", 18)
-	vb.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	vb.offset_left = 30
-	vb.offset_top = 30
-	vb.offset_right = -30
-	vb.offset_bottom = -30
-	vb.alignment = BoxContainer.ALIGNMENT_CENTER
-	card.add_child(vb)
-
-	result_grade = Label.new()
-	result_grade.add_theme_font_size_override("font_size", 72)
-	result_grade.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vb.add_child(result_grade)
-
-	result_title = Label.new()
-	result_title.text = "PERFECT"
-	result_title.add_theme_font_size_override("font_size", 32)
-	result_title.add_theme_color_override("font_color", COL_GOLD)
-	result_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vb.add_child(result_title)
-
-	# Evaluation box — framed verdict line.
-	var eval_box := PanelContainer.new()
-	var eb := StyleBoxFlat.new()
-	eb.bg_color = Color("faf8f3")
-	eb.set_border_width_all(2)
-	eb.border_color = COL_GRID
-	eb.set_corner_radius_all(8)
-	eb.content_margin_left = 16
-	eb.content_margin_right = 16
-	eb.content_margin_top = 14
-	eb.content_margin_bottom = 14
-	eval_box.add_theme_stylebox_override("panel", eb)
-	vb.add_child(eval_box)
-	result_eval = Label.new()
-	result_eval.text = "你简直就是天才，人类容光永不灭"
-	result_eval.add_theme_font_size_override("font_size", 20)
-	result_eval.add_theme_color_override("font_color", COL_INK)
-	result_eval.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	result_eval.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	result_eval.custom_minimum_size = Vector2(400, 0)
-	eval_box.add_child(result_eval)
-
-	result_score = Label.new()
-	result_score.text = "Score 0"
-	result_score.add_theme_font_size_override("font_size", 20)
-	result_score.add_theme_color_override("font_color", COL_MUTED)
-	result_score.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vb.add_child(result_score)
-
-	var buttons := HBoxContainer.new()
-	buttons.add_theme_constant_override("separation", 14)
-	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	vb.add_child(buttons)
-
-	var again := Button.new()
-	again.text = "再来一局"
-	again.custom_minimum_size = Vector2(180, 50)
-	again.add_theme_font_size_override("font_size", 19)
-	again.pressed.connect(start_game)
-	if app:
-		app.style_button(again, "default")
-	buttons.add_child(again)
-
-	var back := Button.new()
-	back.text = "返回关卡"
-	back.custom_minimum_size = Vector2(180, 50)
-	back.add_theme_font_size_override("font_size", 19)
-	back.pressed.connect(_on_back_to_levels)
-	if app:
-		app.style_button(back, "default")
-	buttons.add_child(back)
-
-
 # ===========================================================================
-# Input
+# Input (level-specific space / tutorial; base handles R / Esc / pause)
 # ===========================================================================
-func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
-		if phase == "tutorial":
-			if event.keycode == KEY_SPACE or event.keycode == KEY_ENTER:
-				get_viewport().set_input_as_handled()
-				_advance_tutorial()
-			return
-		if event.keycode == KEY_SPACE:
+func _on_space(pressed: bool) -> void:
+	if pressed:
+		judge_press()
+
+
+func _extra_input(event: InputEvent) -> bool:
+	if phase == "tutorial" and event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_SPACE or event.keycode == KEY_ENTER:
 			get_viewport().set_input_as_handled()
-			judge_press()
-		elif event.keycode == KEY_R:
-			start_game()
+			_advance_tutorial()
+		return true
+	return false
 
 
 func _on_press_button() -> void:
@@ -648,14 +464,14 @@ func judge_press() -> void:
 	last_judged_beat = current_beat
 
 	if not current_beat_data["should_press"]:
-		apply_penalty("Wrong", "wrong")
+		_penalty("Wrong", "wrong")
 		return
 	if delta <= perfect_window():
 		reward("Perfect", 120)
 	elif delta <= good_window():
 		reward("Good", 80)
 	else:
-		apply_penalty("Bad", "wrong")
+		_penalty("Bad", "wrong")
 
 
 func miss_or_skip_if_needed() -> void:
@@ -663,7 +479,7 @@ func miss_or_skip_if_needed() -> void:
 		return
 	last_judged_beat = current_beat
 	if current_beat_data["should_press"]:
-		apply_penalty("Miss", "miss")
+		_penalty("Miss", "miss")
 		return
 	beat_outcome = "skip"
 	set_feedback("Skip", COL_MUTED)
@@ -682,48 +498,19 @@ func reward(kind: String, points: int) -> void:
 	set_feedback(kind, COL_GOLD if kind == "Perfect" else COL_GREEN)
 
 
-func _fever_hit() -> void:
-	notes_hit += 1
-	if not fever_active:
-		fever_gauge = minf(1.0, fever_gauge + 0.06)
-		if fever_gauge >= 1.0:
-			fever_active = true
-			fever_time = 6.0
-			fever_label.visible = true
-			set_feedback("FEVER!", Color("ff7a1a"))
-
-
-func _end_fever() -> void:
-	fever_active = false
-	fever_gauge = 0.0
-	fever_label.visible = false
-
-
-func apply_penalty(text: String, outcome: String) -> void:
-	health -= 1
-	combo = 0
-	notes_missed += 1
-	if fever_active:
-		_end_fever()
+## main's penalty adds the binary-stream outcome + flash/shake, then the base.
+func _penalty(text: String, outcome: String) -> void:
 	beat_outcome = outcome
 	play_sfx(snd_miss)
 	flash_bar(COL_ACCENT)
 	shake_amt = maxf(shake_amt, 12.0)
 	zoom_punch = minf(zoom_punch, -0.02)
-	update_hud()
-	set_feedback(text, COL_ACCENT)
-	if health <= 0:
-		end_game(false)
+	apply_penalty(text)
 
 
 # ===========================================================================
 # HUD
 # ===========================================================================
-func set_feedback(text: String, col: Color) -> void:
-	feedback_label.text = text
-	feedback_label.add_theme_color_override("font_color", col)
-
-
 func update_hud() -> void:
 	score_label.text = str(score)
 	for i in heart_nodes.size():
@@ -795,31 +582,18 @@ func set_tiles_visible(v: bool) -> void:
 # ===========================================================================
 # Main loop
 # ===========================================================================
-func _process(_delta: float) -> void:
-	if phase == "countdown":
-		update_countdown(now_ms())
-	elif phase == "running":
-		layout_tiles(clampf(conductor.beat_phase(), 0.0, 1.0))
-		bpm_label.text = str(roundi(conductor.bpm()))
-	elif phase == "tutorial" and is_instance_valid(tutorial_arrow):
+func _advance(_delta: float) -> void:
+	layout_tiles(clampf(conductor.beat_phase(), 0.0, 1.0))
+	bpm_label.text = str(roundi(conductor.bpm()))
+
+
+func _juice(delta: float) -> void:
+	if phase == "tutorial" and is_instance_valid(tutorial_arrow):
 		tutorial_arrow.position.y = tutorial_arrow_base_y + sin(Time.get_ticks_msec() * 0.006) * 11.0
-
-	# Fever timer + visuals.
-	var fp := conductor.pulse() if conductor.running else 0.0
-	if fever_active:
-		fever_time -= _delta
-		if fever_time <= 0.0:
-			_end_fever()
-	fever_overlay.color.a = (0.10 + 0.12 * fp) if fever_active else 0.0
-	fever_bar_fill.size.x = clampf(fever_gauge, 0.0, 1.0) * 296.0
-	fever_bar_fill.color = Color("ff7a1a") if fever_active else COL_GOLD
-	if fever_active:
-		fever_label.scale = Vector2.ONE * (1.0 + 0.18 * fp)
-
-	_update_juice(_delta)
+	_update_juice(delta)
 
 
-func _on_cycle_advance(_cycle_index: int) -> void:
+func _on_beat(_cycle_index: int) -> void:
 	if phase != "running":
 		return
 	miss_or_skip_if_needed()
@@ -834,47 +608,24 @@ func _on_cycle_advance(_cycle_index: int) -> void:
 		chiptune.finale = true   # audible wind-down before the level ends
 
 
-func update_countdown(now: float) -> void:
-	var step_ms := 60000.0 / float(level["start_bpm"])
-	var elapsed := now - countdown_start
-	var step := mini(int(elapsed / step_ms), COUNTDOWN_BEATS.size() - 1)
-	if step != countdown_step:
-		countdown_step = step
-		countdown_label.text = COUNTDOWN_BEATS[step]
-		countdown_label.pivot_offset = countdown_label.size * 0.5
-		countdown_label.scale = Vector2(0.72, 0.72)
-		flash_bar(COL_GOLD if step == COUNTDOWN_BEATS.size() - 1 else Color.WHITE)
-		play_sfx(snd_hit if step == COUNTDOWN_BEATS.size() - 1 else snd_miss, -8.0)
-		var tw := create_tween()
-		tw.tween_property(countdown_label, "scale", Vector2.ONE, 0.24) \
-			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	if elapsed >= step_ms * COUNTDOWN_BEATS.size():
-		begin_run()
+func _countdown_tick(last: bool) -> void:
+	flash_bar(COL_GOLD if last else Color.WHITE)
+	play_sfx(snd_hit if last else snd_miss, -8.0)
 
 
 # ===========================================================================
 # Phase transitions
 # ===========================================================================
-func start_game() -> void:
-	health = 3
-	score = 0
-	combo = 0
-	fever_gauge = 0.0
-	fever_active = false
-	fever_label.visible = false
-	notes_hit = 0
-	notes_missed = 0
+func _reset_level() -> void:
 	current_beat = 0
 	last_judged_beat = -1
 	beat_outcome = "neutral"
-	conductor.stop()
-	chiptune.reset()
 	prepare_beats()
 	binary_stream.clear()
-	result_layer.visible = false
-	bpm_label.text = str(int(level["start_bpm"]))
-	update_hud()
 	layout_tiles(1.0)
+
+
+func _enter_start() -> void:
 	# First visit to 1-1 plays the tutorial; otherwise straight to the count-in.
 	if tutorial_armed:
 		tutorial_armed = false
@@ -884,22 +635,16 @@ func start_game() -> void:
 
 
 func _enter_countdown() -> void:
-	phase = "countdown"
-	countdown_start = now_ms()
-	countdown_step = -1
-	countdown_label.visible = true
+	super()
 	set_tiles_visible(false)
 	set_feedback("Ready", COL_MUTED)
 
 
-func begin_run() -> void:
-	phase = "running"
+func _begin_play() -> void:
 	current_beat = 0
 	last_judged_beat = -1
-	countdown_label.visible = false
 	set_tiles_visible(true)
 	set_feedback("Start", COL_MUTED)
-	conductor.start()
 
 
 # ===========================================================================
@@ -1059,74 +804,19 @@ func _on_level_finished() -> void:
 		end_game(true)
 
 
-func end_game(won: bool) -> void:
-	phase = "won" if won else "lost"
-	conductor.stop()
-	if won and app:
-		app.record_result(app.current_index, 3 - health)   # 0 lost -> unlock Extreme
-	var rank := ""
-	var rank_col := COL_INK
-	var verdict := ""
+func _verdict(hearts_lost: int, won: bool) -> Dictionary:
 	if won and app and app.extreme:
-		match 3 - health:
-			0:
-				rank = "PERFECT"
-				rank_col = COL_GOLD
-				verdict = "成功上线，组织会记住你的好"
-			1:
-				rank = "GREAT"
-				rank_col = COL_GREEN
-				verdict = "12：00：59也算12点，不超时"
-			_:
-				rank = "CLEAR"
-				rank_col = COL_INK
-				verdict = "管它怎么跑，能跑就行"
+		match hearts_lost:
+			0: return {"rank": "PERFECT", "color": COL_GOLD, "eval": "成功上线，组织会记住你的好"}
+			1: return {"rank": "GREAT", "color": COL_GREEN, "eval": "12：00：59也算12点，不超时"}
+			_: return {"rank": "CLEAR", "color": COL_INK, "eval": "管它怎么跑，能跑就行"}
 	elif won:
-		match 3 - health:  # hearts lost
-			0:
-				rank = "PERFECT"
-				rank_col = COL_GOLD
-				verdict = "你简直就是天才，人类荣光永不灭"
-			1:
-				rank = "GREAT"
-				rank_col = COL_GREEN
-				verdict = "有点小bug，无伤大雅，明天继续上班"
-			_:
-				rank = "CLEAR"
-				rank_col = COL_INK
-				verdict = "你应该学习一下怎么使用大模型了"
-	else:
-		rank = "GAME OVER"
-		rank_col = COL_ACCENT
-		verdict = "这是新来的claude，你明天不用来上班了" if (app and app.extreme) else "内核崩溃，重新编译再来一次"
-	result_title.text = rank
-	result_title.add_theme_color_override("font_color", rank_col)
-	result_eval.text = verdict
-	# Letter grade from accuracy + personal best.
-	var acc := float(notes_hit) / maxf(float(notes_hit + notes_missed), 1.0)
-	var grade := "D"
-	var gcol := COL_ACCENT
-	if acc >= 0.97: grade = "S"; gcol = Color("ff7a1a")
-	elif acc >= 0.88: grade = "A"; gcol = COL_GOLD
-	elif acc >= 0.75: grade = "B"; gcol = COL_GREEN
-	elif acc >= 0.55: grade = "C"; gcol = COL_INK
-	result_grade.text = grade
-	result_grade.add_theme_color_override("font_color", gcol)
-	var new_best := false
-	var best := score
-	if app:
-		new_best = app.record_score(app.current_index, score)
-		best = app.get_best(app.current_index)
-	var best_tag := "  ★NEW!" if new_best else ""
-	result_score.text = "Score %d　命中 %d%%　最高 %d%s" % [score, roundi(acc * 100.0), best, best_tag]
-	result_layer.visible = true
-
-
-## "返回关卡" -> back to the level-select scene.
-func _on_back_to_levels() -> void:
-	var app = get_node_or_null("/root/App")
-	if app:
-		app.goto_levels()
+		match hearts_lost:
+			0: return {"rank": "PERFECT", "color": COL_GOLD, "eval": "你简直就是天才，人类荣光永不灭"}
+			1: return {"rank": "GREAT", "color": COL_GREEN, "eval": "有点小bug，无伤大雅，明天继续上班"}
+			_: return {"rank": "CLEAR", "color": COL_INK, "eval": "你应该学习一下怎么使用大模型了"}
+	var ev := "这是新来的claude，你明天不用来上班了" if (app and app.extreme) else "内核崩溃，重新编译再来一次"
+	return {"rank": "GAME OVER", "color": COL_ACCENT, "eval": ev}
 
 
 # ===========================================================================
@@ -1178,51 +868,5 @@ func _emit_particles(pos: Vector2) -> void:
 # Hit-feedback SFX (distinct from the music)
 # ===========================================================================
 func _build_sfx() -> void:
-	for i in 6:
-		var p := AudioStreamPlayer.new()
-		add_child(p)
-		sfx_players.append(p)
-	snd_hit = _gen_tone(720.0, 1100.0, 0.09, "triangle", 0.5)
-	snd_miss = _gen_tone(200.0, 80.0, 0.16, "sawtooth", 0.45)
-
-
-func play_sfx(stream: AudioStreamWAV, volume_db := -3.0) -> void:
-	if stream == null:
-		return
-	var p := sfx_players[sfx_i]
-	sfx_i = (sfx_i + 1) % sfx_players.size()
-	p.stream = stream
-	p.volume_db = volume_db
-	p.play()
-
-
-func _gen_tone(freq: float, slide_to: float, dur: float, wave: String, gain: float) -> AudioStreamWAV:
-	var rate := 44100
-	var n := int(dur * rate)
-	var data := PackedByteArray()
-	data.resize(n * 2)
-	var attack := 0.012
-	var phase := 0.0
-	for i in n:
-		var t := float(i) / rate
-		var f := freq
-		if slide_to > 0.0:
-			f = freq * pow(slide_to / freq, t / dur)
-		phase += TAU * f / rate
-		var s := 0.0
-		match wave:
-			"sine": s = sin(phase)
-			"triangle": s = asin(sin(phase)) * (2.0 / PI)
-			"sawtooth": s = 2.0 * fposmod(phase / TAU, 1.0) - 1.0
-		var env := 0.0
-		if t < attack:
-			env = t / attack
-		else:
-			env = pow(0.0001, (t - attack) / maxf(dur - attack, 0.0001))
-		data.encode_s16(i * 2, int(clampf(s * gain * env, -1.0, 1.0) * 32767.0))
-	var st := AudioStreamWAV.new()
-	st.format = AudioStreamWAV.FORMAT_16_BITS
-	st.mix_rate = rate
-	st.stereo = false
-	st.data = data
-	return st
+	snd_hit = tone(720.0, 1100.0, 0.09, "triangle", 0.5)
+	snd_miss = tone(200.0, 80.0, 0.16, "sawtooth", 0.45)
