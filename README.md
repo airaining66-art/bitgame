@@ -1,159 +1,192 @@
 # 动次打次 / Bit Reaction Rhythm 🥭🎵
 
-一个用 **Godot 4.6.3** 做的反应节奏小游戏。玩法核心:上下两排图标滑/滚向中央判定区,**相同就在节拍上按、不同就别按**;部分音符是**长按(回味)**。带连击、Fever、段位评分、极限模式。
+一个用 **Godot 4.6.3** 做的反应节奏小游戏。核心玩法:图标滑/滚向中央判定区,
+**该按时在节拍上按、不该按时别按**;部分音符是**长按**、**連打**;答错/漏按扣血。
+带连击、Fever(×2 分)、S~D 段位评分、极限模式、暂停。
 
-> 这份 README 是给接手项目的人看的——读完应该能跑起来、看懂结构、知道怎么加新关卡。有 🟡 标记的是容易踩的坑。
+> 这是给**接手项目的人**(或新开对话的 AI)看的交接文档:读完应能跑起来、看懂
+> 结构、知道怎么加新关卡。🟡 = 容易踩的坑。**最重要的一节是 [§2 架构](#2-架构总览
+> levelbase--子类)** —— 三关现在都是同一个基类的薄子类。
 
 ---
 
 ## 0. 快速上手
 
-1. 装 **Godot 4.6.3 (stable)**(无 .NET 版即可):https://godotengine.org/download
-2. 打开本仓库的 **`godot/`** 目录作为 Godot 项目(`godot/project.godot`)。
-3. **F5** 运行(主场景是 `title.tscn`)。
-4. 操作:**空格** = 按(长按音符要按住再松)、**R** = 重开本关、**Esc** = 返回选关、鼠标点「PRESS/咬一口」按钮也行。
-
-> 🟡 **项目在 `godot/` 子目录里**,不是仓库根。仓库根目录还放着早期的网页原型(`game.js`/`index.html`/`style.css`/`server.cjs`),那是移植前的参照物,**不参与 Godot 工程**。
+1. 装 **Godot 4.6.3 (stable)**(无 .NET 版即可)。本机已装在 `D:\godot\Godot_v4.6.3-stable_win64.exe`(带 `_console` 的是命令行版,跑无头校验用它)。
+2. 用 Godot 打开本仓库的 **`godot/`** 子目录(`godot/project.godot`)。⚠️ 不是仓库根。
+3. **F5** 运行(主场景 `title.tscn` → 选关 → 关卡)。
+4. 操作:**空格**=按(长按要按住再松、連打狂点)、**R**=重开、**Esc**=暂停(运行中)/返回(其它),也可点屏幕按钮。左上有 **暂停** 按钮。
 
 ---
 
-## 1. 技术栈 & 平台
+## 1. 当前状态(2026-06)
 
-- **引擎**:Godot 4.6.3,GDScript,Forward+ 渲染。
-- **目标平台**:Windows 桌面,基准分辨率 **1280×720**(`canvas_items` + `expand` 自适应缩放)。
-- **无外部依赖、无第三方插件**。音效/音乐全部**运行时程序化合成**(`AudioStreamWAV`),不是音频文件。
+**可玩关卡(3 个,都做完了):**
+| 关 | 文件 | 主题 / 机制 |
+|---|---|---|
+| 1-1 生存之战 | `main.gd` | 二进制 0/1,上下相同就按;滑入-停顿式判定;首次进有**新手引导**(组长/试用期梗)+ 金色粒子。8-bit 音乐。 |
+| 1-2 芒果奇缘 | `mango.gd` | 浴室瓷砖 + 手持芒果;芒果/水珠连续横向滚动(太鼓达人式);**长按"回味"**;咬芒果会放大+清水珠。东南亚迷幻音乐。 |
+| 1-3 薛定谔告白 | `schrodinger.gd` | 像素风烛光晚餐表白;**上下两条独立**(上=食物八分网格 / 下=人脸四分);只在"有对的、没有错的"时按;**双击 / 連打框 / 长按(双条)**;头顶对话气泡;日系 J-pop。**极限版=宝宝模式**(3 段爆发:下面变宝宝、上面变奶瓶、提速 1.5×、四周压暗)。 |
 
-> 🟡 **中文字体**:Godot 自带字体不含 CJK。`app.gd` 在运行时从 **Windows 系统字体**(`C:/Windows/Fonts/msyh.ttc` 等)加载微软雅黑,设为全局 `theme.default_font`。**在非 Windows 上中文会变方块**——要跨平台得把一个 CJK `.ttf/.otf` 放进 `assets/` 并改 `app._build_theme()` / `main._apply_cjk_font()`。
+1-4 野摊之王 / 1-5 超绝仰卧起 / 1-6 我有一个PLAN 在选关地图上有名字,**还没做**。
+
+**通用系统(都在基类里):** Fever(命中攒满→6 秒 ×2 分)、S/A/B/C/D 段位(按命中率)、
+极限模式(某关 0 掉血三星通关后解锁,选关页出「极限」按钮)、暂停(继续/再来一次/返回关卡)、
+存档(三星 + 最高分,写到 `user://progress.cfg`)。
+
+**最近一次大改:把三关重构成 `LevelBase` 基类 + 薄子类**(见 §2),并加了暂停系统。
+
+**仓库:** https://github.com/airaining66-art/bitgame (`main` 分支)。`bitgame.exe`(~97MB)和 `builds/`(安卓/macOS 导出)都已 gitignore,发版走 Releases。
 
 ---
 
-## 2. 怎么导出 exe(发给别人玩)
+## 2. 架构总览(LevelBase + 子类)
 
-1. Godot 顶部菜单 **Editor → Manage Export Templates → Download and Install**(一次性,几百 MB)。
-2. **Project → Export…** → 已有 **Windows Desktop** 预设(`export_presets.cfg`,单文件 `embed_pck`)→ **Export Project** → 输出 `godot/bitgame.exe`。
-3. 命令行也行:`Godot_..._console.exe --headless --path godot --export-release "Windows Desktop" bitgame.exe`
+整个游戏没有外部依赖、无第三方插件;音效/音乐**全部运行时程序化合成**(`AudioStreamWAV`),不是音频文件。
 
-> 🟡 **`bitgame.exe`(~97MB)被 `.gitignore` 排除了**(超 GitHub 单文件限制、也不该进 git)。给朋友发 exe 用 **GitHub Releases** 附件或网盘。
+### 关卡基类 `level_base.gd`(`class_name LevelBase extends Control`)
+**所有关卡共用的框架都在这**,改一次三关都生效:
+- Conductor 生命周期 + 信号分发;SFX 池 + `tone()` 合成器;`_load_tex()`
+- HUD 骨架、Fever 系统、倒计时、**结算页 + S~D 评级 + 分数/最高分记录**
+- 暂停接线、计分/扣血/Fever 记账(`_add_score`/`apply_penalty`/`_fever_hit`)
+- 判定时间分类 `classify(误差ms)→perfect/good/miss`
+- `_input` / `_process` 主循环骨架
+
+**每关 = `extends LevelBase` 的薄子类**,只重写**钩子**:
+| 钩子 | 作用 |
+|---|---|
+| `make_cfg()` | 无 App 时的兜底配置(时长/BPM/曲线) |
+| `_conf()` | **主题字典**:颜色、分数标题、Fever/结算/HUD 的色板与文案、`grade_cols`、`score_fmt`、`again_label` 等 |
+| `_make_music()` | 返回本关的音乐模块节点 |
+| `_make_heart()` | 返回一颗血量图标(各关样式不同) |
+| `_build_level()` | 搭本关场景(背景/轨道/按钮/谱面/关卡专属 HUD) |
+| `_build_sfx()` | 用 `tone(...)` 造本关音效 |
+| `_reset_level()` | 每次重开的关卡状态复位 |
+| `_enter_start()` | 默认进倒计时;1-1 重写成新手引导、1-2/1-3 重写成 intro 卡 |
+| `_begin_play()` | `conductor.start()` 后的关卡专属准备 |
+| `_on_space(pressed)` / `_extra_input(e)→bool` | 空格按下/松开;鼠标/引导等额外输入(返回 true=已消费) |
+| `_advance(delta)` | 每帧玩法:布局滚动 + 漏判扫描 + BPM 标签 |
+| `_juice(delta)` | 每帧视觉果汁(缩放/呼吸灯/气泡…) |
+| `_verdict(掉血数, won)→{rank, eval, color?}` | 结束语(基类负责评级/记录/显示) |
+| `_outro_fx()` / `perfect_window()`/`good_window()` / `_countdown_tick(last)` | 收尾特效 / 各关判定窗口 / 倒计时音 |
+
+> 🟡 **判定的拆分原则**:命中/失误的**结果**(加分/连击/Fever、扣血/断连)和**时间分类**
+> 在基类;但**"哪个音符到判定线了"这个音符模型**(1-1 滑停 / 1-2 连续滚 / 1-3 八分双轨)
+> 留在各关,各自有可单独调的判定窗口。别试图把三种音符模型塞进一个统一引擎。
+
+### Conductor `conductor.gd`(`class_name Conductor`)
+节拍/速度的**唯一来源**。所有"该跟拍动"的东西都从它读值。
+- `pulse()` 包络驱动一切跟拍视觉;`beat/downbeat/subdivision/level_finished` 信号。
+- BPM 用关卡 cfg 的 `bpm_curve_exp` 缓入;按下时刻=每拍 0.75(`JUDGE_OFFSET`)=鼓点。
+- `pause()/resume()`:**冻结节拍时钟**(暂停时 `time_ms()` 不走,恢复时平移起点,无缝接上)。
+- `tempo_scale`:运行时变速(1-3 宝宝爆发设 1.5)。
+- `auto_finish`:`true` 时到时长自动结束;**1-3 设 `false`**,改由谱面跑完(`pass_g>=n_ticks`)来结束。
+
+### 音乐模块(各关一个,已解耦)
+| 文件 | class_name | 用于 | 风格 |
+|---|---|---|---|
+| `chiptune.gd` | `Chiptune` | 1-1 | 8-bit 方波 |
+| `lofi.gd` | **`Music`** 🟡(类名不是 LoFi,文件名是历史遗留) | 1-2 | 东南亚迷幻摇滚 |
+| `romance.gd` | `Romance` | 1-3 | 日系 J-pop chiptune |
+
+都跟着 `conductor.subdivision` 走(天然踩点、随提速变快),有 `finale` 标记(收尾渐弱)和 `play_outro()`。
+
+### 其它
+- `pause_menu.gd`(`PauseMenu`):暂停按钮 + 遮罩面板(继续/再来一次/返回关卡),发信号给关卡接线。
+- `app.gd`(autoload **`App`**):全局主题(CJK 字体)、6 关表、场景跳转、存档、`active_cfg()`(极限缩放 / 给 1-3 极限加 `extreme_baby_mode`)、`style_button()`。
+- `binary_stream.gd`(`BinaryStream`):1-1 背景二进制流。
+- `title.gd` / `level_select.gd`:标题页 / 选关地图(虚线路径、循环芒果动画、极限按钮)。
+
+> 🟡 取 App 单例用**无类型** `var app = get_node_or_null("/root/App")`;写成 `:=` 会推断成
+> `Node`、访问自定义成员就编译报错。
 
 ---
 
 ## 3. 目录结构(`godot/`)
 
 ```
-godot/
-  project.godot          # 主场景 = title.tscn;autoload: App = app.gd
-  export_presets.cfg     # Windows / iOS 导出预设
+project.godot          主场景=title.tscn;autoload App=app.gd
+app.gd                 App 单例:主题/关卡表/跳转/存档/active_cfg/style_button
+level_base.gd          ★ LevelBase 关卡基类(公共框架)
+conductor.gd           Conductor 节拍时钟(pause/tempo_scale/auto_finish)
+pause_menu.gd          PauseMenu 暂停菜单
+title.gd / .tscn       标题页
+level_select.gd/.tscn  选关地图
 
-  app.gd                 # 【autoload "App"】全局单例:主题(CJK字体)、关卡表、
-                         #   场景跳转、存档(三星/最高分/极限)、cfg 缩放
-  title.gd / .tscn       # 标题页(动次打次 + 菜单 + 手绘红按钮)
-  level_select.gd/.tscn  # 选关地图(6 个节点、循环芒果动画、极限按钮、二进制终端)
+main.gd / .tscn        1-1 生存之战(extends LevelBase)
+mango.gd / .tscn       1-2 芒果奇缘(extends LevelBase)
+schrodinger.gd/.tscn   1-3 薛定谔告白(extends LevelBase)
 
-  main.gd / .tscn        # 关卡 1-1「生存之战」(二进制 0/1 反应,滑入式)
-  mango.gd / .tscn       # 关卡 1-2「芒果奇缘」(芒果/水滴 + 长按,连续滚动式)
+chiptune.gd            Chiptune  — 1-1 音乐
+lofi.gd                Music     — 1-2 音乐(类名≠文件名)
+romance.gd             Romance   — 1-3 音乐
+binary_stream.gd       BinaryStream — 1-1 背景
 
-  conductor.gd           # 【class_name Conductor】节拍/速度的唯一来源(核心)
-  chiptune.gd            # 【class_name Chiptune】1-1 的 8bit 音乐
-  lofi.gd                # 【class_name Music】1-2 的东南亚迷幻音乐 ⚠️见下
-  binary_stream.gd       # 【class_name BinaryStream】1-1 背景的二进制流
-
-  assets/
-    mangohand.png        # 手持芒果主图(单张,透明)
-    mango.png            # 芒果图标,750×150 = 5 帧"被吃掉"动画(第1帧=完整)
-    drop.png             # 水滴图标,750×150 = 5 帧"炸开"动画(第1帧=完整)
-    *.png.import         # Godot 导入元数据(要提交)
+assets/
+  girlsphoto.png       2×2 像素表:上排 梓涵/如烟(脸),下排 烤鸡/沙拉(食物)
+  emoji.png            竖排 3 帧:❤ / 😐❓(无语) / 🙂(笑)
+  baby.png             1×2:宝宝 / 奶瓶
+  mango.png drop.png   5 帧精灵表(被吃/水花)
+  mangohand.png        手持芒果主图
+  *.png.import         Godot 导入元数据(要提交)
 ```
 
-> 🟡 **`lofi.gd` 里的类名是 `Music`**(不是 LoFi)。文件名是历史遗留,内容早已不是 lo-fi 而是"东南亚迷幻摇滚"。`mango.gd` 里用 `var lofi: Music`。
-> 🟡 **`*.gd.uid` 文件要提交**(Godot 4.4+ 的脚本 UID)。**`.godot/` 缓存目录已 gitignore**,打开工程会自动重建。
+> 🟡 `*.gd.uid` 要提交;`.godot/` 缓存目录已 gitignore(打开工程自动重建)。
 
 ---
 
-## 4. 架构 & 核心系统
+## 4. 怎么加一个新关卡(下一步就是做 1-4 起)
 
-### 场景流
-`title.tscn` → `level_select.tscn` → `main.tscn` / `mango.tscn`,全部由 **`App`**(autoload)用 `change_scene_to_file` 切换:`App.goto_title()` / `goto_levels()` / `play_level(index, extreme)`。
-
-### Conductor(`conductor.gd`)—— 一切节奏的源头
-所有"该跟着节拍动"的东西都从它取值,保持解耦、可复用。
-- 时间/速度:`time_ms()`、`beat_phase()`(0..1)、`bpm()`,BPM 用关卡 cfg 的 `bpm_curve_exp` 做缓入,**踩点时刻 = 每拍 75%(`JUDGE_OFFSET=0.75`)= 鼓点落点**。
-- 信号:`beat(cycle)` / `downbeat(cycle)` / `subdivision(cycle, sub)` / `level_finished`。
-- `pulse(sharpness)`:每个下拍冲到 1、随后衰减的包络——**呼吸灯/UI 跟拍闪动/缩放都读它,别自己写计时器**。
-- 关卡通过 `setup(cfg)` 注入配置。
-
-### 音乐(`chiptune.gd` / `lofi.gd`)
-跟着 `Conductor.subdivision` 走,所以**天然踩点、随加速变快**。各自有 `finale` 标记:接近结尾时收束声部,让人**听得出要结束了**;关卡 `play_outro()` 收个尾和弦。
-
-### 关卡(`main.gd` / `mango.gd`)
-两关是**各自独立的场景**,目前**各写各的判定循环**(有重复)。共用的是 Conductor、音乐模块、资源加载、Fever/段位逻辑(分别在两边实现了一份)。
-- **1-1 滑入式**:音符滑到中央停一拍再判定(经典反应)。
-- **1-2 连续滚动式(太鼓达人风)**:音符匀速横向滚过固定判定区。长按是"头到中央停住 + 尾部滚进来 + 框收缩"。
-
-### 判定
-- 普通:`Perfect / Good` 窗口(ms,随 BPM 收紧);该按没按 = Miss,不该按却按 = 错。
-- **长按(仅 1-2)**:按**按住状态**判定——头部那拍只要在按住就起判(容忍提前按),中段持续不松就连续加分,**尾部到中央前松手才算断**(容忍延迟松开)。
-
-### Fever + 段位 + 极限(两关都有)
-- **Fever**:`fever_gauge` 命中积累,满了进 6 秒 Fever(**得分 ×2** + 全屏暖色跟拍闪 + "FEVER!!"),Miss/断长按立刻退出。
-- **段位**:结算按命中率给 **S(≥97%)/A/B/C/D**,显示命中率 + **个人最高分**(破纪录有 ★)。
-- **极限模式**:某关 **0 掉血三星通关** → 选关页该关出现「极限 1.5×」按钮 → `App.play_level(i, true)`,`App.active_cfg()` 把 BPM×1.5、时长÷1.5。
-
-### 存档
-`App` 把三星记录和最高分写到 **`user://progress.cfg`**(Windows 上在 `%APPDATA%\Godot\app_userdata\…`)。普通/极限的最高分分开存(key 是 `index` 和 `index_ex`)。
+1. 在 `app.gd` 的 `_build_levels()` 把对应关 `unlocked=true`、填 `scene`(如 `res://stall.tscn`)和 `cfg`(用 `_cfg(时长ms, 起始bpm, 结束bpm)`)。
+2. **复制一份现成关卡当模板**(玩法最像哪个就抄哪个:1-2 滚动+长按、1-3 双轨+連打+宝宝)。把脚本 `extends LevelBase`,删掉与基类重复的部分,重写 §2 列的钩子:`_conf`(换配色/文案)、`_make_music`、`_build_level`(换美术/谱面)、`_advance/_juice`、`_verdict`、`_build_sfx`,以及本关独有的判定/布局/特效内部类。
+3. 新建 `.tscn`:一个根 `Control` 节点挂上脚本即可(看任意一关的 `.tscn`,就 6 行)。
+4. 美术特效(`_World`/`_Dinner`/`_Rings`/`_Caps`…)和音效都写在**子类文件里**,不进基类。
 
 ---
 
-## 5. 关卡是怎么"成谱"的
+## 5. 资源约定
 
-- **1-2** 用**固定有限谱面** `const CHART`(token:`m`=芒果该按 / `w`=水滴该按 / `-`=不该按 / `H`=3拍长按 / `E`=结束标记)。打一遍就结束,**最后一个音符后不再出新的**,到 `E` 自动收尾。
-- **1-1** 是**带连段封顶的随机生成**(`press_ratio` + `max_skip_run`/`max_press_run`),结尾段(progress>0.9)自动安静下来。
-
-关卡 cfg(在 `app.gd` 的 `_cfg(duration_ms, start_bpm, end_bpm)`)字段:`duration_ms / start_bpm / end_bpm / bpm_curve_exp / subdivisions / press_ratio / max_skip_run / max_press_run`。
-
----
-
-## 6. 怎么加一个新关卡(下一步路线就是做 1-3 起)
-
-1. 在 `app.gd` 的 `_build_levels()` 里把对应关卡 `unlocked=true`、填上 `scene`(如 `res://schrodinger.tscn`)和 `cfg`。
-2. 新建场景 + 脚本。**最省事**是参考 `mango.gd` 复制一份:它已经把 Conductor、音乐、判定、Fever、段位、结算都接好了;换主题美术、换音乐模块、改 `CHART` 即可。
-3. 想加**新机制**(连打 / 双轨 / 躲避音符 / 变速等)就在新关里扩;Conductor/Fever/段位这些通用件继续复用。
-
-> 🟡 **重构提示**:`main.gd` 和 `mango.gd` 的判定/HUD/结算目前是**两份重复代码**。要做 1-3~1-6,建议先把"判定循环 + Fever + 段位 + 结算"抽成一个共享基类/组件,再让各关只配置主题、谱面、机制。现在没抽是因为前两关玩法差异大、边做边调。
+- **5 帧精灵表**(`mango.png`/`drop.png`,750×150,每帧 150):第 0 帧=静态图标,命中播 0→4 帧消失动画。
+- **`girlsphoto.png` 2×2 / `baby.png` 1×2 / `emoji.png` 竖排 3 帧**:按象限/等分切区域,用 `texture_filter=NEAREST` 保持像素硬边。
+- 加载走基类 `_load_tex(...)`:先 `ResourceLoader`(导入资源),再 `Image.load`(松散 PNG)兜底——丢张同名 PNG 进 `assets/` 重跑就生效。
+- 大量手绘/像素效果是代码 `_draw()` 画的(瓷砖墙、烛光、像素呼吸灯、长按胶囊、对话气泡、地图虚线…),无需素材。
 
 ---
 
-## 7. 资源约定 & 美术
+## 6. 导出(发给别人玩)
 
-- **图标是 5 帧精灵表**(`mango.png` / `drop.png`,750×150,每帧 150×150):**第 0 帧 = 静态图标**,命中时播放 0→4 帧的"被吃/炸开"消失动画。新图标按这个格式做。
-- 加载走 `_load_tex(...)`:**先 `ResourceLoader`(导入资源),再 `Image.load`(松散 PNG)兜底**——所以丢张同名 PNG 进 `assets/` 重跑就生效,不必手动导入。
-- 大量手绘/像素效果是**代码 `_draw()` 画的**(瓷砖墙、判定光环、长按胶囊、手绘红按钮、地图虚线路径等),风格统一、无需素材。
+1. Godot 顶部 **Editor → Manage Export Templates → Download and Install**(一次性)。
+2. **Project → Export…** → 已有 **Windows Desktop** 预设(`export_presets.cfg`,单文件 `embed_pck`)→ 输出 `godot/bitgame.exe`。也有 iOS / 安卓 / macOS 预设。
+3. 🟡 `bitgame.exe`(~97MB)和 `builds/` 已 gitignore——别进 git,发版用 **GitHub Releases**。
 
 ---
 
-## 8. 开发 & 调试小贴士
+## 7. 开发 & 调试贴士
 
-- **无头校验**(不开窗口跑几帧抓报错):
-  ```bash
-  Godot_v4.6.3-stable_win64_console.exe --headless --path godot --import
-  Godot_v4.6.3-stable_win64_console.exe --path godot res://mango.tscn --quit-after 90
+- 命令行版 `Godot_v4.6.3-stable_win64_console.exe`。
+- **改了 `class_name` / 加了新脚本后,先 `--import` 重建全局类缓存**,否则无头跑可能报 "Could not find type":
   ```
-- **跑满全程**测结尾/结算:`--path godot res://mango.tscn`(关卡到点会自动收尾→结算)。
-- 🟡 **F5(编辑器)会报、导出 exe 不报的错**:Debug 构建会打印脚本错误,Release 会**静默忽略**。之前就有个"结算时数组越界"只在 F5 暴露(已修)。**接手后请以 F5 的 Debugger 输出为准排查**。
-- 🟡 改了 `class_name` 或新加脚本后,Godot 要重建全局类缓存——**先 `--import` 一次**再 `--headless` 跑,否则可能报 "Could not find type"。
+  Godot_..._console.exe --headless --path godot --import
+  ```
+- 无头解析校验:`--headless --path godot res://<关卡>.tscn --quit-after 60`,看有没有 `SCRIPT ERROR`。
+- 跑全程/手感测试:写个一次性 `_smoke.tscn` 驱动器(`instantiate` 关卡→`begin_run()`→把 `health` 钉高→定时按键),跑完打印 `phase/score`,**用完即删**。截图用真机窗口跑(非 `--headless`)+ `get_viewport().get_texture().get_image().save_png(...)`。
+- 🟡 **F5(编辑器)会报、导出 exe 静默忽略的错**:Debug 构建打印脚本错误,Release 忽略。排查以 F5 的 Debugger 为准。
+- 🟡 **CJK 字体**:Godot 自带字体不含中文,`app.gd` 运行时从 Windows 系统字体(`msyh.ttc`)加载设为全局 `theme.default_font`。**非 Windows 上中文会变方块**——跨平台需把 CJK `.ttf` 放进 `assets/` 改加载逻辑。
 
 ---
 
-## 9. 现状 & 路线图
+## 8. 路线图 & 已知技术债
 
-**已完成**:标题/选关/两个可玩关卡(1-1 生存之战、1-2 芒果奇缘)、连击、Fever、S~D 段位+最高分、极限模式、干净的关卡结尾、Windows 导出。
+**约定的后续顺序:**
+1. ✅ Fever + 段位评分
+2. ✅ 新机制(1-3 双轨 / 連打 / 长按 / 宝宝模式)
+3. **铺关卡 1-4 ~ 1-6**(野摊之王 / 超绝仰卧起 / 我有一个PLAN)——每关一个新花样 + 主题 + 音乐
+4. **打工人剧情线**(串起组长/试用期的梗,关卡间插小对话)
 
-**约定的后续顺序**(和原作者商量过):
-1. ✅ Fever + 段位评分(已做)
-2. **新机制**(给 1-3 起的关卡用:连打 / 双手两轨 / 躲避音符 / 中途变速等)
-3. **铺关卡 1-3 ~ 1-6**(地图上已命名:薛定谔告白 / 野摊之王 / 超绝仰卧起 / 我有一个PLAN),每关一个新花样 + 主题 + 音乐
-4. **打工人剧情线**(串起"组长/试用期"的梗,关卡间插小对话)
-
-**已知技术债**:① 两关判定逻辑重复,做更多关前建议抽共享基类;② CJK 字体依赖 Windows 系统字体,跨平台需内置字体。
+**已知技术债 / 注意:**
+- `lofi.gd` 类名是 `Music`(文件名历史遗留),别被名字误导。
+- CJK 字体依赖 Windows 系统字体,跨平台要内置字体。
+- 1-3 极限版(宝宝模式)的谱面较长,曾因时长被掐断,现已用 `auto_finish=false` 改成谱面驱动结束。
 
 ---
 
