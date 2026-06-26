@@ -1,4 +1,4 @@
-# 动次打次 / Bit Reaction Rhythm 🥭🎵
+﻿# 动次打次 / Bit Reaction Rhythm 🥭🎵
 
 一个用 **Godot 4.6.3** 做的反应节奏小游戏。核心玩法:图标滑/滚向中央判定区,
 **该按时在节拍上按、不该按时别按**;部分音符是**长按**、**連打**;答错/漏按扣血。
@@ -21,14 +21,15 @@
 
 ## 1. 当前状态(2026-06)
 
-**可玩关卡(3 个,都做完了):**
+**可玩关卡(4 个,都做完了):**
 | 关 | 文件 | 主题 / 机制 |
 |---|---|---|
 | 1-1 生存之战 | `main.gd` | 二进制 0/1,上下相同就按;滑入-停顿式判定;首次进有**新手引导**(组长/试用期梗)+ 金色粒子。8-bit 音乐。 |
 | 1-2 芒果奇缘 | `mango.gd` | 浴室瓷砖 + 手持芒果;芒果/水珠连续横向滚动(太鼓达人式);**长按"回味"**;咬芒果会放大+清水珠。东南亚迷幻音乐。 |
 | 1-3 薛定谔告白 | `schrodinger.gd` | 像素风烛光晚餐表白;**上下两条独立**(上=食物八分网格 / 下=人脸四分);只在"有对的、没有错的"时按;**双击 / 連打框 / 长按(双条)**;头顶对话气泡;日系 J-pop。**极限版=宝宝模式**(3 段爆发:下面变宝宝、上面变奶瓶、提速 1.5×、四周压暗)。 |
+| 1-4 烤摊之王 | `bbq.gd` | 夜市烧烤摊;食材从右往左滚,按右侧"目标烤串"的**顺序**叉对的食材,**错的食材是干扰项要忍住别叉**;一串叉满后**按住翻面**(松早/没按=烤焦)。代码绘制的夜市背景 + 炭火/火花。弗拉门戈/中东风 chiptune(`bbq_music.gd` `class_name BBQMusic`)。 |
 
-1-4 野摊之王 / 1-5 超绝仰卧起 / 1-6 我有一个PLAN 在选关地图上有名字,**还没做**。
+1-5 超绝仰卧起 / 1-6 我有一个PLAN 在选关地图上有名字,**还没做**。
 
 **通用系统(都在基类里):** Fever(命中攒满→6 秒 ×2 分)、S/A/B/C/D 段位(按命中率)、
 极限模式(某关 0 掉血三星通关后解锁,选关页出「极限」按钮)、暂停(继续/再来一次/返回关卡)、
@@ -88,8 +89,10 @@
 | `chiptune.gd` | `Chiptune` | 1-1 | 8-bit 方波 |
 | `lofi.gd` | **`Music`** 🟡(类名不是 LoFi,文件名是历史遗留) | 1-2 | 东南亚迷幻摇滚 |
 | `romance.gd` | `Romance` | 1-3 | 日系 J-pop chiptune |
+| `bbq_music.gd` | `BBQMusic` | 1-4 | 弗拉门戈/中东风 chiptune |
 
 都跟着 `conductor.subdivision` 走(天然踩点、随提速变快),有 `finale` 标记(收尾渐弱)和 `play_outro()`。
+🟡 1-4 的 `BBQMusic` 有 `finale` 字段但子类目前没设 `finale=true`,收尾渐弱还没接(其余三关有)。
 
 ### 其它
 - `pause_menu.gd`(`PauseMenu`):暂停按钮 + 遮罩面板(继续/再来一次/返回关卡),发信号给关卡接线。
@@ -116,10 +119,12 @@ level_select.gd/.tscn  选关地图
 main.gd / .tscn        1-1 生存之战(extends LevelBase)
 mango.gd / .tscn       1-2 芒果奇缘(extends LevelBase)
 schrodinger.gd/.tscn   1-3 薛定谔告白(extends LevelBase)
+bbq.gd / .tscn         1-4 烤摊之王(extends LevelBase)
 
 chiptune.gd            Chiptune  — 1-1 音乐
 lofi.gd                Music     — 1-2 音乐(类名≠文件名)
 romance.gd             Romance   — 1-3 音乐
+bbq_music.gd           BBQMusic  — 1-4 音乐
 binary_stream.gd       BinaryStream — 1-1 背景
 
 assets/
@@ -128,6 +133,9 @@ assets/
   baby.png             1×2:宝宝 / 奶瓶
   mango.png drop.png   5 帧精灵表(被吃/水花)
   mangohand.png        手持芒果主图
+  bbq_ingredients.png  6 帧横排:牛肉/辣椒/洋葱/蘑菇/馒头/大葱
+  bbq_flip.png         2 帧横排:翻面提示/完成
+  bbq_stick.png        烤串签子  bbq_full_skewer.png 整串庆祝图
   *.png.import         Godot 导入元数据(要提交)
 ```
 
@@ -135,7 +143,7 @@ assets/
 
 ---
 
-## 4. 怎么加一个新关卡(下一步就是做 1-4 起)
+## 4. 怎么加一个新关卡(下一步就是做 1-5 起)
 
 1. 在 `app.gd` 的 `_build_levels()` 把对应关 `unlocked=true`、填 `scene`(如 `res://stall.tscn`)和 `cfg`(用 `_cfg(时长ms, 起始bpm, 结束bpm)`)。
 2. **复制一份现成关卡当模板**(玩法最像哪个就抄哪个:1-2 滚动+长按、1-3 双轨+連打+宝宝)。把脚本 `extends LevelBase`,删掉与基类重复的部分,重写 §2 列的钩子:`_conf`(换配色/文案)、`_make_music`、`_build_level`(换美术/谱面)、`_advance/_juice`、`_verdict`、`_build_sfx`,以及本关独有的判定/布局/特效内部类。
@@ -180,13 +188,14 @@ assets/
 **约定的后续顺序:**
 1. ✅ Fever + 段位评分
 2. ✅ 新机制(1-3 双轨 / 連打 / 长按 / 宝宝模式)
-3. **铺关卡 1-4 ~ 1-6**(野摊之王 / 超绝仰卧起 / 我有一个PLAN)——每关一个新花样 + 主题 + 音乐
+3. **铺关卡 1-5 ~ 1-6**(超绝仰卧起 / 我有一个PLAN)——每关一个新花样 + 主题 + 音乐(1-4 烤摊之王 ✅ 已做)
 4. **打工人剧情线**(串起组长/试用期的梗,关卡间插小对话)
 
 **已知技术债 / 注意:**
 - `lofi.gd` 类名是 `Music`(文件名历史遗留),别被名字误导。
 - CJK 字体依赖 Windows 系统字体,跨平台要内置字体。
 - 1-3 极限版(宝宝模式)的谱面较长,曾因时长被掐断,现已用 `auto_finish=false` 改成谱面驱动结束。
+- 1-4 烤摊之王的 `BBQMusic` 没接 `finale` 渐弱;`bbq.gd` 里还留着背景/外部音效美术的 TODO(目前走代码绘制 + 合成音效兜底)。
 
 ---
 
