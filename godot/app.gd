@@ -112,7 +112,7 @@ func _build_levels() -> void:
 		{"id": "1-2", "name": "芒果奇缘", "unlocked": true, "scene": "res://mango.tscn", "cfg": _cfg(45000.0, 70.0, 110.0)},
 		{"id": "1-3", "name": "薛定谔告白", "unlocked": true, "scene": "res://schrodinger.tscn", "cfg": _cfg(42000.0, 84.0, 116.0)},
 		{"id": "1-4", "name": "烤摊之王", "unlocked": true, "scene": "res://bbq.tscn", "cfg": _cfg(44000.0, 84.0, 118.0)},
-		{"id": "1-5", "name": "超绝仰卧起", "unlocked": false, "scene": "", "cfg": _cfg(45000.0)},
+		{"id": "1-5", "name": "房租的主人", "unlocked": true, "scene": "res://rent.tscn", "cfg": _cfg(46000.0, 80.0, 104.0)},
 		{"id": "1-6", "name": "我有一个PLAN", "unlocked": false, "scene": "", "cfg": _cfg(45000.0)},
 	]
 

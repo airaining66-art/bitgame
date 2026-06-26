@@ -147,6 +147,10 @@ var skewer_stick_tex: Texture2D
 var full_skewer_path := "res://assets/bbq_full_skewer.png"
 var full_skewer_tex: Texture2D
 
+## 第四关专用背景图：夜街 + 烤炉 + 炭火。
+var bbq_background_path := "res://assets/bbq_background.png"
+var bbq_background_tex: Texture2D
+
 # --- sfx --------------------------------------------------------------------
 var snd_skewer: AudioStreamWAV
 var snd_miss: AudioStreamWAV
@@ -220,6 +224,8 @@ func _load_textures() -> void:
 		skewer_stick_tex = _load_tex([skewer_stick_path])
 	if full_skewer_path != "":
 		full_skewer_tex = _load_tex([full_skewer_path])
+	if bbq_background_path != "":
+		bbq_background_tex = _load_tex([bbq_background_path])
 
 
 func _build_sfx() -> void:
@@ -608,6 +614,7 @@ func flash_button() -> void:
 func _build_scene() -> void:
 	# 夜市背景
 	var world := _NightMarket.new()
+	world.bg_tex = bbq_background_tex
 	world.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	world.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(world)
@@ -621,13 +628,14 @@ func _build_scene() -> void:
 	# 底部炭火
 	coals = _Coals.new()
 	coals.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	coals.offset_top = -100
+	coals.offset_top = -185
+	coals.offset_bottom = -70
 	coals.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.add_child(coals)
 
 	# 桌面
 	var table := ColorRect.new()
-	table.color = COL_TABLE
+	table.color = Color(COL_TABLE.r, COL_TABLE.g, COL_TABLE.b, 0.0 if bbq_background_tex != null else 1.0)
 	table.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	table.offset_top = -60
 	table.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1265,6 +1273,7 @@ class _Coals:
 	var t := 0.0
 	var embers: Array = []
 	var smoke: Array = []
+	var overlay_only := true
 
 	func _ready() -> void:
 		for i in 30:
@@ -1291,6 +1300,9 @@ class _Coals:
 	func _draw() -> void:
 		var w := 1280.0
 		var h := 100.0
+		if overlay_only:
+			_draw_fire_overlay()
+			return
 		# 升起的烟雾（先画，作为底层氛围）
 		for sm in smoke:
 			var sx: float = sm["x"] + sin(t * 0.7 + sm["phase"]) * 18.0
@@ -1318,6 +1330,33 @@ class _Coals:
 			y = fposmod(y, h + 20.0)
 			var a := 0.3 + 0.3 * sin(t * 5.0 + ph)
 			draw_circle(Vector2(x, y), s, Color(1.0, 0.5, 0.15, a))
+
+	func _draw_fire_overlay() -> void:
+		var breath := 0.5 + 0.5 * sin(t * 3.2)
+		var beat := clampf(pulse, 0.0, 1.0)
+		var flash := clampf(fire_flash, 0.0, 1.0)
+		var a := 0.18 + breath * 0.12 + beat * 0.08 + flash * 0.18
+		var center := Vector2(640.0, 56.0)
+		for i in 9:
+			var frac := float(i) / 8.0
+			var rx := lerpf(460.0, 140.0, frac)
+			var ry := lerpf(56.0, 18.0, frac)
+			var col := Color(1.0, lerpf(0.18, 0.72, frac), 0.03, a * (1.0 - frac * 0.78))
+			_draw_ellipse(center, rx, ry, col)
+		for e in embers:
+			var x: float = 205.0 + fposmod(float(e["x"]) + t * 12.0, 870.0)
+			var y: float = 24.0 + fposmod(float(e["y"]) - t * e["speed"], 72.0)
+			var s: float = float(e["size"]) * 0.55
+			var ph: float = e["phase"]
+			var ea := (0.12 + 0.25 * sin(t * 5.0 + ph)) * (0.6 + breath * 0.4)
+			draw_circle(Vector2(x, y), s, Color(1.0, 0.45, 0.12, ea))
+
+	func _draw_ellipse(center: Vector2, rx: float, ry: float, col: Color) -> void:
+		var pts := PackedVector2Array()
+		for i in 36:
+			var a := TAU * float(i) / 36.0
+			pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
+		draw_colored_polygon(pts, col)
 
 
 ## 火焰心形（health icon）
@@ -1516,6 +1555,7 @@ class _NightMarket:
 	const COL_GROUND := Color("1a0e08")
 	const COL_STAR := Color("f5e6d3")
 
+	var bg_tex: Texture2D
 	var stars: Array = []
 	var lanterns: Array = []
 	var far_windows: Array = []   # 预生成窗户
@@ -1582,6 +1622,9 @@ class _NightMarket:
 	func _draw() -> void:
 		var w := 1280.0
 		var h := 720.0
+		if bg_tex:
+			draw_texture_rect(bg_tex, Rect2(Vector2.ZERO, Vector2(w, h)), false)
+			return
 
 		# 天空渐变
 		for i in 12:

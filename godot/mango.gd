@@ -90,12 +90,27 @@ var beat_ring: _BeatRing
 var track: Control
 var mango_icon_tex: Texture2D
 var drop_tex: Texture2D
+var background_tex: Texture2D
+var grass_tex: Texture2D
+var leaves_tex: Texture2D
+var bottom_tex: Texture2D
+var perfect_tex: Texture2D
+var good_tex: Texture2D
+var stop_tex: Texture2D
+var logbox_tex: Texture2D
+var rank_tex: Texture2D
+var bpm_tex: Texture2D
+var hp_tex: Texture2D
 var hold_frame: _HoldFrame
 var top_tiles: Array = []
 var bottom_tiles: Array = []
 var hit_fx: Array = []
 var hit_fx_i := 0
 var hit_button: Button
+var bpm_skin: _BpmHud
+var hp_skin: _HpHud
+var feedback_art: TextureRect
+var feedback_art_time := 0.0
 var intro_layer: ColorRect
 var intro_label: Label
 
@@ -140,6 +155,7 @@ func _make_music() -> Node:
 
 func _make_heart() -> Control:
 	var d := _Droplet.new()
+	d.tex = drop_tex
 	d.custom_minimum_size = Vector2(30, 38)
 	return d
 
@@ -171,6 +187,7 @@ func _reset_level() -> void:
 	prepare_beats()
 	wetness = 0.45
 	world.wetness = 0.45
+	world.fevering = false
 	key_held = false
 	btn_held = false
 	shake = 0.0
@@ -179,6 +196,9 @@ func _reset_level() -> void:
 	zoom_cur = 0.0
 	bump = 0.0
 	hold_dim = 0.0
+	feedback_art_time = 0.0
+	if feedback_art:
+		feedback_art.visible = false
 
 
 func _enter_start() -> void:
@@ -219,6 +239,16 @@ func _countdown_tick(last: bool) -> void:
 func _advance(_delta: float) -> void:
 	layout_notes()
 	bpm_label.text = str(roundi(conductor.bpm()))
+	if bpm_skin:
+		var start_bpm := float(level.get("start_bpm", 70.0))
+		var end_bpm := float(level.get("end_bpm", 110.0))
+		bpm_skin.fill = inverse_lerp(start_bpm, end_bpm, conductor.bpm())
+
+
+func update_hud() -> void:
+	super()
+	if hp_skin:
+		hp_skin.health = health
 
 
 func _on_beat(_cycle_index: int) -> void:
@@ -295,6 +325,21 @@ func _build_world() -> void:
 
 	mango_icon_tex = _load_tex(["res://assets/mango.png"])
 	drop_tex = _load_tex(["res://assets/drop.png"])
+	background_tex = _load_tex(["res://assets/mango_background.png"])
+	grass_tex = _load_tex(["res://assets/mango_grass.png"])
+	leaves_tex = _load_tex(["res://assets/mango_leaves.png"])
+	bottom_tex = _load_tex(["res://assets/mango_bottom.png"])
+	perfect_tex = _load_tex(["res://assets/mango_perfect.png"])
+	good_tex = _load_tex(["res://assets/mango_good.png"])
+	stop_tex = _load_tex(["res://assets/mango_stop.png"])
+	logbox_tex = _load_tex(["res://assets/mango_logbox.png"])
+	rank_tex = _load_tex(["res://assets/mango_rank.png"])
+	bpm_tex = _load_tex(["res://assets/mango_bpm.png"])
+	hp_tex = _load_tex(["res://assets/mango_hp.png"])
+	world.bg_tex = background_tex
+	world.grass_tex = grass_tex
+	world.leaves_tex = leaves_tex
+	world.drop_tex = drop_tex
 	world.hand_tex = _load_tex(["res://assets/mango_hand.png", "res://assets/mangohand.png"])
 
 	hold_frame = _HoldFrame.new()
@@ -318,6 +363,15 @@ func _build_world() -> void:
 		track.add_child(fx)
 		hit_fx.append(fx)
 
+	feedback_art = TextureRect.new()
+	feedback_art.size = Vector2(380, 116)
+	feedback_art.position = Vector2(450, 92)
+	feedback_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	feedback_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	feedback_art.visible = false
+	feedback_art.z_index = 3
+	add_child(feedback_art)
+
 
 func _make_tile() -> IconTile:
 	var tile := IconTile.new()
@@ -338,28 +392,32 @@ func _build_button() -> void:
 
 	hit_button = Button.new()
 	hit_button.text = "咬一口"
-	hit_button.custom_minimum_size = Vector2(220, 92)
+	if bottom_tex:
+		hit_button.text = ""
+		hit_button.icon = bottom_tex
+		hit_button.expand_icon = true
+	hit_button.custom_minimum_size = Vector2(292, 102)
 	hit_button.add_theme_font_size_override("font_size", 28)
 	hit_button.focus_mode = Control.FOCUS_NONE
 	hit_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color("fff7df")
-	normal.set_border_width_all(14)
+	normal.bg_color = Color(1, 1, 1, 0.0 if bottom_tex != null else 1.0)
+	normal.set_border_width_all(0 if bottom_tex != null else 14)
 	normal.border_color = COL_MANGO
 	normal.set_corner_radius_all(44)
 	hit_button.add_theme_stylebox_override("normal", normal)
 	var hover := normal.duplicate()
-	hover.bg_color = Color("fff0c2")
+	hover.bg_color = Color(1, 1, 1, 0.0) if bottom_tex != null else Color("fff0c2")
 	hit_button.add_theme_stylebox_override("hover", hover)
 	var pressed := normal.duplicate()
-	pressed.bg_color = Color("ffe49a")
+	pressed.bg_color = Color(1, 1, 1, 0.0) if bottom_tex != null else Color("ffe49a")
 	pressed.border_color = COL_MANGO_DK
 	hit_button.add_theme_stylebox_override("pressed", pressed)
 	for s in ["font_color", "font_hover_color", "font_pressed_color"]:
 		hit_button.add_theme_color_override(s, COL_MANGO_DK)
 	hit_button.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
-	hit_button.position = Vector2(-110, -116)
-	hit_button.pivot_offset = Vector2(110, 46)
+	hit_button.position = Vector2(-146, -116)
+	hit_button.pivot_offset = Vector2(146, 51)
 	hit_button.button_down.connect(func() -> void:
 		btn_held = true
 		_press_down())
@@ -377,16 +435,14 @@ func _build_intro() -> void:
 	intro_layer.visible = false
 	add_child(intro_layer)
 
-	var card := Panel.new()
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color("fff5cc")
-	sb.set_border_width_all(4)
-	sb.border_color = COL_MANGO_DK
-	sb.set_corner_radius_all(10)
-	card.add_theme_stylebox_override("panel", sb)
-	card.custom_minimum_size = Vector2(640, 220)
+	var card := TextureRect.new()
+	card.texture = logbox_tex
+	card.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	card.stretch_mode = TextureRect.STRETCH_SCALE
+	card.custom_minimum_size = Vector2(720, 214)
+	card.size = Vector2(720, 214)
 	card.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	card.position = Vector2(-320, -110)
+	card.position = Vector2(-360, -107)
 	intro_layer.add_child(card)
 
 	intro_label = Label.new()
@@ -396,8 +452,10 @@ func _build_intro() -> void:
 	intro_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	intro_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	intro_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	intro_label.offset_left = 34
-	intro_label.offset_right = -34
+	intro_label.offset_left = 54
+	intro_label.offset_right = -54
+	intro_label.offset_top = 10
+	intro_label.offset_bottom = -10
 	card.add_child(intro_label)
 
 	var hint := Label.new()
@@ -408,6 +466,76 @@ func _build_intro() -> void:
 	hint.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	hint.offset_top = -34
 	intro_layer.add_child(hint)
+
+
+func _build_result() -> void:
+	super()
+
+
+func _build_hud() -> void:
+	super()
+	if rank_tex != null and score_label != null:
+		var score_group := score_label.get_parent()
+		var rank_bg := TextureRect.new()
+		rank_bg.texture = rank_tex
+		rank_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		rank_bg.stretch_mode = TextureRect.STRETCH_SCALE
+		rank_bg.size = Vector2(142, 102)
+		rank_bg.position = Vector2(8, 8)
+		rank_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(rank_bg)
+		move_child(rank_bg, score_group.get_index())
+		score_group.position = Vector2(24, 43)
+		var score_caption := score_group.get_child(0) as Label
+		if score_caption:
+			score_caption.visible = false
+		score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		score_label.custom_minimum_size = Vector2(84, 42)
+		score_label.add_theme_font_size_override("font_size", 30)
+	if bpm_tex != null and bpm_label != null:
+		bpm_skin = _BpmHud.new()
+		bpm_skin.tex = bpm_tex
+		bpm_skin.size = Vector2(420, 132)
+		bpm_skin.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+		bpm_skin.position = Vector2(-210, 0)
+		bpm_skin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(bpm_skin)
+		var bpm_group := bpm_label.get_parent()
+		move_child(bpm_skin, bpm_group.get_index())
+		bpm_group.position = Vector2(-38, 30)
+		var bpm_caption := bpm_group.get_child(0) as Label
+		bpm_caption.visible = false
+		bpm_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		bpm_label.custom_minimum_size = Vector2(76, 38)
+	if hp_tex != null and hearts.size() > 0:
+		var hearts_box := hearts[0].get_parent() as Control
+		hearts_box.visible = false
+		hp_skin = _HpHud.new()
+		hp_skin.tex = hp_tex
+		hp_skin.health = health
+		hp_skin.size = Vector2(166, 130)
+		hp_skin.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+		hp_skin.position = Vector2(-184, 8)
+		hp_skin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(hp_skin)
+
+
+func _build_pause() -> void:
+	super()
+	if stop_tex == null or pause_menu == null or pause_menu.pause_btn == null:
+		return
+	var btn := pause_menu.pause_btn
+	btn.text = ""
+	btn.icon = stop_tex
+	btn.expand_icon = true
+	btn.custom_minimum_size = Vector2(120, 60)
+	btn.size = Vector2(120, 60)
+	btn.position = Vector2(18, 118)
+	var clear := StyleBoxFlat.new()
+	clear.bg_color = Color(1, 1, 1, 0)
+	clear.set_border_width_all(0)
+	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
+		btn.add_theme_stylebox_override(state, clear)
 
 
 # ===========================================================================
@@ -484,7 +612,6 @@ func _press_down() -> void:
 	if phase != "running":
 		return
 	bump = maxf(bump, 0.022)
-	shake = maxf(shake, 2.5)
 	var cur := current_beat_data
 	if cur.get("hold", false):
 		if int(cur.get("hold_pos", 0)) == 0 and not hold_active:
@@ -500,8 +627,10 @@ func _press_down() -> void:
 		apply_penalty("不一样!")
 		return
 	if d <= perfect_window():
+		_show_feedback_art(perfect_tex)
 		reward("Perfect", 120)
 	elif d <= good_window():
+		_show_feedback_art(good_tex)
 		reward("Good", 80)
 	else:
 		apply_penalty("差点")
@@ -580,7 +709,10 @@ func reward(kind: String, points: int) -> void:
 	_add_score(points)
 	_fever_hit()
 	play_sfx(snd_bite)
-	set_feedback(kind, COL_MANGO_DK if kind == "Perfect" else COL_GREEN)
+	if kind == "Perfect" or kind == "Good":
+		set_feedback("", COL_MANGO_DK if kind == "Perfect" else COL_GREEN)
+	else:
+		set_feedback(kind, COL_MANGO_DK if kind == "Perfect" else COL_GREEN)
 	_hit_feedback(k)
 	current_hit = true
 	_spawn_fx(k, Vector2(640.0, 220.0))
@@ -625,6 +757,16 @@ func apply_penalty(text: String) -> void:
 
 func flash_button() -> void:
 	btn_pop = 1.0
+
+
+func _show_feedback_art(tex: Texture2D) -> void:
+	if feedback_art == null or tex == null:
+		return
+	feedback_art.texture = tex
+	feedback_art.visible = true
+	feedback_art.modulate = Color.WHITE
+	feedback_art.scale = Vector2.ONE
+	feedback_art_time = 0.62
 
 
 # ===========================================================================
@@ -709,6 +851,7 @@ func _juice(delta: float) -> void:
 	world.position = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * shake
 	world.center_color = COL_JUDGE.lerp(bar_color, clampf(bar_flash, 0.0, 1.0))
 	world.center_pulse = p
+	world.fevering = fever_active
 	var dim_target := 1.0 if (phase == "running" and current_beat_data.get("hold", false)) else 0.0
 	hold_dim = move_toward(hold_dim, dim_target, delta * 3.0)
 	var beat_dim := (1.0 - p) * 0.13 if conductor.running else 0.0
@@ -722,6 +865,14 @@ func _juice(delta: float) -> void:
 		btn_pop = move_toward(btn_pop, 0.0, delta * 5.0)
 		hit_button.scale = Vector2.ONE * (1.0 + 0.15 * btn_pop)
 		hit_button.modulate = Color.WHITE.lerp(Color("ffc83a"), btn_pop)
+	if feedback_art:
+		feedback_art_time = move_toward(feedback_art_time, 0.0, delta)
+		if feedback_art_time <= 0.0:
+			feedback_art.visible = false
+		else:
+			var f := clampf(feedback_art_time / 0.62, 0.0, 1.0)
+			feedback_art.modulate.a = minf(1.0, f * 1.6)
+			feedback_art.scale = Vector2.ONE * (1.0 + (1.0 - f) * 0.08)
 	hit_pop = move_toward(hit_pop, 0.0, delta * 6.0)
 	hold_head_pop = move_toward(hold_head_pop, 0.0, delta * 4.0)
 
@@ -765,20 +916,34 @@ class _World:
 	const COL_JUDGE := Color("33dd66")
 
 	const MAX_DROPS := 22
+	const LEAF_RECTS := [
+		Rect2(32, 28, 56, 64), Rect2(136, 26, 48, 60), Rect2(234, 26, 48, 60),
+		Rect2(344, 36, 34, 42), Rect2(444, 42, 26, 32), Rect2(532, 46, 24, 22),
+		Rect2(34, 130, 68, 58), Rect2(142, 118, 72, 76), Rect2(268, 104, 74, 84),
+		Rect2(400, 100, 74, 86), Rect2(524, 118, 46, 70),
+	]
 
 	var droplets: Array = []
+	var fever_leaves: Array = []
 	var wetness := 0.45
 	var _shown := 0.45
 	var center_pulse := 0.0
 	var center_color := Color.WHITE
+	var bg_tex: Texture2D
+	var grass_tex: Texture2D
+	var leaves_tex: Texture2D
+	var drop_tex: Texture2D
 	var hand_tex: Texture2D
+	var fevering := false
+	var leaf_emit := 0.0
 	var t := 0.0
 
 	func _ready() -> void:
 		for i in MAX_DROPS:
 			droplets.append({
 				"x": randf_range(30, 1250), "y": randf_range(-400, 720),
-				"speed": randf_range(80, 190), "len": randf_range(55, 130),
+				"speed": randf_range(90, 230), "size": randf_range(18, 38),
+				"frame": randi_range(0, 1), "drift": randf_range(-10, 10),
 			})
 
 	func _process(delta: float) -> void:
@@ -786,31 +951,64 @@ class _World:
 		_shown = move_toward(_shown, wetness, delta * 2.6)
 		for d in droplets:
 			d["y"] += d["speed"] * delta
-			if d["y"] - d["len"] > 760:
-				d["y"] = -d["len"]
+			d["x"] += d["drift"] * delta
+			if d["y"] > 760:
+				d["y"] = -float(d["size"])
 				d["x"] = randf_range(30, 1250)
-				d["speed"] = randf_range(80, 190)
+				d["speed"] = randf_range(90, 230)
+				d["size"] = randf_range(18, 38)
+				d["frame"] = randi_range(0, 1)
+				d["drift"] = randf_range(-10, 10)
+		_update_fever_leaves(delta)
 		queue_redraw()
+
+	func _update_fever_leaves(delta: float) -> void:
+		if fevering and leaves_tex:
+			leaf_emit += delta * 12.0
+			while leaf_emit >= 1.0 and fever_leaves.size() < 42:
+				leaf_emit -= 1.0
+				fever_leaves.append({
+					"x": randf_range(80, 1200), "y": randf_range(-80, -20),
+					"vx": randf_range(-45, 45), "vy": randf_range(60, 145),
+					"rot": randf_range(-0.8, 0.8), "vr": randf_range(-1.8, 1.8),
+					"scale": randf_range(0.55, 1.1), "life": randf_range(4.0, 6.0),
+					"src": LEAF_RECTS.pick_random(),
+				})
+		else:
+			leaf_emit = 0.0
+		for i in range(fever_leaves.size() - 1, -1, -1):
+			var leaf: Dictionary = fever_leaves[i]
+			leaf["life"] -= delta
+			leaf["x"] += leaf["vx"] * delta + sin(t * 2.2 + float(i)) * 16.0 * delta
+			leaf["y"] += leaf["vy"] * delta
+			leaf["rot"] += leaf["vr"] * delta
+			if leaf["life"] <= 0.0 or leaf["y"] > 780:
+				fever_leaves.remove_at(i)
 
 	func _draw() -> void:
 		var w := 1280.0
 		var h := 720.0
-		draw_rect(Rect2(Vector2.ZERO, Vector2(w, h)), COL_BG)
-		var cols := int(ceil(w / TILE)) + 1
-		var rows := int(ceil(h / TILE)) + 1
-		for r in rows:
-			for c in cols:
-				var col := COL_WALL2 if (r + c) % 2 == 0 else COL_WALL
-				draw_rect(Rect2(c * TILE, r * TILE, TILE, TILE), col)
-		for c in range(1, cols):
-			draw_line(Vector2(c * TILE, 0), Vector2(c * TILE, h), COL_GROUT, 2.0)
-		for r in range(1, rows):
-			draw_line(Vector2(0, r * TILE), Vector2(w, r * TILE), COL_GROUT, 2.0)
-		for i in 7:
-			draw_rect(Rect2(0, i * 22, w, 22), Color(1, 1, 1, 0.10 * (1.0 - i / 7.0)))
+		if bg_tex:
+			draw_texture_rect(bg_tex, Rect2(Vector2.ZERO, Vector2(w, h)), false)
+		else:
+			draw_rect(Rect2(Vector2.ZERO, Vector2(w, h)), COL_BG)
+			var cols := int(ceil(w / TILE)) + 1
+			var rows := int(ceil(h / TILE)) + 1
+			for r in rows:
+				for c in cols:
+					var col := COL_WALL2 if (r + c) % 2 == 0 else COL_WALL
+					draw_rect(Rect2(c * TILE, r * TILE, TILE, TILE), col)
+			for c in range(1, cols):
+				draw_line(Vector2(c * TILE, 0), Vector2(c * TILE, h), COL_GROUT, 2.0)
+			for r in range(1, rows):
+				draw_line(Vector2(0, r * TILE), Vector2(w, r * TILE), COL_GROUT, 2.0)
+			for i in 7:
+				draw_rect(Rect2(0, i * 22, w, 22), Color(1, 1, 1, 0.10 * (1.0 - i / 7.0)))
+		if grass_tex:
+			draw_texture_rect(grass_tex, Rect2(Vector2(0, 462), Vector2(1280, 258)), false)
 		if hand_tex:
 			var hs := hand_tex.get_size()
-			var sc := minf(460.0 / hs.x, 500.0 / hs.y)
+			var sc := minf(530.0 / hs.x, 540.0 / hs.y)
 			var dst := hs * sc
 			var hc := Vector2(640.0, 380.0 + sin(t * 1.6) * 8.0)
 			draw_texture_rect(hand_tex, Rect2(hc - dst * 0.5, dst), false)
@@ -824,9 +1022,25 @@ class _World:
 			var d: Dictionary = droplets[i]
 			var x: float = d["x"]
 			var y: float = d["y"]
-			var l: float = d["len"]
-			draw_line(Vector2(x, y - l), Vector2(x, y), Color(COL_WATER.r, COL_WATER.g, COL_WATER.b, av), 5.0)
-			draw_circle(Vector2(x, y), 7.0, Color(COL_WATER.r, COL_WATER.g, COL_WATER.b, minf(av + 0.25, 1.0)))
+			var s: float = d["size"]
+			if drop_tex:
+				var frame := int(d["frame"])
+				draw_texture_rect_region(drop_tex, Rect2(Vector2(x, y), Vector2(s, s)),
+					Rect2(frame * 150, 0, 150, 150), Color(1, 1, 1, av))
+			else:
+				draw_circle(Vector2(x, y), s * 0.28, Color(COL_WATER.r, COL_WATER.g, COL_WATER.b, av))
+		_draw_fever_leaves()
+
+	func _draw_fever_leaves() -> void:
+		if leaves_tex == null:
+			return
+		for leaf in fever_leaves:
+			var src: Rect2 = leaf["src"]
+			var sc: float = leaf["scale"]
+			var dst := src.size * sc
+			draw_set_transform(Vector2(leaf["x"], leaf["y"]), float(leaf["rot"]), Vector2.ONE)
+			draw_texture_rect_region(leaves_tex, Rect2(-dst * 0.5, dst), src)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 	func _judge_ring(c: Vector2) -> void:
 		var pr := clampf(center_pulse, 0.0, 1.0)
@@ -992,6 +1206,7 @@ class _Droplet:
 	const COL_WATER := Color("8cc1de")
 	const COL_INK := Color("2a2a2a")
 	var lost := false
+	var tex: Texture2D
 
 	func set_lost(v: bool) -> void:
 		lost = v
@@ -999,6 +1214,9 @@ class _Droplet:
 
 	func _draw() -> void:
 		var a := 0.2 if lost else 1.0
+		if tex:
+			draw_texture_rect_region(tex, Rect2(Vector2.ZERO, size), Rect2(0, 0, 150, 150), Color(1, 1, 1, a))
+			return
 		var c := Color(COL_WATER.r, COL_WATER.g, COL_WATER.b, a)
 		var ctr := size * 0.5 + Vector2(0, 4)
 		draw_circle(ctr, 11.0, c)
@@ -1035,6 +1253,49 @@ class _Vignette:
 			draw_rect(Rect2(0, h - d, w, d), col)
 			draw_rect(Rect2(0, 0, d, h), col)
 			draw_rect(Rect2(w - d, 0, d, h), col)
+
+
+## BPM panel: top half is the static frame, bottom yellow strip is the fill.
+class _BpmHud:
+	extends Control
+
+	var tex: Texture2D
+	var fill := 0.0:
+		set(v):
+			fill = clampf(v, 0.0, 1.0)
+			queue_redraw()
+
+	func _draw() -> void:
+		if tex == null:
+			return
+		var bg_src := Rect2(0, 0, 708, 166)
+		draw_texture_rect_region(tex, Rect2(Vector2.ZERO, size), bg_src)
+		var slot := Rect2(18, 63, 384 * fill, 31)
+		if slot.size.x <= 1.0:
+			return
+		var fill_src := Rect2(22, 178, 664 * fill, 38)
+		draw_texture_rect_region(tex, slot, fill_src)
+
+
+## HP panel: top half is the three empty drops, bottom drop is one live heart.
+class _HpHud:
+	extends Control
+
+	var tex: Texture2D
+	var health := 3:
+		set(v):
+			health = clampi(v, 0, 3)
+			queue_redraw()
+
+	func _draw() -> void:
+		if tex == null:
+			return
+		draw_texture_rect_region(tex, Rect2(0, 0, size.x, 76), Rect2(0, 0, 335, 154))
+		var drop_src := Rect2(125, 162, 92, 100)
+		var centers := [39.0, 83.0, 127.0]
+		for i in health:
+			var dst := Rect2(Vector2(centers[i] - 18.0, 26.0), Vector2(36, 42))
+			draw_texture_rect_region(tex, dst, drop_src)
 
 
 ## Breathing beat ring behind the PRESS button.
