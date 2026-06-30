@@ -1,0 +1,38 @@
+{
+	"meta": {
+		"version": 1,
+		"level_id": "1-5",
+		"variant": "extreme",
+		"level_name": "Rent Extreme",
+		"music_id": "rent",
+		"music_path": "res://rent_music.gd",
+		"start_bpm": 80.0,
+		"end_bpm": 104.0,
+		"bpm_curve_exp": 1.5,
+		"subdivisions": 4,
+		"duration_beats": 48.0
+	},
+	"tracks": [
+		{"id": "node", "name": "Node", "color": "#ef4444"},
+		{"id": "decoy", "name": "Non-node", "color": "#777777"}
+	],
+	"node_kinds": [
+		{"id": "bill", "name": "Bill", "color": "#ef4444"},
+		{"id": "scam", "name": "Scam", "color": "#f97316"},
+		{"id": "loan", "name": "Loan", "color": "#eab308"},
+		{"id": "food", "name": "Food", "color": "#22c55e"},
+		{"id": "boss", "name": "Boss", "color": "#f43f5e"},
+		{"id": "landlord", "name": "Landlord", "color": "#38bdf8"}
+	],
+	"notes": [
+		{"id": "rx-bill-01", "beat": 2.0, "duration_beats": 0.0, "judge_type": "tap", "lane": "node", "track": "node", "kind": "bill", "payload": {}},
+		{"id": "rx-food-01", "beat": 3.0, "duration_beats": 0.0, "judge_type": "none", "lane": "decoy", "track": "decoy", "kind": "food", "payload": {}},
+		{"id": "rx-scam-01", "beat": 4.5, "duration_beats": 0.0, "judge_type": "tap", "lane": "node", "track": "node", "kind": "scam", "payload": {}},
+		{"id": "rx-boss-01", "beat": 7.0, "duration_beats": 4.0, "judge_type": "roll", "lane": "node", "track": "node", "kind": "boss", "payload": {"need": 10}},
+		{"id": "rx-loan-01", "beat": 12.5, "duration_beats": 0.0, "judge_type": "tap", "lane": "node", "track": "node", "kind": "loan", "payload": {}},
+		{"id": "rx-landlord-01", "beat": 15.0, "duration_beats": 3.5, "judge_type": "hold", "lane": "node", "track": "node", "kind": "landlord", "payload": {"need_ms": 1650}},
+		{"id": "rx-game-01", "beat": 20.0, "duration_beats": 0.0, "judge_type": "none", "lane": "decoy", "track": "decoy", "kind": "food", "payload": {}},
+		{"id": "rx-boss-02", "beat": 23.0, "duration_beats": 4.0, "judge_type": "roll", "lane": "node", "track": "node", "kind": "boss", "payload": {"need": 10}},
+		{"id": "rx-landlord-02", "beat": 33.0, "duration_beats": 3.5, "judge_type": "hold", "lane": "node", "track": "node", "kind": "landlord", "payload": {"need_ms": 1650}}
+	]
+}

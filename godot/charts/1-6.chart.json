@@ -1,0 +1,121 @@
+{
+	"meta": {
+		"bpm_curve_exp": 1.5,
+		"duration_beats": 64.0,
+		"end_bpm": 104.0,
+		"level_id": "1-6",
+		"level_name": "Rent",
+		"music_id": "rent",
+		"music_path": "res://rent_music.gd",
+		"start_bpm": 80.0,
+		"subdivisions": 4,
+		"variant": "normal",
+		"version": 1
+	},
+	"node_kinds": [
+		{
+			"color": "#ef4444",
+			"id": "bill",
+			"name": "Bill"
+		},
+		{
+			"color": "#f97316",
+			"id": "scam",
+			"name": "Scam"
+		},
+		{
+			"color": "#eab308",
+			"id": "loan",
+			"name": "Loan"
+		},
+		{
+			"color": "#22c55e",
+			"id": "food",
+			"name": "Food"
+		},
+		{
+			"color": "#f43f5e",
+			"id": "boss",
+			"name": "Boss"
+		},
+		{
+			"color": "#38bdf8",
+			"id": "landlord",
+			"name": "Landlord"
+		}
+	],
+	"notes": [
+		{
+			"beat": 2.0,
+			"duration_beats": 0.0,
+			"id": "6029881165-44484",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 3.5,
+			"duration_beats": 0.0,
+			"id": "6029881173-62726",
+			"judge_type": "none",
+			"kind": "food",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 5.0,
+			"duration_beats": 0.0,
+			"id": "6029881177-28765",
+			"judge_type": "tap",
+			"kind": "scam",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 8.0,
+			"duration_beats": 4.0,
+			"id": "6029881181-29930",
+			"judge_type": "roll",
+			"kind": "boss",
+			"lane": "node",
+			"payload": {
+				"need": 8
+			},
+			"track": "node"
+		},
+		{
+			"beat": 14.0,
+			"duration_beats": 3.0,
+			"id": "6029881187-60657",
+			"judge_type": "hold",
+			"kind": "landlord",
+			"lane": "node",
+			"payload": {
+				"need_ms": 1400
+			},
+			"track": "node"
+		}
+	],
+	"tracks": [
+		{
+			"color": "#ef4444",
+			"id": "node",
+			"name": "Node"
+		},
+		{
+			"color": "#777777",
+			"id": "decoy",
+			"name": "Non-node"
+		}
+	]
+}

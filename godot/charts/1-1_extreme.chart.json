@@ -1,0 +1,1003 @@
+{
+	"meta": {
+		"version": 1,
+		"level_id": "1-1",
+		"level_name": "Binary Extreme",
+		"music_id": "neon_pulse",
+		"music_path": "res://assets/Neon Pulse.mp3",
+		"start_bpm": 64,
+		"end_bpm": 64,
+		"bpm_curve_exp": 1,
+		"subdivisions": 4,
+		"duration_beats": 96,
+		"duration_ms": 90000,
+		"variant": "extreme",
+		"duration_mode": "music"
+	},
+	"tracks": [
+		{
+			"id": "node",
+			"name": "Node",
+			"color": "#ef4444"
+		},
+		{
+			"id": "decoy",
+			"name": "Non-node",
+			"color": "#777777"
+		}
+	],
+	"node_kinds": [
+		{
+			"id": "bit0",
+			"name": "Bit 0",
+			"color": "#ef4444"
+		},
+		{
+			"id": "bit1",
+			"name": "Bit 1",
+			"color": "#f6b800"
+		}
+	],
+	"notes": [
+		{
+			"id": "neon-pulse-extreme-000",
+			"beat": 0,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-001",
+			"beat": 1,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-002",
+			"beat": 2,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-003",
+			"beat": 3,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-004",
+			"beat": 4,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-005",
+			"beat": 5,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-006",
+			"beat": 6,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-007",
+			"beat": 7,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-008",
+			"beat": 8,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-009",
+			"beat": 9,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-010",
+			"beat": 10,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-011",
+			"beat": 11,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-012",
+			"beat": 12,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-013",
+			"beat": 13,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-014",
+			"beat": 14,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-015",
+			"beat": 15,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-016",
+			"beat": 16,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-017",
+			"beat": 17,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-018",
+			"beat": 18,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-019",
+			"beat": 19,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-020",
+			"beat": 20,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-021",
+			"beat": 21,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-022",
+			"beat": 22,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-023",
+			"beat": 23,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-024",
+			"beat": 24,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-025",
+			"beat": 25,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-026",
+			"beat": 26,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-027",
+			"beat": 27,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-028",
+			"beat": 28,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-029",
+			"beat": 29,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-030",
+			"beat": 30,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-031",
+			"beat": 31,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-032",
+			"beat": 32,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-033",
+			"beat": 33,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-034",
+			"beat": 34,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-035",
+			"beat": 35,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-036",
+			"beat": 36,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-037",
+			"beat": 37,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-038",
+			"beat": 38,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-039",
+			"beat": 39,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-040",
+			"beat": 40,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-041",
+			"beat": 41,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-042",
+			"beat": 42,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-043",
+			"beat": 43,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-044",
+			"beat": 44,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-045",
+			"beat": 45,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-046",
+			"beat": 46,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-047",
+			"beat": 47,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-048",
+			"beat": 48,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-049",
+			"beat": 49,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-050",
+			"beat": 50,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-051",
+			"beat": 51,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-052",
+			"beat": 52,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-053",
+			"beat": 53,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-054",
+			"beat": 54,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-055",
+			"beat": 55,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-056",
+			"beat": 56,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-057",
+			"beat": 57,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-058",
+			"beat": 58,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-059",
+			"beat": 59,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-060",
+			"beat": 60,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-061",
+			"beat": 61,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-062",
+			"beat": 62,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-063",
+			"beat": 63,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-064",
+			"beat": 64,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-065",
+			"beat": 65,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-066",
+			"beat": 66,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-067",
+			"beat": 67,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-068",
+			"beat": 68,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-069",
+			"beat": 69,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-070",
+			"beat": 70,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-071",
+			"beat": 71,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-072",
+			"beat": 72,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-073",
+			"beat": 73,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-074",
+			"beat": 74,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-075",
+			"beat": 75,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-076",
+			"beat": 76,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-077",
+			"beat": 77,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-078",
+			"beat": 78,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-079",
+			"beat": 79,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-080",
+			"beat": 80,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-081",
+			"beat": 81,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-082",
+			"beat": 82,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-083",
+			"beat": 83,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-084",
+			"beat": 84,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-085",
+			"beat": 85,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-086",
+			"beat": 86,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-087",
+			"beat": 87,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-088",
+			"beat": 88,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-089",
+			"beat": 89,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-090",
+			"beat": 90,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-091",
+			"beat": 91,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-092",
+			"beat": 92,
+			"duration_beats": 0,
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"track": "node",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-093",
+			"beat": 93,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-094",
+			"beat": 94,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		},
+		{
+			"id": "neon-pulse-extreme-095",
+			"beat": 95,
+			"duration_beats": 0,
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"track": "decoy",
+			"payload": {}
+		}
+	]
+}

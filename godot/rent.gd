@@ -1,6 +1,10 @@
-extends LevelBase
-## 1-5 房租的主人
-## Core rule: one button only. Stressful things are handled at the center line:
+﻿extends LevelBase
+
+const RhythmChartScript := preload("res://rhythm/rhythm_chart.gd")
+const RhythmChartRuntimeScript := preload("res://rhythm/rhythm_chart_runtime.gd")
+const JudgementRuntimeScript := preload("res://rhythm/judgement_runtime.gd")
+const BeatSlotJudgementScript := preload("res://rhythm/beat_slot_judgement.gd")
+## 1-5 鎴跨鐨勪富浜?## Core rule: one button only. Stressful things are handled at the center line:
 ## bills and scam calls are fanned away, loan requests are guarded. Nice things
 ## should pass by untouched. Fixed story beats add a boss tap challenge and a
 ## landlord hold challenge.
@@ -63,32 +67,20 @@ const LANDLORD_BEATS := STORY_DEFAULT_BEATS
 const CHALLENGE_WARN_BEATS := STORY_DEFAULT_WARN_BEATS
 const CHALLENGE_CONVERGE_MS := STORY_DEFAULT_CONVERGE_MS
 
-# --- chart ------------------------------------------------------------------
-## b=bill, s=scam, l=loan, f=food, g=game, m=heart, -=rest, E=end.
-## Story tokens are data-driven:
-## boss:warn_beats:active_beats:taps
-## landlord:warn_beats:active_beats:hold_ms
-## Optional 5th field sets visible strip length on the curved path, e.g. boss:2:4:8:0.6.
-const CHART := [
-	"b", "-", "b", "-", "s", "f", "-", "l", "-",
-	"boss:2:4:8",
-	"g", "b", "m", "s", "-", "l", "-",
-	"landlord:2:4:1400",
-	"b", "s", "l", "f", "b", "-", "g", "s", "l", "-",
-	"boss:2:4:8",
-	"b", "m", "s", "l", "-",
-	"landlord:2:4:1400",
-	"b", "s", "l", "b", "s", "l", "E",
-]
-
 # --- state ------------------------------------------------------------------
-var rent_music: RentMusic
+var rent_music: Node
 var current_beat := 0
-var last_judged_beat := -1
 var current_beat_data: Dictionary = {}
 var prev_beat_data: Dictionary = {}
 var queue: Array[Dictionary] = []
-var story_emit: Array[Dictionary] = []
+var active_chart_beats: Array = []
+var chart_runtime
+var chart_loaded := false
+var chart_duration_beats := 0.0
+var normal_chart_events: Array[Dictionary] = []
+var normal_event_by_id: Dictionary = {}
+var judgement_runtime
+var beat_judgement := BeatSlotJudgementScript.new()
 var chart_i := 0
 var spawn_count := 0
 var hidden_beat := -999
@@ -113,6 +105,9 @@ var pending_story_cfg: Dictionary = {}
 var current_story_cfg: Dictionary = {}
 var story_head_beat := -999.0
 var story_tail_beat := -999.0
+var story_events: Array[Dictionary] = []
+var story_event_i := 0
+var active_story_event: Dictionary = {}
 
 # --- juice ------------------------------------------------------------------
 var shake := 0.0
@@ -149,10 +144,15 @@ var snd_hold: AudioStreamWAV
 # LevelBase hooks
 # ===========================================================================
 func make_cfg() -> Dictionary:
-	return {
+	var cfg := {
 		"duration_ms": 46000.0, "start_bpm": 80.0, "end_bpm": 104.0,
 		"bpm_curve_exp": 1.5, "subdivisions": 4,
 	}
+	var chart_meta := chart_meta_for("1-5")
+	for key in ["start_bpm", "end_bpm", "bpm_curve_exp", "subdivisions"]:
+		if chart_meta.has(key):
+			cfg[key] = chart_meta[key]
+	return cfg
 
 
 func _auto_finish() -> bool:
@@ -160,7 +160,7 @@ func _auto_finish() -> bool:
 
 
 func _make_music() -> Node:
-	rent_music = RentMusic.new()
+	rent_music = setup_chart_music("1-5", RentMusic)
 	return rent_music
 
 
@@ -174,8 +174,8 @@ func _conf() -> Dictionary:
 		"result_bg": Color("fffaf0"), "result_border": COL_GOLD,
 		"title_col": COL_GREEN, "lose_col": COL_RED,
 		"eval_bg": Color("fff2cf"), "eval_border": Color("e8c675"),
-		"again_label": "再撑一月",
-		"score_fmt": "余额 %d　命中 %d%%　最高 %d%s",
+		"again_label": "再来一局",
+		"score_fmt": "余额 %d  命中 %d%%  最高 %d%s",
 		"grade_cols": {"S": COL_GOLD, "A": COL_GREEN, "B": COL_BLUE, "C": COL_INK, "D": COL_MUTED},
 	}
 
@@ -216,7 +216,7 @@ func _make_heart() -> Control:
 
 func _reset_level() -> void:
 	current_beat = 0
-	last_judged_beat = -1
+	beat_judgement.reset()
 	spawn_count = 0
 	hidden_beat = -999
 	key_held = false
@@ -225,6 +225,12 @@ func _reset_level() -> void:
 	pending_story_angle = -1.5708
 	story_head_beat = -999.0
 	story_tail_beat = -999.0
+	story_event_i = 0
+	active_story_event = {}
+	for ev in normal_chart_events:
+		ev["judged"] = false
+		ev["missed"] = false
+		ev["announced"] = false
 	shake = 0.0
 	flash = 0.0
 	ring_pulse = 0.0
@@ -240,6 +246,7 @@ func _reset_level() -> void:
 	arena.challenge_time_progress = 0.0
 	arena.story_cfg = {}
 	arena.story_visible = false
+	arena.story_alpha = 0.0
 	arena.story_u_head = 999.0
 	arena.story_u_tail = 999.0
 
@@ -250,7 +257,7 @@ func _enter_start() -> void:
 
 func _begin_play() -> void:
 	set_tiles_visible(true)
-	set_feedback("一键应对!", COL_GREEN)
+	set_feedback("一键应对！", COL_GREEN)
 
 
 func _on_space(pressed: bool) -> void:
@@ -278,10 +285,15 @@ func _countdown_tick(last: bool) -> void:
 
 
 func _advance(delta: float) -> void:
+	_update_story_events()
+	_update_chart_normal_notes()
 	_layout_items()
 	_update_challenge_warning(delta)
 	_update_challenge(delta)
 	_sync_story_bar()
+	if chart_loaded and phase == "running" and _chart_clock() >= chart_duration_beats + 0.85 \
+			and not warning_active and not challenge_active:
+		_start_outro()
 	bpm_label.text = str(roundi(conductor.bpm()))
 
 
@@ -295,10 +307,10 @@ func _on_beat(_cycle_index: int) -> void:
 	current_beat_data = queue.pop_front()
 	ensure_queue()
 	current_beat += 1
-	if rent_music and not rent_music.finale:
+	if rent_music and rent_music.get("finale") == false:
 		for q in queue:
 			if q.get("end", false):
-				rent_music.finale = true
+				rent_music.set("finale", true)
 				break
 	if current_beat_data.get("end", false):
 		_start_outro()
@@ -313,7 +325,7 @@ func _on_beat(_cycle_index: int) -> void:
 
 
 func _outro_fx() -> void:
-	set_feedback("这个月稳住了~", COL_GOLD)
+	set_feedback("这个月稳住了～", COL_GOLD)
 	flash = 1.0
 
 
@@ -321,96 +333,33 @@ func _verdict(hearts_lost: int, won: bool) -> Dictionary:
 	if won:
 		match hearts_lost:
 			0:
-				return {"rank": "房租的主人", "eval": "账单扇走,借钱挡住,钱包还会发光。"}
+				return {"rank": "房租的主人", "eval": "账单扇走，借钱挡住，钱包还会发光。"}
 			1:
-				return {"rank": "稳住钱包", "eval": "有点手忙脚乱,但这个月还是你赢。"}
+				return {"rank": "稳住钱包", "eval": "有点手忙脚乱，但这个月还是你赢。"}
 			_:
-				return {"rank": "勉强过关", "eval": "生活扑面而来,你还是把门顶住了。"}
-	return {"rank": "余额告急", "eval": "压力没挡住,下次把扇子和钱包盾再练熟一点。"}
+				return {"rank": "勉强过关", "eval": "生活扑面而来，你还是把门顶住了。"}
+	return {"rank": "余额告急", "eval": "压力没挡住，下次把扇子和钱包盾再练熟一点。"}
 
 
 # ===========================================================================
 # Beat generation
 # ===========================================================================
 func make_beat() -> Dictionary:
-	if not story_emit.is_empty():
-		var ev: Dictionary = story_emit.pop_front()
-		if ev.get("rest", false):
-			return {"kind": -1, "action": ACTION_NONE, "should_press": false,
-				"story_rest": true, "angle": ev["angle"], "cfg": ev["cfg"]}
-		return {"kind": -1, "action": ACTION_NONE, "should_press": false,
-			"challenge": ev["kind"], "angle": ev["angle"], "cfg": ev["cfg"]}
-	if chart_i >= CHART.size():
-		return {"kind": -1, "action": ACTION_NONE, "should_press": false, "angle": 0.0, "end": true}
-	var tok: String = CHART[chart_i]
-	chart_i += 1
-	if tok == "E":
-		return {"kind": -1, "action": ACTION_NONE, "should_press": false, "angle": 0.0, "end": true}
-	if tok == "-":
-		return {"kind": -1, "action": ACTION_NONE, "should_press": false, "angle": 0.0}
-	if tok == "o":
-		return {"kind": -1, "action": ACTION_NONE, "should_press": false, "challenge": CHALLENGE_BOSS, "angle": 0.0}
-	if tok == "r":
-		return {"kind": -1, "action": ACTION_NONE, "should_press": false, "challenge": CHALLENGE_LANDLORD, "angle": 0.0}
-	if tok == "O":
-		return {"kind": -1, "action": ACTION_NONE, "should_press": false, "warning": CHALLENGE_BOSS, "angle": _next_story_angle()}
-	if tok == "R":
-		return {"kind": -1, "action": ACTION_NONE, "should_press": false, "warning": CHALLENGE_LANDLORD, "angle": _next_story_angle()}
-	if tok.begins_with("boss:") or tok.begins_with("landlord:"):
-		var cfg := _story_cfg_from_token(tok)
-		var angle := _next_story_angle()
-		var warn_beats := maxi(1, roundi(float(cfg.get("warn_beats", STORY_DEFAULT_WARN_BEATS))))
-		var active_beats := maxi(1, roundi(float(cfg.get("beats", STORY_DEFAULT_BEATS))))
-		for i in range(warn_beats - 1):
-			story_emit.append({"rest": true, "cfg": cfg, "angle": angle})
-		story_emit.append({"kind": cfg["kind"], "cfg": cfg, "angle": angle})
-		for i in range(active_beats - 1):
-			story_emit.append({"rest": true, "cfg": cfg, "angle": angle})
-		return {"kind": -1, "action": ACTION_NONE, "should_press": false,
-			"warning": cfg["kind"], "angle": angle, "cfg": cfg}
-	var k := _tok_kind(tok)
-	var action: int = KIND_ACTION[k]
-	var angle := fposmod(float(spawn_count) * 2.3998277 - PI * 0.5, TAU)
-	spawn_count += 1
-	return {
-		"kind": k,
-		"action": action,
-		"should_press": action != ACTION_NONE,
-		"angle": angle,
-	}
+	if chart_loaded:
+		return _rest_beat()
+	if not active_chart_beats.is_empty():
+		if chart_i >= active_chart_beats.size():
+			return {"kind": -1, "action": ACTION_NONE, "should_press": false, "angle": 0.0, "end": true}
+		var beat_data: Dictionary = active_chart_beats[chart_i]
+		chart_i += 1
+		return beat_data.duplicate(true)
+	return {"kind": -1, "action": ACTION_NONE, "should_press": false, "angle": 0.0, "end": true}
 
 
 func _next_story_angle() -> float:
 	var angle := fposmod(float(spawn_count) * 2.3998277 - PI * 0.5, TAU)
 	spawn_count += 1
 	return angle
-
-
-func _story_cfg_from_token(tok: String) -> Dictionary:
-	var p: PackedStringArray = tok.split(":")
-	var is_boss: bool = p[0] == "boss"
-	var warn: float = float(p[1]) if p.size() > 1 else STORY_DEFAULT_WARN_BEATS
-	var beats: float = float(p[2]) if p.size() > 2 else STORY_DEFAULT_BEATS
-	var need: float = float(p[3]) if p.size() > 3 else (STORY_DEFAULT_TAPS if is_boss else STORY_DEFAULT_HOLD_MS)
-	var strip_len: float = float(p[4]) if p.size() > 4 else STORY_DEFAULT_LEN
-	return {
-		"kind": CHALLENGE_BOSS if is_boss else CHALLENGE_LANDLORD,
-		"warn_beats": warn,
-		"beats": beats,
-		"need": need,
-		"strip_len": strip_len,
-	}
-
-
-func _tok_kind(tok: String) -> int:
-	match tok:
-		"b": return BILL
-		"s": return SCAM
-		"l": return LOAN
-		"f": return FOOD
-		"g": return GAME
-		"m": return GIRL
-		_: return -1
 
 
 func ensure_queue() -> void:
@@ -420,11 +369,169 @@ func ensure_queue() -> void:
 
 func prepare_beats() -> void:
 	queue = []
+	chart_loaded = _chart_file_is_valid()
+	if not chart_loaded:
+		push_warning("Missing RhythmChart for 1-5; level has no script fallback chart.")
+	chart_duration_beats = _load_chart_duration_beats()
+	normal_chart_events = _load_normal_chart_events()
+	story_events = _load_story_chart_events()
+	normal_event_by_id = {}
+	for ev in normal_chart_events:
+		normal_event_by_id[str(ev.get("id", ""))] = ev
+	var chart = _load_chart()
+	if chart:
+		judgement_runtime = JudgementRuntimeScript.new()
+		judgement_runtime.setup(chart)
+	else:
+		judgement_runtime = null
+	active_chart_beats = [] if chart_loaded else _load_editor_chart_beats()
+	story_event_i = 0
+	active_story_event = {}
+	for ev in normal_chart_events:
+		ev["judged"] = false
+		ev["missed"] = false
+		ev["announced"] = false
 	chart_i = 0
 	ensure_queue()
 	current_beat_data = queue.pop_front()
 	prev_beat_data = {}
 	ensure_queue()
+
+
+func _load_editor_chart_beats() -> Array:
+	var chart = chart_for("1-5")
+	if chart == null:
+		chart_runtime = null
+		return []
+	chart_runtime = RhythmChartRuntimeScript.new()
+	chart_runtime.setup(chart)
+	return chart_slots_for(str(chart.meta.get("level_id", "1-5")), 1,
+		Callable(self, "_chart_note_to_slot_entries"),
+		_rest_slot(),
+		{"kind": -1, "action": ACTION_NONE, "should_press": false, "angle": 0.0, "end": true})
+
+
+func _load_chart() -> RhythmChart:
+	return chart_for("1-5")
+
+
+func _chart_file_is_valid() -> bool:
+	return _load_chart() != null
+
+
+func _load_chart_duration_beats() -> float:
+	var chart = _load_chart()
+	return chart.duration_beats() if chart else 0.0
+
+
+func _load_normal_chart_events() -> Array[Dictionary]:
+	var events: Array[Dictionary] = []
+	var chart = _load_chart()
+	if chart == null:
+		return events
+	chart.sort_notes()
+	for note in chart.notes:
+		if _is_story_chart_note(note):
+			continue
+		var data := _chart_note_to_beat(note)
+		if data.is_empty():
+			continue
+		data["id"] = str(note.get("id", ""))
+		data["beat"] = maxf(0.0, float(note.get("beat", 0.0)))
+		data["judge_type"] = str(note.get("judge_type", RhythmChartScript.JUDGE_TAP))
+		data["lane"] = str(note.get("lane", RhythmChartScript.LANE_NODE))
+		data["judged"] = false
+		data["missed"] = false
+		data["announced"] = false
+		events.append(data)
+	return events
+
+
+func _load_story_chart_events() -> Array[Dictionary]:
+	var events: Array[Dictionary] = []
+	var chart = _load_chart()
+	if chart == null:
+		return events
+	chart.sort_notes()
+	for note in chart.notes:
+		if not _is_story_chart_note(note):
+			continue
+		var payload: Dictionary = note.get("payload", {})
+		var head := maxf(0.0, float(note.get("beat", 0.0)))
+		var active_beats := maxf(0.25, float(note.get("duration_beats", STORY_DEFAULT_BEATS)))
+		var warn_beats := maxf(0.0, float(payload.get("warn_beats", STORY_DEFAULT_WARN_BEATS)))
+		var cfg := _story_cfg_from_chart_note(note, warn_beats, active_beats)
+		events.append({
+			"id": str(note.get("id", "")),
+			"kind": int(cfg.get("kind", CHALLENGE_BOSS)),
+			"warn_start": maxf(0.0, head - warn_beats),
+			"head": head,
+			"tail": head + active_beats,
+			"angle": _next_story_angle(),
+			"cfg": cfg,
+		})
+	return events
+
+
+func _rest_slot() -> Dictionary:
+	var data := _rest_beat()
+	data["_priority"] = 0
+	return data
+
+
+func _chart_note_to_slot_entries(note: Dictionary):
+	if _is_story_chart_note(note):
+		return {}
+	var data := _chart_note_to_beat(note)
+	if data.is_empty():
+		return {}
+	data["_priority"] = 2 if bool(data.get("should_press", false)) else 1
+	return data
+
+
+func _is_story_chart_note(note: Dictionary) -> bool:
+	var judge := str(note.get("judge_type", RhythmChartScript.JUDGE_NONE))
+	var kind_id := str(note.get("kind", ""))
+	return (judge == RhythmChartScript.JUDGE_ROLL or judge == RhythmChartScript.JUDGE_HOLD) \
+		and (kind_id == "boss" or kind_id == "landlord")
+
+
+func _chart_note_to_beat(note: Dictionary) -> Dictionary:
+	var kind_id := str(note.get("kind", "bill"))
+	var k := _chart_kind_to_kind(kind_id)
+	if k < 0:
+		return {}
+	var action: int = ACTION_NONE if str(note.get("judge_type", RhythmChartScript.JUDGE_NONE)) == RhythmChartScript.JUDGE_NONE else KIND_ACTION[k]
+	var angle: float = fposmod(float(spawn_count) * 2.3998277 - PI * 0.5, TAU)
+	spawn_count += 1
+	return {"kind": k, "action": action, "should_press": action != ACTION_NONE, "angle": angle}
+
+
+func _story_cfg_from_chart_note(note: Dictionary, warn_beats: float, active_beats: float) -> Dictionary:
+	var judge := str(note.get("judge_type", RhythmChartScript.JUDGE_ROLL))
+	var payload: Dictionary = note.get("payload", {})
+	var is_boss: bool = judge == RhythmChartScript.JUDGE_ROLL
+	return {
+		"kind": CHALLENGE_BOSS if is_boss else CHALLENGE_LANDLORD,
+		"warn_beats": float(warn_beats),
+		"beats": float(active_beats),
+		"need": float(payload.get("need", STORY_DEFAULT_TAPS)) if is_boss else float(payload.get("need_ms", STORY_DEFAULT_HOLD_MS)),
+		"strip_len": float(payload.get("strip_len", STORY_DEFAULT_LEN)),
+	}
+
+
+func _chart_kind_to_kind(kind_id: String) -> int:
+	match kind_id:
+		"bill": return BILL
+		"scam": return SCAM
+		"loan": return LOAN
+		"game": return GAME
+		"girl", "heart": return GIRL
+		_: return FOOD
+
+
+func _rest_beat() -> Dictionary:
+	return {"kind": -1, "action": ACTION_NONE, "should_press": false, "angle": 0.0}
 
 
 # ===========================================================================
@@ -437,6 +544,11 @@ func _press_down() -> void:
 	if challenge_active:
 		_challenge_press_down()
 		return
+	if chart_loaded:
+		_press_chart_normal()
+		return
+	if warning_active and _normal_judge_clock_overlaps_story(float(current_beat) + JUDGE_OFFSET):
+		return
 
 	var cur := current_beat_data
 	var action := int(cur.get("action", ACTION_NONE))
@@ -446,20 +558,55 @@ func _press_down() -> void:
 	var d := _judge_delta()
 	if d > good_window():
 		return
-	if last_judged_beat == current_beat:
-		return
-	last_judged_beat = current_beat
-
 	var k := int(cur.get("kind", -1))
+	var result := beat_judgement.judge_press(current_beat,
+		k >= 0 and action != ACTION_NONE,
+		d, perfect_window(), good_window())
+	var kind := str(result.get("result", ""))
+	if kind == BeatSlotJudgementScript.RESULT_REPEAT:
+		return
+
 	if k < 0:
 		return
-	if action == ACTION_NONE:
-		apply_penalty("别碰%s!" % KIND_NAME[k])
-		return
-	if d <= perfect_window():
+	if kind == BeatSlotJudgementScript.RESULT_WRONG:
+		apply_penalty("别碰%s！" % KIND_NAME[k])
+	elif kind == BeatSlotJudgementScript.RESULT_PERFECT:
 		_handle_item("Perfect", 120, cur)
 	else:
 		_handle_item("Good", 80, cur)
+
+
+func _press_chart_normal() -> void:
+	if judgement_runtime == null:
+		return
+	var clock := _chart_clock()
+	var radius := good_window() / maxf(conductor.cycle_duration, 1.0)
+	var best: Dictionary = judgement_runtime.closest_note(clock, radius,
+		[RhythmChartScript.JUDGE_TAP, RhythmChartScript.JUDGE_NONE],
+		Callable(self, "_normal_judgement_note_filter"))
+	var ev: Dictionary = {}
+	if not best.is_empty():
+		var best_note: Dictionary = best.get("note", {})
+		ev = normal_event_by_id.get(str(best_note.get("id", "")), {})
+	action_tool.pulse(int(ev.get("action", ACTION_FAN)) if not ev.is_empty() else ACTION_FAN)
+	play_sfx(snd_guard if int(ev.get("action", ACTION_FAN)) == ACTION_GUARD else snd_fan, -10.0)
+	if ev.is_empty():
+		return
+	var hit_note: Dictionary = best["note"]
+	judgement_runtime.mark_judged(hit_note)
+	ev["judged"] = true
+	var k := int(ev.get("kind", -1))
+	if k < 0:
+		return
+	var action := int(ev.get("action", ACTION_NONE))
+	if action == ACTION_NONE:
+		apply_penalty("别碰%s！" % KIND_NAME[k])
+		return
+	var error_ms := float(best.get("error_beats", 0.0)) * conductor.cycle_duration
+	if error_ms <= perfect_window():
+		_handle_item("Perfect", 120, ev)
+	else:
+		_handle_item("Good", 80, ev)
 
 
 func _press_up() -> void:
@@ -482,18 +629,25 @@ func _handle_item(kind: String, points: int, cur: Dictionary) -> void:
 func _resolve_boundary() -> void:
 	if phase != "running":
 		return
-	var cur := current_beat_data
-	if last_judged_beat == current_beat:
+	if chart_loaded:
 		return
-	last_judged_beat = current_beat
+	var cur := current_beat_data
+	if beat_judgement.was_judged(current_beat):
+		return
 	var k := int(cur.get("kind", -1))
 	if k < 0:
+		beat_judgement.mark_judged(current_beat)
 		return
 	if _normal_judge_clock_overlaps_story(float(current_beat) + JUDGE_OFFSET):
+		beat_judgement.mark_judged(current_beat)
 		return
 	var action := int(cur.get("action", ACTION_NONE))
-	if action != ACTION_NONE:
-		apply_penalty("%s没应对!" % KIND_NAME[k])
+	var result := beat_judgement.resolve_slot(current_beat, action != ACTION_NONE)
+	var kind := str(result.get("result", ""))
+	if kind == BeatSlotJudgementScript.RESULT_REPEAT:
+		return
+	if kind == BeatSlotJudgementScript.RESULT_MISS:
+		apply_penalty("%s没应对！" % KIND_NAME[k])
 	else:
 		_keep(k)
 
@@ -526,7 +680,48 @@ func apply_penalty(text: String) -> void:
 # ===========================================================================
 # Story challenges
 # ===========================================================================
-func _start_challenge_warning(kind: int, angle: float, cfg: Dictionary = {}) -> void:
+func _chart_clock() -> float:
+	return float(current_beat) + (conductor.beat_phase() if conductor else 0.0)
+
+
+func _update_story_events() -> void:
+	if story_events.is_empty():
+		return
+	var clock := _chart_clock()
+	if active_story_event.is_empty():
+		while story_event_i < story_events.size() and clock >= float(story_events[story_event_i].get("tail", 0.0)) + 0.15:
+			story_event_i += 1
+		if story_event_i >= story_events.size():
+			return
+		var ev: Dictionary = story_events[story_event_i]
+		var warn_start := float(ev.get("warn_start", 0.0))
+		var head := float(ev.get("head", 0.0))
+		var tail := float(ev.get("tail", head))
+		if clock >= warn_start and clock < head:
+			active_story_event = ev
+			_start_challenge_warning(int(ev.get("kind", CHALLENGE_BOSS)),
+				float(ev.get("angle", -1.5708)), ev.get("cfg", {}), head, tail)
+		elif clock >= head and clock < tail:
+			active_story_event = ev
+			pending_story_angle = float(ev.get("angle", -1.5708))
+			_start_challenge(int(ev.get("kind", CHALLENGE_BOSS)), ev.get("cfg", {}), head, tail)
+		return
+	var active_head := float(active_story_event.get("head", 0.0))
+	var active_tail := float(active_story_event.get("tail", active_head))
+	if warning_active and clock >= active_head:
+		_clear_challenge_warning()
+		pending_story_angle = float(active_story_event.get("angle", -1.5708))
+		_start_challenge(int(active_story_event.get("kind", CHALLENGE_BOSS)),
+			active_story_event.get("cfg", {}), active_head, active_tail)
+	elif challenge_active and clock >= active_tail:
+		_finish_challenge(challenge_satisfied)
+	if clock >= active_tail + 0.15 and not warning_active and not challenge_active:
+		active_story_event = {}
+		story_event_i += 1
+
+
+func _start_challenge_warning(kind: int, angle: float, cfg: Dictionary = {},
+		head_beat := -999.0, tail_beat := -999.0) -> void:
 	warning_active = true
 	warning_type = kind
 	warning_started_ms = now_ms()
@@ -536,16 +731,16 @@ func _start_challenge_warning(kind: int, angle: float, cfg: Dictionary = {}) -> 
 	warning_duration_ms = conductor.cycle_duration * warn_beats
 	warning_angle = angle
 	pending_story_angle = angle
-	story_head_beat = float(current_beat) + warn_beats
-	story_tail_beat = story_head_beat + active_beats
+	story_head_beat = head_beat if head_beat > -900.0 else _chart_clock() + warn_beats
+	story_tail_beat = tail_beat if tail_beat > -900.0 else story_head_beat + active_beats
 	arena.warning_active = true
 	arena.warning_type = kind
 	arena.warning_progress = 0.0
 	arena.story_angle = angle
 	arena.story_cfg = cfg
 	arena.story_visible = true
-	arena.story_u_head = warn_beats
-	arena.story_u_tail = warn_beats + active_beats
+	arena.story_u_head = story_head_beat - _chart_clock()
+	arena.story_u_tail = story_tail_beat - _chart_clock()
 	arena.role_sheet = role_sheet
 	if kind == CHALLENGE_BOSS:
 		set_feedback("上司靠近中...", COL_ORANGE)
@@ -557,8 +752,9 @@ func _start_challenge_warning(kind: int, angle: float, cfg: Dictionary = {}) -> 
 func _update_challenge_warning(_delta: float) -> void:
 	if not warning_active:
 		return
-	var elapsed := now_ms() - warning_started_ms
-	var p := clampf(elapsed / maxf(warning_duration_ms, 1.0), 0.0, 1.0)
+	var clock := _chart_clock()
+	var warn_start := story_head_beat - float(pending_story_cfg.get("warn_beats", CHALLENGE_WARN_BEATS))
+	var p := clampf((clock - warn_start) / maxf(story_head_beat - warn_start, 0.001), 0.0, 1.0)
 	arena.warning_progress = p
 
 
@@ -574,7 +770,7 @@ func _clear_challenge_warning() -> void:
 		arena.warning_progress = 0.0
 
 
-func _start_challenge(kind: int, cfg: Dictionary = {}) -> void:
+func _start_challenge(kind: int, cfg: Dictionary = {}, head_beat := -999.0, tail_beat := -999.0) -> void:
 	if challenge_active:
 		_finish_challenge(false)
 	current_story_cfg = cfg if not cfg.is_empty() else pending_story_cfg
@@ -589,6 +785,10 @@ func _start_challenge(kind: int, cfg: Dictionary = {}) -> void:
 	challenge_done_this_press = false
 	challenge_satisfied = false
 	var beats: float = float(current_story_cfg.get("beats", BOSS_BEATS if kind == CHALLENGE_BOSS else LANDLORD_BEATS))
+	if head_beat > -900.0:
+		story_head_beat = head_beat
+	if tail_beat > -900.0:
+		story_tail_beat = tail_beat
 	challenge_duration_ms = conductor.cycle_duration * beats
 	arena.challenge_active = true
 	arena.warning_active = false
@@ -602,9 +802,9 @@ func _start_challenge(kind: int, cfg: Dictionary = {}) -> void:
 	arena.boss_tex = boss_tex
 	action_tool.pulse(ACTION_NONE)
 	if kind == CHALLENGE_BOSS:
-		set_feedback("上司来了: 连点确认!", COL_ORANGE)
+		set_feedback("上司来了：连点确认！", COL_ORANGE)
 	else:
-		set_feedback("房东来了: 按住别松!", COL_ORANGE)
+		set_feedback("房东来了：按住别松！", COL_ORANGE)
 	play_sfx(snd_warn_stress, -8.0)
 
 
@@ -613,10 +813,8 @@ func _sync_story_bar() -> void:
 		return
 	if not (warning_active or challenge_active):
 		arena.story_visible = false
-		arena.story_u_head = 999.0
-		arena.story_u_tail = 999.0
 		return
-	var clock := float(current_beat) + conductor.beat_phase()
+	var clock := _chart_clock()
 	arena.story_visible = true
 	arena.story_u_head = story_head_beat - clock
 	arena.story_u_tail = story_tail_beat - clock
@@ -641,9 +839,12 @@ func _challenge_press_down() -> void:
 func _update_challenge(delta: float) -> void:
 	if not challenge_active:
 		return
-	var elapsed := now_ms() - challenge_started_ms
-	arena.challenge_converge = clampf(elapsed / CHALLENGE_CONVERGE_MS, 0.0, 1.0)
-	arena.challenge_time_progress = clampf(elapsed / maxf(challenge_duration_ms, 1.0), 0.0, 1.0)
+	var clock := _chart_clock()
+	var beat_span := maxf(story_tail_beat - story_head_beat, 0.001)
+	var elapsed_beats := maxf(0.0, clock - story_head_beat)
+	var elapsed_ms := elapsed_beats * conductor.cycle_duration
+	arena.challenge_converge = clampf(elapsed_ms / CHALLENGE_CONVERGE_MS, 0.0, 1.0)
+	arena.challenge_time_progress = clampf(elapsed_beats / beat_span, 0.0, 1.0)
 	if challenge_type == CHALLENGE_LANDLORD and challenge_hold_live:
 		challenge_hold_ms += delta * 1000.0
 		var need_hold := float(current_story_cfg.get("need", LANDLORD_HOLD_MS))
@@ -654,7 +855,7 @@ func _update_challenge(delta: float) -> void:
 	elif challenge_type == CHALLENGE_BOSS:
 		var need_taps := int(current_story_cfg.get("need", BOSS_TAPS))
 		arena.challenge_progress = clampf(float(challenge_taps) / float(maxi(need_taps, 1)), 0.0, 1.0)
-	if elapsed >= challenge_duration_ms:
+	if clock >= story_tail_beat:
 		_finish_challenge(challenge_satisfied)
 
 
@@ -669,17 +870,15 @@ func _finish_challenge(success: bool) -> void:
 	arena.challenge_time_progress = 0.0
 	arena.story_cfg = {}
 	arena.story_visible = false
-	arena.story_u_head = 999.0
-	arena.story_u_tail = 999.0
 	arena.role_linger = 1.0
 	if success:
 		_add_score(240 if kind == CHALLENGE_BOSS else 280)
 		_fever_hit()
 		play_sfx(snd_pass)
 		flash = maxf(flash, 0.7)
-		set_feedback("连点过关!" if kind == CHALLENGE_BOSS else "稳稳挡住!", COL_GOLD)
+		set_feedback("连点过关！" if kind == CHALLENGE_BOSS else "稳稳挡住！", COL_GOLD)
 	else:
-		apply_penalty("上司追问没接住!" if kind == CHALLENGE_BOSS else "房东催租没顶住!")
+		apply_penalty("上司追问没接住！" if kind == CHALLENGE_BOSS else "房东催租没顶住！")
 
 
 func _clear_challenge() -> void:
@@ -700,7 +899,38 @@ func _clear_challenge() -> void:
 # ===========================================================================
 # Layout
 # ===========================================================================
+func _update_chart_normal_notes() -> void:
+	if not chart_loaded or phase != "running" or judgement_runtime == null:
+		return
+	var clock := _chart_clock()
+	var miss_lag_beats := good_window() / maxf(conductor.cycle_duration, 1.0)
+	for note in judgement_runtime.sweep_past(clock, miss_lag_beats,
+			[RhythmChartScript.JUDGE_TAP, RhythmChartScript.JUDGE_NONE],
+			Callable(self, "_normal_judgement_note_filter")):
+		var ev: Dictionary = normal_event_by_id.get(str(note.get("id", "")), {})
+		if ev.is_empty():
+			continue
+		ev["missed"] = true
+		var k := int(ev.get("kind", -1))
+		if k < 0:
+			continue
+		if int(ev.get("action", ACTION_NONE)) != ACTION_NONE:
+			apply_penalty("%s没应对！" % KIND_NAME[k])
+		else:
+			_keep(k)
+
+
+func _normal_judgement_note_filter(note: Dictionary) -> bool:
+	var note_id := str(note.get("id", ""))
+	if not normal_event_by_id.has(note_id):
+		return false
+	return not _normal_judge_clock_overlaps_story(float(note.get("beat", 0.0)))
+
+
 func _layout_items() -> void:
+	if chart_loaded:
+		_layout_chart_normal_items()
+		return
 	var bp := conductor.beat_phase()
 	for slot in NOTE_SLOTS:
 		var k := slot - 1
@@ -729,6 +959,42 @@ func _layout_items() -> void:
 		tile.set_kind(int(note.get("kind", -1)))
 		tile.action = action
 		var pos := _path_pos(note, u)
+		tile.position = pos - tile.size * 0.5
+		var near := clampf(1.0 - absf(u), 0.0, 1.0)
+		tile.scale = Vector2.ONE * (0.84 + 0.25 * near)
+
+
+func _layout_chart_normal_items() -> void:
+	var clock := _chart_clock()
+	var visible_events: Array[Dictionary] = []
+	for ev in normal_chart_events:
+		if bool(ev.get("judged", false)) or bool(ev.get("missed", false)):
+			continue
+		var beat := float(ev.get("beat", 0.0))
+		if _normal_judge_clock_overlaps_story(beat):
+			continue
+		var action := int(ev.get("action", ACTION_NONE))
+		var tv := TRAVEL_TREAT if action == ACTION_NONE else TRAVEL_STRESS
+		var u := beat - clock
+		if u <= tv + 0.2 and u >= -0.8:
+			visible_events.append(ev)
+	visible_events.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return float(a.get("beat", 0.0)) < float(b.get("beat", 0.0)))
+	for i in item_tiles.size():
+		var tile: _Item = item_tiles[i]
+		if i >= visible_events.size():
+			tile.visible = false
+			continue
+		var ev: Dictionary = visible_events[i]
+		var action := int(ev.get("action", ACTION_NONE))
+		if not bool(ev.get("announced", false)):
+			ev["announced"] = true
+			play_sfx(snd_warn_treat if action == ACTION_NONE else snd_warn_stress, -13.0)
+		var u := float(ev.get("beat", 0.0)) - clock
+		tile.visible = true
+		tile.set_kind(int(ev.get("kind", -1)))
+		tile.action = action
+		var pos := _path_pos(ev, u)
 		tile.position = pos - tile.size * 0.5
 		var near := clampf(1.0 - absf(u), 0.0, 1.0)
 		tile.scale = Vector2.ONE * (0.84 + 0.25 * near)
@@ -914,7 +1180,7 @@ func _build_intro() -> void:
 # ===========================================================================
 func _enter_intro() -> void:
 	phase = "intro"
-	intro_label.text = "月底到了,压力从四面八方飞来!\n账单和诈骗电话: 按键扇走。\n朋友借钱: 按键格挡。\n美食、游戏和心动: 忍住别按。\n上司剧情要连点,房东剧情要长按。"
+	intro_label.text = "月底到了，压力从四面八方飞来。\n账单和诈骗电话：按键扇走。\n朋友借钱：按键格挡。\n美食、游戏和心动：忍住别按。\n上司剧情要连点，房东剧情要长按。"
 	intro_layer.visible = true
 	countdown_label.visible = false
 	set_tiles_visible(false)
@@ -1196,6 +1462,7 @@ class _Arena:
 	var story_angle := -1.5708
 	var story_cfg: Dictionary = {}
 	var story_visible := false
+	var story_alpha := 0.0
 	var story_u_head := 999.0
 	var story_u_tail := 999.0
 	var role_linger := 0.0
@@ -1213,6 +1480,7 @@ class _Arena:
 	func _process(delta: float) -> void:
 		t += delta
 		role_linger = move_toward(role_linger, 0.0, delta * 0.8)
+		story_alpha = move_toward(story_alpha, 1.0 if story_visible else 0.0, delta * 5.5)
 		queue_redraw()
 
 	func _draw() -> void:
@@ -1226,7 +1494,7 @@ class _Arena:
 		_draw_floaters(h)
 		draw_circle(Vector2(640, 338), 126.0, Color(1.0, 0.85, 0.35, 0.04 + flash * 0.11))
 		_draw_role()
-		if story_visible:
+		if story_visible or story_alpha > 0.01:
 			_draw_judgement_strip()
 		if flash > 0.0:
 			draw_rect(Rect2(0, 0, w, h), Color(1.0, 0.93, 0.55, flash * 0.10))
@@ -1289,19 +1557,19 @@ class _Arena:
 		var kind := _visible_story_kind()
 		if not challenge_active:
 			var pulse_a := 0.07 + 0.05 * absf(sin(t * 10.0))
-			draw_rect(Rect2(0, 0, 1280, 720), Color(1.0, 0.74, 0.20, pulse_a * (1.0 - warning_progress * 0.35)))
-		if story_u_tail < -0.25 or story_u_head > TRAVEL_STRESS + 0.65:
+			draw_rect(Rect2(0, 0, 1280, 720), Color(1.0, 0.74, 0.20, pulse_a * (1.0 - warning_progress * 0.35) * story_alpha))
+		if story_u_tail < -0.75 or story_u_head > TRAVEL_STRESS + 0.65:
 			return
 		var strip := _story_strip_points_from_beat_u(maxf(0.0, story_u_head), maxf(0.0, story_u_tail))
-		_draw_story_ribbon(strip, 1.0 if challenge_active else 0.78)
+		_draw_story_ribbon(strip, (1.0 if challenge_active else 0.78) * story_alpha)
 		if challenge_active:
 			if kind == CHALLENGE_BOSS:
-				_draw_tap_progress(challenge_progress)
+				_draw_tap_progress(challenge_progress, story_alpha)
 			else:
-				_draw_hold_fill(strip, challenge_progress)
+				_draw_hold_fill(strip, challenge_progress, story_alpha)
 		else:
-			_draw_warning_marker(Vector2(strip[0]), kind)
-		draw_arc(Vector2(640, 338), 48.0 + 5.0 * pulse, 0, TAU, 38, Color(1.0, 0.86, 0.03, 0.55), 3.0)
+			_draw_warning_marker(Vector2(strip[0]), kind, story_alpha)
+		draw_arc(Vector2(640, 338), 48.0 + 5.0 * pulse, 0, TAU, 38, Color(1.0, 0.86, 0.03, 0.55 * story_alpha), 3.0)
 
 	func _visible_story_kind() -> int:
 		return challenge_type if challenge_active else warning_type
@@ -1351,13 +1619,14 @@ class _Arena:
 		_draw_strip_end(Vector2(points[0]), active_a, true)
 		_draw_strip_end(Vector2(points[points.size() - 1]), active_a, false)
 
-	func _draw_tap_progress(progress: float) -> void:
+	func _draw_tap_progress(progress: float, alpha := 1.0) -> void:
 		var p := clampf(progress, 0.0, 1.0)
 		var col := Color("ffcf4d").lerp(Color("fff7b0"), 0.35 + p * 0.45)
+		col.a *= alpha
 		draw_arc(STRIKE, 62.0, -PI * 0.5, -PI * 0.5 + TAU * p, 40, col, 7.0)
-		draw_arc(STRIKE, 71.0 + 4.0 * absf(sin(t * 9.0)), 0, TAU, 40, Color(1, 1, 1, 0.28 + p * 0.18), 3.0)
+		draw_arc(STRIKE, 71.0 + 4.0 * absf(sin(t * 9.0)), 0, TAU, 40, Color(1, 1, 1, (0.28 + p * 0.18) * alpha), 3.0)
 
-	func _draw_hold_fill(points: Array, progress: float) -> void:
+	func _draw_hold_fill(points: Array, progress: float, alpha := 1.0) -> void:
 		var fill_path := []
 		var end_i := clampi(ceili(float(points.size() - 1) * clampf(progress, 0.0, 1.0)), 1, points.size() - 1)
 		for i in end_i + 1:
@@ -1366,16 +1635,17 @@ class _Arena:
 		for p in fill_path:
 			fill.append(p)
 		if fill.size() >= 2:
-			draw_polyline(fill, Color("58bfe8", 0.50), 19.0)
-			draw_polyline(fill, Color("fff7a8", 0.72), 8.0)
-		draw_arc(STRIKE, 62.0, -PI * 0.5, -PI * 0.5 + TAU * clampf(progress, 0.0, 1.0), 40, Color("58bfe8"), 7.0)
+			draw_polyline(fill, Color("58bfe8", 0.50 * alpha), 19.0)
+			draw_polyline(fill, Color("fff7a8", 0.72 * alpha), 8.0)
+		draw_arc(STRIKE, 62.0, -PI * 0.5, -PI * 0.5 + TAU * clampf(progress, 0.0, 1.0), 40, Color("58bfe8", alpha), 7.0)
 
-	func _draw_warning_marker(pos: Vector2, kind: int) -> void:
+	func _draw_warning_marker(pos: Vector2, kind: int, alpha := 1.0) -> void:
 		var col := Color("ffcf4d") if kind == CHALLENGE_BOSS else Color("58bfe8")
-		draw_circle(pos, 30.0, Color("e5483f", 0.95))
+		draw_circle(pos, 30.0, Color("e5483f", 0.95 * alpha))
+		col.a *= alpha
 		draw_circle(pos, 22.0, col)
-		draw_circle(pos + Vector2(-5, -6), 7.0, Color(1, 1, 1, 0.56))
-		draw_arc(pos, 34.0 + 7.0 * absf(sin(t * 8.0)), 0, TAU, 26, Color(1, 1, 1, 0.55), 3.0)
+		draw_circle(pos + Vector2(-5, -6), 7.0, Color(1, 1, 1, 0.56 * alpha))
+		draw_arc(pos, 34.0 + 7.0 * absf(sin(t * 8.0)), 0, TAU, 26, Color(1, 1, 1, 0.55 * alpha), 3.0)
 
 	func _draw_strip_end(pos: Vector2, alpha: float, head: bool) -> void:
 		var col := Color("ffcf4d") if head else Color("fff7b0")

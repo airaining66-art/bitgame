@@ -29,7 +29,7 @@ var _mango_tex: Texture2D
 var _anim_t := 0.0
 var _unlocked: Array = []
 var _armed := false   # ignore clicks for a moment so a leftover release from
-                      # the previous scene can't immediately launch a level
+					  # the previous scene can't immediately launch a level
 
 
 func _ready() -> void:
@@ -133,7 +133,7 @@ func _add_node(index: int, center: Vector2, lvl_name: String, lvl_id: String, un
 
 		# Extreme-mode button appears once the level is 3-star cleared.
 		var app2 = get_node_or_null("/root/App")
-		if app2 and app2.is_3star(index):
+		if app2 and app2.can_play_extreme(index):
 			var ex := Button.new()
 			ex.text = "极限 1.5×"
 			ex.custom_minimum_size = Vector2(120, 38)

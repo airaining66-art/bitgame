@@ -1,0 +1,991 @@
+{
+	"meta": {
+		"bpm_curve_exp": 1.0,
+		"duration_beats": 41.6666666666667,
+		"duration_mode": "music",
+		"duration_ms": 50000.0,
+		"end_bpm": 50.0,
+		"level_id": "1-1",
+		"level_name": "Binary",
+		"music_id": "Neon Pulse (Remove Section).mp3",
+		"music_path": "res://assets/Neon Pulse (Remove Section).mp3",
+		"start_bpm": 50.0,
+		"subdivisions": 2,
+		"variant": "normal",
+		"version": 1.0
+	},
+	"node_kinds": [
+		{
+			"color": "#ef4444",
+			"id": "bit0",
+			"name": "Bit 0"
+		},
+		{
+			"color": "#f6b800",
+			"id": "bit1",
+			"name": "Bit 1"
+		}
+	],
+	"notes": [
+		{
+			"beat": 0.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-017",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 1.0,
+			"duration_beats": 0.0,
+			"id": "209454117-33525",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 2.0,
+			"duration_beats": 0.0,
+			"id": "197393437-52727",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 3.0,
+			"duration_beats": 0.0,
+			"id": "208161832-64891",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 4.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-008",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 5.0,
+			"duration_beats": 0.0,
+			"id": "201994398-66791",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 6.0,
+			"duration_beats": 0.0,
+			"id": "206062749-38663",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 7.0,
+			"duration_beats": 0.0,
+			"id": "222404973-57360",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 8.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-018",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 9.0,
+			"duration_beats": 0.0,
+			"id": "212379749-58445",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 10.0,
+			"duration_beats": 0.0,
+			"id": "223571444-28638",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 11.0,
+			"duration_beats": 0.0,
+			"id": "224196563-22937",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 12.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-021",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 13.0,
+			"duration_beats": 0.0,
+			"id": "214671342-80193",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 14.0,
+			"duration_beats": 0.0,
+			"id": "216404626-70968",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 15.0,
+			"duration_beats": 0.0,
+			"id": "225249022-47457",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 15.5,
+			"duration_beats": 0.0,
+			"id": "306623824-3859",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 16.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-019",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 16.5,
+			"duration_beats": 0.0,
+			"id": "304656505-8181",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 17.0,
+			"duration_beats": 0.0,
+			"id": "226073831-38530",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 18.0,
+			"duration_beats": 0.0,
+			"id": "218196403-67133",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 19.0,
+			"duration_beats": 0.0,
+			"id": "226880149-39806",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 20.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-022",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 21.0,
+			"duration_beats": 0.0,
+			"id": "219580643-69197",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 24.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-024",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 26.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-026",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 28.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-028",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 30.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-030",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 32.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-032",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 34.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-034",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 36.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-036",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 38.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-038",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 40.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-040",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 42.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-042",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 44.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-044",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 46.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-046",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 48.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-048",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 50.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-050",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 52.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-052",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 54.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-054",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 56.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-056",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 58.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-058",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 60.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-060",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 62.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-062",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 64.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-064",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 66.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-066",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 68.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-068",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 70.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-070",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 72.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-072",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 74.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-074",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 76.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-076",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 78.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-078",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 80.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-080",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 82.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-082",
+			"judge_type": "none",
+			"kind": "bit0",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 84.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-084",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 86.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-086",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 88.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-088",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 90.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-090",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 92.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-092",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 94.0,
+			"duration_beats": 0.0,
+			"id": "neon-pulse-normal-094",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 96.0,
+			"duration_beats": 0.0,
+			"id": "888630377-55604",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 98.0,
+			"duration_beats": 0.0,
+			"id": "928561300-71779",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 100.0,
+			"duration_beats": 0.0,
+			"id": "892105810-47494",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 102.0,
+			"duration_beats": 0.0,
+			"id": "893214354-5548",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 104.0,
+			"duration_beats": 0.0,
+			"id": "910450010-8203",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 106.0,
+			"duration_beats": 0.0,
+			"id": "930895894-77697",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 108.0,
+			"duration_beats": 0.0,
+			"id": "931996354-79854",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 110.0,
+			"duration_beats": 0.0,
+			"id": "952688794-25738",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 112.0,
+			"duration_beats": 0.0,
+			"id": "965666212-95036",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 114.0,
+			"duration_beats": 0.0,
+			"id": "935295070-59531",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 116.0,
+			"duration_beats": 0.0,
+			"id": "976207286-10971",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 118.0,
+			"duration_beats": 0.0,
+			"id": "936726409-614",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 120.0,
+			"duration_beats": 0.0,
+			"id": "978792199-35105",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 122.0,
+			"duration_beats": 0.0,
+			"id": "933348649-62782",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 124.0,
+			"duration_beats": 0.0,
+			"id": "982817133-38669",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 126.0,
+			"duration_beats": 0.0,
+			"id": "1011870487-52983",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 128.0,
+			"duration_beats": 0.0,
+			"id": "985842468-44476",
+			"judge_type": "tap",
+			"kind": "bit0",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 130.0,
+			"duration_beats": 0.0,
+			"id": "1013788367-28257",
+			"judge_type": "none",
+			"kind": "bit1",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 132.0,
+			"duration_beats": 0.0,
+			"id": "987701118-1896",
+			"judge_type": "tap",
+			"kind": "bit1",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		}
+	],
+	"tracks": [
+		{
+			"color": "#ef4444",
+			"id": "node",
+			"name": "Node"
+		},
+		{
+			"color": "#777777",
+			"id": "decoy",
+			"name": "Non-node"
+		}
+	]
+}

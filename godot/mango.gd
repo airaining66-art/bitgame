@@ -1,5 +1,9 @@
-extends LevelBase
-## 1-2 芒果奇缘 — bathroom reaction level.
+﻿extends LevelBase
+
+const RhythmChartScript := preload("res://rhythm/rhythm_chart.gd")
+const BeatSlotJudgementScript := preload("res://rhythm/beat_slot_judgement.gd")
+const MangoMusicScript := preload("res://lofi.gd")
+## 1-2 芒果奇缘 - bathroom reaction level.
 ## Two icons (mango / water-drop) slide to center each beat; if they match,
 ## bite (press) on the beat; if they differ, hold off. Biting zooms the mango
 ## and wall in and the shower droplets vanish. Hold "savor" notes + lo-fi BGM.
@@ -34,28 +38,9 @@ const SPACING := 330.0       # pixels per beat of continuous scroll
 const JUDGE_OFFSET := 0.75   # a note crosses center at this phase of its cycle
 const NOTE_SLOTS := 7        # IconTiles per lane (scroll window)
 
-## Fixed, FINITE chart. Tokens: m=mango press, w=water press, -=no-press beat,
-## H=3-beat mango "savor" hold, E=end marker.
-const CHART := [
-	"m", "-", "m", "m",
-	"w", "w", "-", "w",
-	"m", "-", "m", "H",
-	"w", "-", "w", "w",
-	"m", "m", "-", "m",
-	"H", "w", "w", "-",
-	"m", "-", "w", "-",
-	"m", "m", "H",
-	"w", "w", "-", "w",
-	"m", "-", "m", "m",
-	"w", "H",
-	"m", "m", "m", "H",   # final flourish
-	"E",
-]
-
 # --- mango-specific state ---------------------------------------------------
-var lofi: Music
+var lofi: Node
 var current_beat := 0
-var last_judged_beat := -1
 var current_beat_data: Dictionary = {}
 var prev_beat_data: Dictionary = {}
 var queue: Array[Dictionary] = []
@@ -63,8 +48,8 @@ var hit_pop := 0.0
 var current_hit := false
 var chart_i := 0
 var chart_total_beats := 0
-var hold_emit_left := 0
-var hold_emit_len := 0
+var active_chart_beats: Array = []
+var beat_judgement := BeatSlotJudgementScript.new()
 var hold_active := false
 var hold_filled := 0.0
 var hold_head_pop := 0.0
@@ -127,7 +112,6 @@ func make_cfg() -> Dictionary:
 	return {
 		"duration_ms": 45000.0, "start_bpm": 70.0, "end_bpm": 110.0,
 		"bpm_curve_exp": 1.6, "subdivisions": 4,
-		"press_ratio": 0.6, "max_skip_run": 2, "max_press_run": 3,
 	}
 
 
@@ -149,7 +133,7 @@ func _conf() -> Dictionary:
 
 
 func _make_music() -> Node:
-	lofi = Music.new()
+	lofi = setup_chart_music("1-2", MangoMusicScript)
 	return lofi
 
 
@@ -183,7 +167,7 @@ func _build_level() -> void:
 
 func _reset_level() -> void:
 	current_beat = 0
-	last_judged_beat = -1
+	beat_judgement.reset()
 	prepare_beats()
 	wetness = 0.45
 	world.wetness = 0.45
@@ -207,9 +191,9 @@ func _enter_start() -> void:
 
 func _begin_play() -> void:
 	current_beat = 0
-	last_judged_beat = -1
+	beat_judgement.reset()
 	set_tiles_visible(true)
-	set_feedback("开吃!", COL_MANGO_DK)
+	set_feedback("开吃！", COL_MANGO_DK)
 
 
 func _on_space(pressed: bool) -> void:
@@ -262,14 +246,14 @@ func _on_beat(_cycle_index: int) -> void:
 	ensure_queue()
 	current_beat += 1
 	current_hit = false
-	if current_beat >= chart_total_beats - 8:
-		lofi.finale = true
+	if current_beat >= chart_total_beats - 8 and lofi:
+		lofi.set("finale", true)
 	if current_beat_data.get("end", false):
 		_start_outro()
 
 
 func _on_downbeat(_cycle_index: int) -> void:
-	# A soft kick on every "should-press" beat — the rhythm peg you press to.
+	# A soft kick on every "should-press" beat, the rhythm peg you press to.
 	if phase == "running" and current_beat_data.get("should_press", false):
 		play_sfx(snd_anchor, -9.0)
 
@@ -485,12 +469,13 @@ func _build_hud() -> void:
 		rank_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(rank_bg)
 		move_child(rank_bg, score_group.get_index())
-		score_group.position = Vector2(24, 43)
+		score_group.position = Vector2(37, 43)
 		var score_caption := score_group.get_child(0) as Label
 		if score_caption:
 			score_caption.visible = false
 		score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		score_label.custom_minimum_size = Vector2(84, 42)
+		score_label.size = Vector2(84, 42)
 		score_label.add_theme_font_size_override("font_size", 30)
 	if bpm_tex != null and bpm_label != null:
 		bpm_skin = _BpmHud.new()
@@ -513,11 +498,11 @@ func _build_hud() -> void:
 		hp_skin = _HpHud.new()
 		hp_skin.tex = hp_tex
 		hp_skin.health = health
-		hp_skin.size = Vector2(166, 130)
-		hp_skin.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-		hp_skin.position = Vector2(-184, 8)
+		hp_skin.position = Vector2(1094, 16)
+		hp_skin.size = Vector2(166, 76)
 		hp_skin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(hp_skin)
+		move_child(hp_skin, get_child_count() - 1)
 
 
 func _build_pause() -> void:
@@ -542,32 +527,15 @@ func _build_pause() -> void:
 # Beat generation
 # ===========================================================================
 func make_beat() -> Dictionary:
-	if hold_emit_left > 0:
-		var pos := hold_emit_len - hold_emit_left
-		hold_emit_left -= 1
-		return _hold_beat(pos, hold_emit_len)
-	if chart_i >= CHART.size():
-		return {"top": MANGO, "bottom": MANGO, "should_press": false,
-			"hold": false, "hold_pos": 0, "hold_len": 0, "end": true}
-	var tok: String = CHART[chart_i]
-	chart_i += 1
-	match tok:
-		"H":
-			hold_emit_len = 3
-			hold_emit_left = hold_emit_len - 1
-			return _hold_beat(0, hold_emit_len)
-		"m":
-			return {"top": MANGO, "bottom": MANGO, "should_press": true,
-				"hold": false, "hold_pos": 0, "hold_len": 0}
-		"w":
-			return {"top": WATER, "bottom": WATER, "should_press": true,
-				"hold": false, "hold_pos": 0, "hold_len": 0}
-		"E":
+	if not active_chart_beats.is_empty():
+		if chart_i >= active_chart_beats.size():
 			return {"top": MANGO, "bottom": MANGO, "should_press": false,
 				"hold": false, "hold_pos": 0, "hold_len": 0, "end": true}
-		_:
-			return {"top": MANGO, "bottom": WATER, "should_press": false,
-				"hold": false, "hold_pos": 0, "hold_len": 0}
+		var beat_data: Dictionary = active_chart_beats[chart_i]
+		chart_i += 1
+		return beat_data.duplicate(true)
+	return {"top": MANGO, "bottom": MANGO, "should_press": false,
+		"hold": false, "hold_pos": 0, "hold_len": 0, "end": true}
 
 
 func _hold_beat(pos: int, length: int) -> Dictionary:
@@ -580,18 +548,13 @@ func ensure_queue() -> void:
 		queue.append(make_beat())
 
 
-func _chart_beats() -> int:
-	var n := 0
-	for tok in CHART:
-		n += 3 if tok == "H" else 1
-	return n
-
-
 func prepare_beats() -> void:
 	queue = []
+	active_chart_beats = _load_editor_chart_beats()
+	if active_chart_beats.is_empty():
+		push_warning("Missing RhythmChart for 1-2; level has no script fallback chart.")
 	chart_i = 0
-	chart_total_beats = _chart_beats()
-	hold_emit_left = 0
+	chart_total_beats = active_chart_beats.size()
 	hold_active = false
 	hold_filled = 0.0
 	hit_pop = 0.0
@@ -599,6 +562,49 @@ func prepare_beats() -> void:
 	ensure_queue()
 	current_beat_data = queue.pop_front()
 	ensure_queue()
+
+
+func _load_editor_chart_beats() -> Array:
+	return chart_slots_for("1-2", 1,
+		Callable(self, "_chart_note_to_beat"),
+		{"top": MANGO, "bottom": WATER, "should_press": false,
+			"hold": false, "hold_pos": 0, "hold_len": 0, "_priority": 0},
+		{"top": MANGO, "bottom": MANGO, "should_press": false,
+			"hold": false, "hold_pos": 0, "hold_len": 0, "end": true})
+
+
+func _chart_note_to_beat(note: Dictionary):
+	var judge := str(note.get("judge_type", RhythmChartScript.JUDGE_NONE))
+	var kind := str(note.get("kind", "mango"))
+	var top := _chart_kind_to_icon(kind)
+	if judge == RhythmChartScript.JUDGE_HOLD:
+		var length := maxi(1, int(note.get("duration_ticks", 1)))
+		var beats := []
+		for i in length:
+			var data := _hold_beat(i, length)
+			data["_priority"] = 3
+			data["_offset"] = i
+			beats.append(data)
+		return beats
+	var should_press := judge != RhythmChartScript.JUDGE_NONE \
+		and str(note.get("lane", RhythmChartScript.LANE_NODE)) != RhythmChartScript.LANE_DECOY
+	return {
+		"top": top,
+		"bottom": top if should_press else 1 - top,
+		"should_press": should_press,
+		"hold": false,
+		"hold_pos": 0,
+		"hold_len": 0,
+		"_priority": 2 if should_press else 1,
+	}
+
+
+func _chart_kind_to_icon(kind: String) -> int:
+	match kind:
+		"water":
+			return WATER
+		_:
+			return MANGO
 
 
 # ===========================================================================
@@ -615,21 +621,24 @@ func _press_down() -> void:
 	var cur := current_beat_data
 	if cur.get("hold", false):
 		if int(cur.get("hold_pos", 0)) == 0 and not hold_active:
-			last_judged_beat = current_beat
+			if beat_judgement.was_judged(current_beat):
+				return
+			beat_judgement.mark_judged(current_beat)
 			_start_hold()
 		return
-	if last_judged_beat == current_beat:
+	var d := _judge_delta()
+	var result := beat_judgement.judge_press(current_beat,
+		bool(cur.get("should_press", false)), d, perfect_window(), good_window())
+	var kind := str(result.get("result", ""))
+	if kind == BeatSlotJudgementScript.RESULT_REPEAT:
 		return
 	flash_button()
-	last_judged_beat = current_beat
-	var d := _judge_delta()
-	if not cur["should_press"]:
-		apply_penalty("不一样!")
-		return
-	if d <= perfect_window():
+	if kind == BeatSlotJudgementScript.RESULT_WRONG:
+		apply_penalty("不一样")
+	elif kind == BeatSlotJudgementScript.RESULT_PERFECT:
 		_show_feedback_art(perfect_tex)
 		reward("Perfect", 120)
-	elif d <= good_window():
+	elif kind == BeatSlotJudgementScript.RESULT_GOOD:
 		_show_feedback_art(good_tex)
 		reward("Good", 80)
 	else:
@@ -663,7 +672,7 @@ func _start_hold() -> void:
 	_add_score(100)
 	_fever_hit()
 	play_sfx(snd_bite)
-	set_feedback("回味!", COL_MANGO_DK)
+	set_feedback("回味！", COL_MANGO_DK)
 	_hit_feedback(MANGO)
 	hold_head_pop = 1.0
 	_step_out()
@@ -679,27 +688,33 @@ func _resolve_boundary() -> void:
 		var pos := int(cur.get("hold_pos", 0))
 		if pos == 0:
 			if not hold_active:
-				last_judged_beat = current_beat
+				if beat_judgement.was_judged(current_beat):
+					return
+				beat_judgement.mark_judged(current_beat)
 				if is_holding():
 					_start_hold()
 				else:
-					apply_penalty("Miss")
+					apply_penalty("漏掉了")
 		else:
-			last_judged_beat = current_beat
+			beat_judgement.mark_judged(current_beat)
 			if hold_active:
 				_add_score(60)
 				_fever_hit()
 				play_sfx(snd_bite, -6.0)
-				set_feedback("回味…", COL_GREEN)
+				set_feedback("回味", COL_GREEN)
 				_hit_feedback(MANGO)
 				hold_head_pop = 1.0
 				_step_out()
 		if pos == l - 1:
 			hold_active = false
-	elif last_judged_beat != current_beat:
-		last_judged_beat = current_beat
-		if cur["should_press"]:
-			apply_penalty("Miss")
+	else:
+		var result := beat_judgement.resolve_slot(current_beat,
+			bool(cur.get("should_press", false)))
+		var kind := str(result.get("result", ""))
+		if kind == BeatSlotJudgementScript.RESULT_REPEAT:
+			return
+		if kind == BeatSlotJudgementScript.RESULT_MISS:
+			apply_penalty("漏掉了")
 		else:
 			set_feedback("忍住", COL_MUTED)
 

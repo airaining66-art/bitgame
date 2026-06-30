@@ -12,6 +12,8 @@ extends Control
 ## NOTE MODEL (which note is at the line, scroll/park/grid math) stays per-level,
 ## with per-level tunable windows.
 
+const _LevelChartBridgeScript := preload("res://rhythm/level_chart_bridge.gd")
+
 const COUNTDOWN_BEATS := ["3", "2", "1", "START"]
 
 # --- shared state -----------------------------------------------------------
@@ -98,6 +100,30 @@ func _ready() -> void:
 
 func now_ms() -> float:
 	return Time.get_ticks_usec() / 1000.0
+
+
+func chart_meta_for(level_id: String) -> Dictionary:
+	return _LevelChartBridgeScript.load_meta(level_id, bool(app and app.extreme))
+
+
+func chart_for(level_id: String):
+	return _LevelChartBridgeScript.load_chart(level_id, bool(app and app.extreme))
+
+
+func chart_sequencer_for(level_id: String, ticks_per_beat := 1):
+	return _LevelChartBridgeScript.load_sequencer(level_id, bool(app and app.extreme), ticks_per_beat)
+
+
+func chart_slots_for(level_id: String, ticks_per_beat: int, map_event: Callable,
+		rest_data: Dictionary, end_data: Dictionary) -> Array:
+	return _LevelChartBridgeScript.load_discrete_slots(level_id, bool(app and app.extreme),
+		ticks_per_beat, map_event, rest_data, end_data)
+
+
+func setup_chart_music(level_id: String, fallback_script) -> Node:
+	var meta := chart_meta_for(level_id)
+	_LevelChartBridgeScript.apply_meta_to_level(meta, level, conductor)
+	return _LevelChartBridgeScript.make_music_from_meta(meta, fallback_script)
 
 
 # ===========================================================================

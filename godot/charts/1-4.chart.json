@@ -1,0 +1,863 @@
+{
+	"meta": {
+		"bpm_curve_exp": 1.5,
+		"duration_beats": 66.0,
+		"end_bpm": 118.0,
+		"level_id": "1-4",
+		"level_name": "BBQ",
+		"music_id": "bbq",
+		"music_path": "res://bbq_music.gd",
+		"start_bpm": 84.0,
+		"subdivisions": 4.0,
+		"variant": "normal",
+		"version": 1.0
+	},
+	"node_kinds": [
+		{
+			"color": "#c62828",
+			"id": "beef",
+			"name": "Beef"
+		},
+		{
+			"color": "#ff6f00",
+			"id": "pepper",
+			"name": "Pepper"
+		},
+		{
+			"color": "#7b1fa2",
+			"id": "onion",
+			"name": "Onion"
+		},
+		{
+			"color": "#6d4c41",
+			"id": "mushroom",
+			"name": "Mushroom"
+		},
+		{
+			"color": "#fff9c4",
+			"id": "bread",
+			"name": "Bread"
+		},
+		{
+			"color": "#388e3c",
+			"id": "leek",
+			"name": "Leek"
+		},
+		{
+			"color": "#ffc107",
+			"id": "flip",
+			"name": "Flip"
+		},
+		{
+			"color": "#777777",
+			"id": "rest",
+			"name": "Rest"
+		}
+	],
+	"notes": [
+		{
+			"beat": 0.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-1",
+			"judge_type": "tap",
+			"kind": "beef",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 1.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-2",
+			"judge_type": "none",
+			"kind": "rest",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 2.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-3",
+			"judge_type": "tap",
+			"kind": "pepper",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 3.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-4",
+			"judge_type": "none",
+			"kind": "rest",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 4.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-5",
+			"judge_type": "none",
+			"kind": "leek",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 5.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-6",
+			"judge_type": "tap",
+			"kind": "onion",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 6.0,
+			"duration_beats": 1.5,
+			"id": "migrated-1-4-7",
+			"judge_type": "hold",
+			"kind": "flip",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 7.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-8",
+			"judge_type": "none",
+			"kind": "rest",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 8.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-9",
+			"judge_type": "none",
+			"kind": "leek",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 9.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-10",
+			"judge_type": "tap",
+			"kind": "mushroom",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 10.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-11",
+			"judge_type": "tap",
+			"kind": "beef",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 11.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-12",
+			"judge_type": "none",
+			"kind": "rest",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 12.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-13",
+			"judge_type": "none",
+			"kind": "onion",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 13.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-14",
+			"judge_type": "tap",
+			"kind": "pepper",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 14.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-15",
+			"judge_type": "none",
+			"kind": "leek",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 15.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-16",
+			"judge_type": "tap",
+			"kind": "onion",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 16.0,
+			"duration_beats": 1.5,
+			"id": "migrated-1-4-17",
+			"judge_type": "hold",
+			"kind": "flip",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 17.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-18",
+			"judge_type": "none",
+			"kind": "rest",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 18.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-19",
+			"judge_type": "none",
+			"kind": "pepper",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 19.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-20",
+			"judge_type": "tap",
+			"kind": "beef",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 20.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-21",
+			"judge_type": "none",
+			"kind": "leek",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 21.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-22",
+			"judge_type": "tap",
+			"kind": "pepper",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 22.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-23",
+			"judge_type": "none",
+			"kind": "onion",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 23.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-24",
+			"judge_type": "tap",
+			"kind": "mushroom",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 24.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-25",
+			"judge_type": "none",
+			"kind": "leek",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 25.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-26",
+			"judge_type": "tap",
+			"kind": "onion",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 26.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-27",
+			"judge_type": "none",
+			"kind": "pepper",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 27.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-28",
+			"judge_type": "tap",
+			"kind": "bread",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 28.0,
+			"duration_beats": 1.5,
+			"id": "migrated-1-4-29",
+			"judge_type": "hold",
+			"kind": "flip",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 29.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-30",
+			"judge_type": "none",
+			"kind": "rest",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 30.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-31",
+			"judge_type": "tap",
+			"kind": "beef",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 31.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-32",
+			"judge_type": "tap",
+			"kind": "pepper",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 32.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-33",
+			"judge_type": "tap",
+			"kind": "onion",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 33.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-34",
+			"judge_type": "none",
+			"kind": "leek",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 34.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-35",
+			"judge_type": "tap",
+			"kind": "mushroom",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 35.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-36",
+			"judge_type": "none",
+			"kind": "pepper",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 36.0,
+			"duration_beats": 1.5,
+			"id": "migrated-1-4-37",
+			"judge_type": "hold",
+			"kind": "flip",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 37.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-38",
+			"judge_type": "none",
+			"kind": "rest",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 38.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-39",
+			"judge_type": "none",
+			"kind": "beef",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 39.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-40",
+			"judge_type": "tap",
+			"kind": "leek",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 40.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-41",
+			"judge_type": "none",
+			"kind": "mushroom",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 41.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-42",
+			"judge_type": "tap",
+			"kind": "beef",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 42.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-43",
+			"judge_type": "none",
+			"kind": "pepper",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 43.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-44",
+			"judge_type": "tap",
+			"kind": "mushroom",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 44.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-45",
+			"judge_type": "none",
+			"kind": "leek",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 45.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-46",
+			"judge_type": "tap",
+			"kind": "pepper",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 46.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-47",
+			"judge_type": "none",
+			"kind": "bread",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 47.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-48",
+			"judge_type": "tap",
+			"kind": "onion",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 48.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-49",
+			"judge_type": "none",
+			"kind": "pepper",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 49.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-50",
+			"judge_type": "tap",
+			"kind": "bread",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 50.0,
+			"duration_beats": 1.5,
+			"id": "migrated-1-4-51",
+			"judge_type": "hold",
+			"kind": "flip",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 51.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-52",
+			"judge_type": "none",
+			"kind": "mushroom",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 52.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-53",
+			"judge_type": "none",
+			"kind": "pepper",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 53.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-54",
+			"judge_type": "tap",
+			"kind": "beef",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 54.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-55",
+			"judge_type": "none",
+			"kind": "leek",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 55.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-56",
+			"judge_type": "tap",
+			"kind": "pepper",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 56.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-57",
+			"judge_type": "none",
+			"kind": "mushroom",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 57.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-58",
+			"judge_type": "tap",
+			"kind": "onion",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 58.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-59",
+			"judge_type": "none",
+			"kind": "pepper",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 59.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-60",
+			"judge_type": "tap",
+			"kind": "mushroom",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 60.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-61",
+			"judge_type": "none",
+			"kind": "leek",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 61.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-62",
+			"judge_type": "tap",
+			"kind": "bread",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 62.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-63",
+			"judge_type": "none",
+			"kind": "onion",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 63.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-64",
+			"judge_type": "tap",
+			"kind": "leek",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 64.0,
+			"duration_beats": 1.5,
+			"id": "migrated-1-4-65",
+			"judge_type": "hold",
+			"kind": "flip",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 65.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-4-66",
+			"judge_type": "none",
+			"kind": "rest",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		}
+	],
+	"tracks": [
+		{
+			"color": "#ef4444",
+			"id": "node",
+			"name": "Node"
+		},
+		{
+			"color": "#777777",
+			"id": "decoy",
+			"name": "Non-node"
+		}
+	]
+}

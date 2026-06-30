@@ -2,6 +2,8 @@ extends Node
 ## Autoloaded singleton: shared UI theme (CJK font), the level table, and
 ## scene-flow helpers (Title -> Level Select -> Game).
 
+const LevelChartBridgeScript := preload("res://rhythm/level_chart_bridge.gd")
+
 var ui_theme: Theme
 var levels: Array = []
 var current_index := 0
@@ -66,6 +68,18 @@ func is_3star(index: int) -> bool:
 	return cleared_3star.get(index, false)
 
 
+func level_id(index: int) -> String:
+	return str(levels[index].get("id", ""))
+
+
+func has_extreme_chart(index: int) -> bool:
+	return LevelChartBridgeScript.chart_exists(level_id(index), true)
+
+
+func can_play_extreme(index: int) -> bool:
+	return is_3star(index) and has_extreme_chart(index)
+
+
 ## The current level's config, scaled to 1.5x for an Extreme run.
 func active_cfg() -> Dictionary:
 	var cfg: Dictionary = current_level().get("cfg", {}).duplicate()
@@ -99,9 +113,6 @@ func _cfg(duration_ms: float, start_bpm := 50.0, end_bpm := 100.0) -> Dictionary
 		"end_bpm": end_bpm,
 		"bpm_curve_exp": 1.6,
 		"subdivisions": 4,
-		"press_ratio": 0.6,
-		"max_skip_run": 2,
-		"max_press_run": 3,
 	}
 
 
@@ -132,7 +143,7 @@ func goto_levels() -> void:
 
 func play_level(index: int, ext := false) -> void:
 	current_index = index
-	extreme = ext
+	extreme = ext and can_play_extreme(index)
 	var scene: String = levels[index].get("scene", "")
 	if scene == "":
 		scene = "res://main.tscn"

@@ -6,7 +6,7 @@
 
 > 这是给**接手项目的人**(或新开对话的 AI)看的交接文档:读完应能跑起来、看懂
 > 结构、知道怎么加新关卡。🟡 = 容易踩的坑。**最重要的一节是 [§2 架构](#2-架构总览
-> levelbase--子类)** —— 三关现在都是同一个基类的薄子类。
+> levelbase--子类)** —— 已接入关卡都应该是同一个基类和同一套谱面/判定运行时的薄表现层。
 
 ---
 
@@ -21,21 +21,22 @@
 
 ## 1. 当前状态(2026-06)
 
-**可玩关卡(4 个,都做完了):**
+**可玩关卡(5 个):**
 | 关 | 文件 | 主题 / 机制 |
 |---|---|---|
 | 1-1 生存之战 | `main.gd` | 二进制 0/1,上下相同就按;滑入-停顿式判定;首次进有**新手引导**(组长/试用期梗)+ 金色粒子。8-bit 音乐。 |
 | 1-2 芒果奇缘 | `mango.gd` | 浴室瓷砖 + 手持芒果;芒果/水珠连续横向滚动(太鼓达人式);**长按"回味"**;咬芒果会放大+清水珠。东南亚迷幻音乐。 |
 | 1-3 薛定谔告白 | `schrodinger.gd` | 像素风烛光晚餐表白;**上下两条独立**(上=食物八分网格 / 下=人脸四分);只在"有对的、没有错的"时按;**双击 / 連打框 / 长按(双条)**;头顶对话气泡;日系 J-pop。**极限版=宝宝模式**(3 段爆发:下面变宝宝、上面变奶瓶、提速 1.5×、四周压暗)。 |
 | 1-4 烤摊之王 | `bbq.gd` | 夜市烧烤摊;食材从右往左滚,按右侧"目标烤串"的**顺序**叉对的食材,**错的食材是干扰项要忍住别叉**;一串叉满后**按住翻面**(松早/没按=烤焦)。代码绘制的夜市背景 + 炭火/火花。弗拉门戈/中东风 chiptune(`bbq_music.gd` `class_name BBQMusic`)。 |
+| 1-5 房租的主人 | `rent.gd` | 一键处理生活压力:账单/诈骗电话扇走,朋友借钱格挡,美食/游戏/心动要忍住;固定谱面里有上司追问(`roll`)和房东催租(`hold`)挑战。 |
 
-1-5 超绝仰卧起 / 1-6 我有一个PLAN 在选关地图上有名字,**还没做**。
+1-6 我有一个PLAN 在选关地图上有名字,目前仍锁定、未接场景。
 
 **通用系统(都在基类里):** Fever(命中攒满→6 秒 ×2 分)、S/A/B/C/D 段位(按命中率)、
 极限模式(某关 0 掉血三星通关后解锁,选关页出「极限」按钮)、暂停(继续/再来一次/返回关卡)、
 存档(三星 + 最高分,写到 `user://progress.cfg`)。
 
-**最近一次大改:把三关重构成 `LevelBase` 基类 + 薄子类**(见 §2),并加了暂停系统。
+**最近一次大改:把关卡收敛到 `LevelBase` + `RhythmChart` + 共享判定运行时**(见 §2),并加了暂停系统。
 
 **仓库:** https://github.com/airaining66-art/bitgame (`main` 分支)。`bitgame.exe`(~97MB)和 `builds/`(安卓/macOS 导出)都已 gitignore,发版走 Releases。
 
@@ -46,7 +47,7 @@
 整个游戏没有外部依赖、无第三方插件;音效/音乐**全部运行时程序化合成**(`AudioStreamWAV`),不是音频文件。
 
 ### 关卡基类 `level_base.gd`(`class_name LevelBase extends Control`)
-**所有关卡共用的框架都在这**,改一次三关都生效:
+**所有关卡共用的框架都在这**,改一次已接入关卡都生效:
 - Conductor 生命周期 + 信号分发;SFX 池 + `tone()` 合成器;`_load_tex()`
 - HUD 骨架、Fever 系统、倒计时、**结算页 + S~D 评级 + 分数/最高分记录**
 - 暂停接线、计分/扣血/Fever 记账(`_add_score`/`apply_penalty`/`_fever_hit`)
@@ -71,11 +72,30 @@
 | `_verdict(掉血数, won)→{rank, eval, color?}` | 结束语(基类负责评级/记录/显示) |
 | `_outro_fx()` / `perfect_window()`/`good_window()` / `_countdown_tick(last)` | 收尾特效 / 各关判定窗口 / 倒计时音 |
 
-> 🟡 **判定的拆分原则**:命中/失误的**结果**(加分/连击/Fever、扣血/断连)和**时间分类**
-> 在基类;但**"哪个音符到判定线了"这个音符模型**(1-1 滑停 / 1-2 连续滚 / 1-3 八分双轨)
-> 留在各关,各自有可单独调的判定窗口。
+> 🟡 **判定的拆分原则**:底层只有单点 / 连点 / 长按。命中/失误的**结果**
+> (加分/连击/Fever、扣血/断连)在基类;note 状态和重复判定保护走 `rhythm/` 里的共享运行时。
+> 关卡脚本只保留表现映射,例如把 `tap` 画成叉食材/扇走,把 `hold` 画成回味/翻面。
 >
 > 🟡 **核心判定类型只能有三种**:全游戏本质上只有**单点 / 连点 / 长按**。所有关卡必须复用这三类判定逻辑,不要为了某一关再发明新的判定类型。关卡之间的差异只体现在**表现形式、轨道形状、素材、节奏编排和反馈**上。例如 1-3 的长按胶囊、1-5 的弯曲长条,都应该是同一种"固定判定点长按/连点条"逻辑的不同视觉表现。
+
+### RhythmChart / 谱面编辑器路线
+新增统一谱面层在 `rhythm/`:
+- `rhythm_chart.gd`:统一 chart 数据模型。可按 JSON 读写,底层只区分 `tap` / `roll` / `hold` / `none`(迷惑项)。
+- `rhythm_chart_runtime.gd`:运行时查询层。关卡以后应从这里查询"哪个 note 到判定点/哪个长条正在 active",不要各关再写一套私有 cursor。
+- `rhythm_chart_sequencer.gd`:统一谱面时间展开层。它按 `beat` / `duration_beats` / `subdivisions` 保留所有 note 的真实时间位置,不允许关卡脚本各自 `round(beat)`、手写 `while cursor` 或用最后一个 note 决定流程长度。
+- `level_chart_bridge.gd`:关卡和 chart 的桥。负责加载普通/极限谱面、套 BPM/meta/music,以及把 sequencer 投影成旧关卡暂用的 beat slots。
+- `judgement_runtime.gd`:连续 chart note 的共享判定状态,负责 tap/roll/hold/none 的已判定/已错过 bookkeeping 和时间窗查询。
+- `beat_slot_judgement.gd`:一拍一格旧关卡投影的共享判定状态,负责同一格只能判一次、wrong/miss/skip/perfect/good/bad 分类。
+- `rhythm_chart_validator.gd`:编辑器和运行时共用的 chart 校验器。
+- `charts/*.chart.json`:编辑器和关卡共享的谱面文件。第一份样例是 `charts/1-5.chart.json`。
+
+Godot 编辑器插件在 `addons/rhythm_editor/`,打开工程后底部面板会出现 **Rhythm Editor**。它用于选关、选音乐、编辑 node/non-node、选择 node 种类、播放/暂停并预听音乐和判定音。
+
+当前接入状态:1-1、1-2、1-3、1-4、1-5 都走 `charts/*.chart.json`。旧关卡仍保留自己的视觉/玩法表现,但谱面长度、BPM、音乐和 note 时间来源必须走 `RhythmChart` / `RhythmChartSequencer` / `LevelChartBridge`;不要再新增内置 `CHART` 或脚本私有谱面语言。
+
+> 🟡 后续新关卡/旧关卡迁移时,先把玩法翻译成 `RhythmChart` 的三类判定,再让关卡把这些 note 映射成自己的美术表现。普通/极限谱面要分开保存,例如 `1-5.chart.json` / `1-5_extreme.chart.json`;不要继续扩散每关私有 `CHART` 格式。
+>
+> 🟡 如果插件里能编辑到某个 note,运行时也必须从同一个 sequencer 读到它。不能在关卡里单独过滤小数拍、按数组顺序吞 note,也不能因为最后一个 note 提前就让流程变短。旧的一拍一格关卡暂时可以用 `LevelChartBridge.build_discrete_slots()` 投影,但这只是兼容层;真正的连续/小数拍显示和判定应继续向 `RhythmChartSequencer` 靠拢。
 
 ### Conductor `conductor.gd`(`class_name Conductor`)
 节拍/速度的**唯一来源**。所有"该跟拍动"的东西都从它读值。
@@ -122,12 +142,28 @@ main.gd / .tscn        1-1 生存之战(extends LevelBase)
 mango.gd / .tscn       1-2 芒果奇缘(extends LevelBase)
 schrodinger.gd/.tscn   1-3 薛定谔告白(extends LevelBase)
 bbq.gd / .tscn         1-4 烤摊之王(extends LevelBase)
+rent.gd / .tscn        1-5 房租的主人(extends LevelBase)
 
 chiptune.gd            Chiptune  — 1-1 音乐
 lofi.gd                Music     — 1-2 音乐(类名≠文件名)
 romance.gd             Romance   — 1-3 音乐
 bbq_music.gd           BBQMusic  — 1-4 音乐
+rent_music.gd          RentMusic — 1-5 音乐
 binary_stream.gd       BinaryStream — 1-1 背景
+
+rhythm/
+  rhythm_chart.gd           Chart 数据模型(tap/roll/hold/none)
+  rhythm_chart_sequencer.gd 按 beat/duration/subdivision 展开事件
+  rhythm_chart_runtime.gd   连续谱面查询
+  judgement_runtime.gd      连续 note 判定状态
+  beat_slot_judgement.gd    一拍一格投影判定状态
+  level_chart_bridge.gd     关卡加载 chart/meta/music 的统一桥
+  rhythm_chart_validator.gd Chart 校验器
+
+charts/
+  *.chart.json          普通/极限谱面;见 charts/README.md
+
+addons/rhythm_editor/  Godot 底部 Rhythm Editor 插件
 
 assets/
   girlsphoto.png       2×2 像素表:上排 梓涵/如烟(脸),下排 烤鸡/沙拉(食物)
@@ -145,12 +181,14 @@ assets/
 
 ---
 
-## 4. 怎么加一个新关卡(下一步就是做 1-5 起)
+## 4. 怎么加一个新关卡(下一步就是做 1-6 起)
 
 1. 在 `app.gd` 的 `_build_levels()` 把对应关 `unlocked=true`、填 `scene`(如 `res://stall.tscn`)和 `cfg`(用 `_cfg(时长ms, 起始bpm, 结束bpm)`)。
-2. **复制一份现成关卡当模板**(玩法最像哪个就抄哪个:1-2 滚动+长按、1-3 双轨+連打+宝宝)。把脚本 `extends LevelBase`,删掉与基类重复的部分,重写 §2 列的钩子:`_conf`(换配色/文案)、`_make_music`、`_build_level`(换美术/谱面)、`_advance/_juice`、`_verdict`、`_build_sfx`,以及本关独有的判定/布局/特效内部类。
-3. 新建 `.tscn`:一个根 `Control` 节点挂上脚本即可(看任意一关的 `.tscn`,就 6 行)。
-4. 美术特效(`_World`/`_Dinner`/`_Rings`/`_Caps`…)和音效都写在**子类文件里**,不进基类。
+2. 先建 `charts/LEVEL.chart.json`。如果有极限模式,再建 `charts/LEVEL_extreme.chart.json`。玩法先翻译成 `tap` / `roll` / `hold` / `none`,再考虑主题表现。
+3. **复制一份现成关卡当模板**(玩法最像哪个就抄哪个:1-2 滚动+长按、1-3 双轨+連打+宝宝、1-5 连续 chart + 挑战条)。把脚本 `extends LevelBase`,重写 §2 列的钩子:`_conf`(换配色/文案)、`_make_music`、`_build_level`(换美术/表现映射)、`_advance/_juice`、`_verdict`、`_build_sfx`。
+4. 判定状态优先接 `JudgementRuntime`(连续 beat clock)或 `BeatSlotJudgement`(一拍一格投影)。不要复制旧关卡的私有 cursor / 私有 CHART。
+5. 新建 `.tscn`:一个根 `Control` 节点挂上脚本即可(看任意一关的 `.tscn`,就 6 行)。
+6. 美术特效(`_World`/`_Dinner`/`_Rings`/`_Caps`…)和音效都写在**子类文件里**,不进基类。
 
 > 🟡 新关卡设计前先归类判定:**单点 / 连点 / 长按**。如果玩法描述听起来像"扇走、格挡、喂奶、翻面、连打、回味",先判断它属于这三类里的哪一种,再做主题化表现。不要把表现名当成新的底层判定。
 
@@ -192,7 +230,7 @@ assets/
 **约定的后续顺序:**
 1. ✅ Fever + 段位评分
 2. ✅ 新机制(1-3 双轨 / 連打 / 长按 / 宝宝模式)
-3. **铺关卡 1-5 ~ 1-6**(超绝仰卧起 / 我有一个PLAN)——每关一个新花样 + 主题 + 音乐(1-4 烤摊之王 ✅ 已做)
+3. **铺关卡 1-6**(我有一个PLAN)——继续沿用 `RhythmChart` + 共享判定运行时,只新增主题表现和音乐
 4. **打工人剧情线**(串起组长/试用期的梗,关卡间插小对话)
 
 **已知技术债 / 注意:**

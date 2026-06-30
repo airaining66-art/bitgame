@@ -1,4 +1,8 @@
 extends LevelBase
+
+const RhythmChartScript := preload("res://rhythm/rhythm_chart.gd")
+const BeatSlotJudgementScript := preload("res://rhythm/beat_slot_judgement.gd")
+const RomanceMusicScript := preload("res://romance.gd")
 ## 1-3 薛定谔告白 — pixel-art candlelit-dinner confession.
 ## Two INDEPENDENT lanes scroll intrusive "thoughts": top = food/喜好 (fast,
 ## eighth grid), bottom = faces/角色 (slow, quarter grid). Each play randomly
@@ -54,31 +58,6 @@ const EMO_HEART := 0
 const EMO_AWKWARD := 1
 const EMO_SMILE := 2
 
-## Fixed chart. Entries are either a 3-char quarter `[face, top-on, top-off]`
-## (c=correct / x=wrong / .=empty), or "HOLD:n" / "ROLL:n" (n beats, both/one
-## lane), or "E" (end). Difficulty steps up past 1-1/1-2: denser, more traps,
-## plus holds and 連打 rolls.
-const CHART := [
-	# date-night jitters: staggered face/food calls rather than 1-1 style singles
-	"c..", "...", "..c", ".c.", "c.c", "...", "..x", ".cc", "c..",
-	# off-beats & double-taps
-	"..c", "c.c", ".c.", "...", "..x", ".cc", "...", "c..", "..c", ".cc",
-	# traps you must NOT press
-	".x.", "c.c", "cx.", "...", "..x", "..c", "x.c", ".cc", "c.x", "...",
-	"x..", ".c.", "cx.", "...", "..x", "..c", "...", "BABY:6", "...",
-	# 长按: both lanes held together (clean entry), then a breather
-	"HOLD:3", "...", "..c", "c.c",
-	# fixed-beat 連打 (precise consecutive eighths), with a visible pickup
-	"c..", ".cc", ".cc", "...", "..x", "..c", "...",
-	# free 連打-roll box (mash!)
-	"ROLL:3", "...", "c.c", "..x", "..c", "BABY:6", "...",
-	# climax: traps + doubles + a shorter hold
-	"..c", "cx.", "...", "..x", ".cc", "x.c", "c.c", ".x.", "c.x", "..c",
-	"HOLD:2", ".cc", "...", "..x", "BABY:6", "...",
-	# finale wind-down
-	"c.c", "...", "..x", "..c", ".c.", "...", "c..", "E",
-]
-
 # --- random draw (today's date + favourite) ---------------------------------
 const FACE_DATA := [{"name": "梓涵"}, {"name": "如烟"}]   # 0 black hair / 1 white hair
 const FOOD_DATA := [{"name": "烤鸡"}, {"name": "沙拉"}]   # 0 roast chicken / 1 salad
@@ -91,12 +70,13 @@ var girls_tex: Texture2D
 var emoji_tex: Texture2D
 var baby_tex: Texture2D
 
-# --- grid (built from CHART) ------------------------------------------------
+# --- grid (built from JSON chart events) ------------------------------------
 var g_top: Array[int] = []
 var g_bot: Array[int] = []
 var g_press: Array[bool] = []
 var g_kind: Array[int] = []
 var judged: Array[bool] = []
+var beat_judgement := BeatSlotJudgementScript.new()
 var n_ticks := 0
 var pass_g := 0
 var hold_segs: Array = []       # [{s,e}] inclusive tick range
@@ -107,7 +87,7 @@ var hold_started: Array[bool] = []
 var roll_done: Array[bool] = []
 var baby_done: Array[bool] = []
 var baby_started: Array[bool] = []
-var romance: Romance
+var romance: Node
 
 # --- state (level-specific) -------------------------------------------------
 var shake := 0.0
@@ -185,7 +165,7 @@ func _auto_finish() -> bool:
 
 
 func _make_music() -> Node:
-	romance = Romance.new()
+	romance = setup_chart_music("1-3", RomanceMusicScript)
 	return romance
 
 
@@ -225,67 +205,84 @@ func _build_level() -> void:
 # Grid build (CHART -> per-eighth-tick arrays + hold/roll segments)
 # ===========================================================================
 func _build_grid() -> void:
+	var sequencer = chart_sequencer_for("1-3", 2)
+	if sequencer != null:
+		_build_grid_from_chart(sequencer)
+		return
 	g_top = []
 	g_bot = []
 	g_kind = []
+	g_press = []
+	judged = []
 	hold_segs = []
 	roll_segs = []
 	baby_segs = []
-	for entry in CHART:
-		if entry == "E":
-			break
-		if entry.begins_with("BABY:"):
-			if not extreme_baby_mode:
-				continue
-			var n := int(entry.substr(5))
-			var s := g_top.size()
-			for b in n:
-				for half in 2:
-					g_top.append(CORRECT)
-					g_bot.append(CORRECT if half == 0 else NONE)
-					g_kind.append(K_BABY)
-			baby_segs.append({"s": s, "e": g_top.size() - 1})
-			continue
-		if entry.begins_with("HOLD:"):
-			var n := int(entry.substr(5))
-			var s := g_top.size()
-			for b in n:
-				for half in 2:
-					g_top.append(CORRECT)
-					g_bot.append(CORRECT if half == 0 else NONE)
-					g_kind.append(K_HOLD)
-			hold_segs.append({"s": s, "e": g_top.size() - 1})
-			continue
-		if entry.begins_with("ROLL:"):
-			var n := int(entry.substr(5))
-			var s := g_top.size()
-			for b in n:
-				for half in 2:
-					g_top.append(CORRECT)
-					g_bot.append(NONE)
-					g_kind.append(K_ROLL)
-			roll_segs.append({"s": s, "e": g_top.size() - 1})
-			continue
-		# normal 3-char quarter
-		g_top.append(_tok(entry[1]))
-		g_bot.append(_tok(entry[0]))
-		g_kind.append(K_NORMAL)
-		g_top.append(_tok(entry[2]))
-		g_bot.append(NONE)
-		g_kind.append(K_NORMAL)
-	n_ticks = g_top.size()
+	n_ticks = 0
+	push_warning("Missing RhythmChart for 1-3; level has no script fallback chart.")
+	_finish_chart_grid_state()
+
+
+func _build_grid_from_chart(sequencer) -> void:
+	g_top = []
+	g_bot = []
+	g_kind = []
 	g_press = []
 	judged = []
-	for g in n_ticks:
-		if g_kind[g] == K_BABY:
-			g_press.append(true)
-		elif g_kind[g] != K_NORMAL:
-			g_press.append(false)   # holds/rolls judged separately
-		else:
-			var hc := g_top[g] == CORRECT or g_bot[g] == CORRECT
-			var hw := g_top[g] == WRONG or g_bot[g] == WRONG
-			g_press.append(hc and not hw)
-		judged.append(false)
+	hold_segs = []
+	roll_segs = []
+	baby_segs = []
+	var tick := 0
+	while tick < sequencer.tick_count():
+		var events: Array = sequencer.events_at_tick(tick)
+		if events.is_empty():
+			_append_chart_tick(NONE, NONE, K_NORMAL, false)
+			tick += 1
+			continue
+		tick += _append_chart_event(events[0])
+	n_ticks = g_top.size()
+	_finish_chart_grid_state()
+
+
+func _append_chart_event(note: Dictionary) -> int:
+	var judge := str(note.get("judge_type", RhythmChartScript.JUDGE_NONE))
+	var kind := str(note.get("kind", "empty"))
+	var ticks := maxi(1, int(note.get("duration_ticks", 1)))
+	if kind == "baby":
+		if not extreme_baby_mode:
+			for i in ticks:
+				_append_chart_tick(NONE, NONE, K_NORMAL, false)
+			return ticks
+		var s := g_top.size()
+		for i in ticks:
+			_append_chart_tick(CORRECT, CORRECT if i % 2 == 0 else NONE, K_BABY, true)
+		baby_segs.append({"s": s, "e": g_top.size() - 1})
+	elif judge == RhythmChartScript.JUDGE_HOLD or kind == "hold":
+		var s := g_top.size()
+		for i in ticks:
+			_append_chart_tick(CORRECT, CORRECT if i % 2 == 0 else NONE, K_HOLD, false)
+		hold_segs.append({"s": s, "e": g_top.size() - 1})
+	elif judge == RhythmChartScript.JUDGE_ROLL or kind == "roll":
+		var s := g_top.size()
+		for i in ticks:
+			_append_chart_tick(CORRECT, NONE, K_ROLL, false)
+		roll_segs.append({"s": s, "e": g_top.size() - 1})
+	else:
+		var cells := _chart_kind_to_cells(kind, note)
+		_append_chart_tick(int(cells["top"]), int(cells["bottom"]), K_NORMAL,
+			judge != RhythmChartScript.JUDGE_NONE)
+	return ticks
+
+
+func _append_chart_tick(top: int, bot: int, kind: int, pressable: bool) -> void:
+	g_top.append(top)
+	g_bot.append(bot)
+	g_kind.append(kind)
+	g_press.append(pressable)
+	judged.append(false)
+
+
+func _finish_chart_grid_state() -> void:
+	beat_judgement.reset()
 	hold_done = []
 	hold_started = []
 	for i in hold_segs.size():
@@ -301,11 +298,40 @@ func _build_grid() -> void:
 		baby_started.append(false)
 
 
-func _tok(c: String) -> int:
-	match c:
-		"c": return CORRECT
-		"x": return WRONG
-		_: return NONE
+func _tick_judged(g: int) -> bool:
+	return beat_judgement.was_judged(g)
+
+
+func _mark_tick_judged(g: int) -> void:
+	beat_judgement.mark_judged(g)
+	if g >= 0 and g < judged.size():
+		judged[g] = true
+
+
+func _reset_tick_judgements() -> void:
+	beat_judgement.reset()
+	for i in judged.size():
+		judged[i] = false
+
+
+func _chart_kind_to_cells(kind: String, note: Dictionary) -> Dictionary:
+	var payload: Dictionary = note.get("payload", {})
+	if payload.has("top") or payload.has("bottom"):
+		return {
+			"top": int(payload.get("top", NONE)),
+			"bottom": int(payload.get("bottom", NONE)),
+		}
+	match kind:
+		"food_correct":
+			return {"top": CORRECT, "bottom": NONE}
+		"face_correct":
+			return {"top": NONE, "bottom": CORRECT}
+		"both_correct":
+			return {"top": CORRECT, "bottom": CORRECT}
+		"trap":
+			return {"top": WRONG, "bottom": NONE}
+		_:
+			return {"top": NONE, "bottom": NONE}
 
 
 # ===========================================================================
@@ -658,7 +684,7 @@ func _press_down() -> void:
 	var best := -1
 	var best_err := 1e9
 	for cand in [g - 1, g, g + 1]:
-		if cand < 0 or cand >= n_ticks or judged[cand] or not g_press[cand]:
+		if cand < 0 or cand >= n_ticks or _tick_judged(cand) or not g_press[cand]:
 			continue
 		var err: float = absf(cross_e(cand) - e) * eighth_dur_ms()
 		if err <= gw and err < best_err:
@@ -671,7 +697,7 @@ func _press_down() -> void:
 		hold_err = absf(cross_e(hold_segs[hi]["s"]) - e) * eighth_dur_ms()
 
 	if best >= 0 and best_err <= hold_err:
-		judged[best] = true
+		_mark_tick_judged(best)
 		_hit(best, best_err <= perfect_window())
 		return
 	if hold_err <= gw:
@@ -680,11 +706,11 @@ func _press_down() -> void:
 
 	# 3) a wrong / un-pressable icon sat at center -> you blurted it.
 	for cand in [g - 1, g, g + 1]:
-		if cand < 0 or cand >= n_ticks or judged[cand] or g_kind[cand] != K_NORMAL:
+		if cand < 0 or cand >= n_ticks or _tick_judged(cand) or g_kind[cand] != K_NORMAL:
 			continue
 		var err: float = absf(cross_e(cand) - e) * eighth_dur_ms()
 		if err <= tw and (g_top[cand] != NONE or g_bot[cand] != NONE):
-			judged[cand] = true
+			_mark_tick_judged(cand)
 			apply_penalty("喊错名字!")
 			return
 
@@ -1125,13 +1151,13 @@ func _sweep_misses() -> void:
 	var e := clock_e()
 	var margin := _margin_e()
 	while pass_g < n_ticks and e > cross_e(pass_g) + margin:
-		if g_press[pass_g] and not judged[pass_g]:
-			judged[pass_g] = true
+		if g_press[pass_g] and not _tick_judged(pass_g):
+			_mark_tick_judged(pass_g)
 			if g_kind[pass_g] == K_BABY:
 				var bi := _baby_index_for_tick(pass_g)
 				if bi >= 0 and pass_g == int(baby_segs[bi]["s"]) and not baby_started[bi]:
 					for bg in range(int(baby_segs[bi]["s"]), int(baby_segs[bi]["e"]) + 1):
-						judged[bg] = true
+						_mark_tick_judged(bg)
 					baby_done[bi] = true
 					baby_active = false
 					baby_idx = -1
@@ -1140,7 +1166,8 @@ func _sweep_misses() -> void:
 				return
 		pass_g += 1
 		if pass_g >= n_ticks - 12:
-			romance.finale = true
+			if romance:
+				romance.set("finale", true)
 	if pass_g >= n_ticks and phase == "running":
 		_start_outro()
 
@@ -1154,8 +1181,7 @@ func _countdown_tick(last: bool) -> void:
 
 func _reset_level() -> void:
 	pass_g = 0
-	for i in judged.size():
-		judged[i] = false
+	_reset_tick_judgements()
 	for i in hold_done.size():
 		hold_done[i] = false
 		hold_started[i] = false
@@ -1228,8 +1254,7 @@ func _begin_countdown() -> void:
 
 func _begin_play() -> void:
 	pass_g = 0
-	for i in judged.size():
-		judged[i] = false
+	_reset_tick_judgements()
 	set_feedback("表白吧!", COL_ROSE)
 
 

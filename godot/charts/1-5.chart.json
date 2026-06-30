@@ -1,0 +1,324 @@
+{
+	"meta": {
+		"bpm_curve_exp": 1.5,
+		"duration_beats": 48.0,
+		"end_bpm": 104.0,
+		"level_id": "1-5",
+		"level_name": "Rent Hero",
+		"music_id": "rent",
+		"music_path": "res://rent_music.gd",
+		"start_bpm": 80.0,
+		"subdivisions": 4.0,
+		"version": 1.0
+	},
+	"node_kinds": [
+		{
+			"color": "#ef4444",
+			"id": "bill",
+			"name": "Bill"
+		},
+		{
+			"color": "#f97316",
+			"id": "scam",
+			"name": "Scam"
+		},
+		{
+			"color": "#eab308",
+			"id": "loan",
+			"name": "Loan"
+		},
+		{
+			"color": "#22c55e",
+			"id": "food",
+			"name": "Food"
+		},
+		{
+			"color": "#f43f5e",
+			"id": "boss",
+			"name": "Boss"
+		},
+		{
+			"color": "#38bdf8",
+			"id": "landlord",
+			"name": "Landlord"
+		}
+	],
+	"notes": [
+		{
+			"beat": 0.5,
+			"duration_beats": 0.0,
+			"id": "303507234-43708",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 1.0,
+			"duration_beats": 0.0,
+			"id": "130484345-64565",
+			"judge_type": "none",
+			"kind": "landlord",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 1.5,
+			"duration_beats": 0.0,
+			"id": "309473043-61876",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 2.0,
+			"duration_beats": 0.0,
+			"id": "131953394-46595",
+			"judge_type": "none",
+			"kind": "landlord",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 2.5,
+			"duration_beats": 0.0,
+			"id": "313389715-34646",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 3.0,
+			"duration_beats": 0.0,
+			"id": "133019190-48385",
+			"judge_type": "none",
+			"kind": "landlord",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 3.5,
+			"duration_beats": 0.0,
+			"id": "315014891-13922",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 4.0,
+			"duration_beats": 0.0,
+			"id": "133943145-47128",
+			"judge_type": "none",
+			"kind": "landlord",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 5.0,
+			"duration_beats": 0.0,
+			"id": "314150332-76618",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 6.25,
+			"duration_beats": 3.25,
+			"id": "103608246-24673",
+			"judge_type": "roll",
+			"kind": "boss",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 10.5,
+			"duration_beats": 0.0,
+			"id": "2082513866-49639",
+			"judge_type": "none",
+			"kind": "food",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 11.0,
+			"duration_beats": 3.25,
+			"id": "119183500-40411",
+			"judge_type": "hold",
+			"kind": "landlord",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 15.25,
+			"duration_beats": 0.0,
+			"id": "2085064504-60356",
+			"judge_type": "none",
+			"kind": "food",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 15.75,
+			"duration_beats": 0.0,
+			"id": "2104068866-55847",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 16.0,
+			"duration_beats": 0.0,
+			"id": "2087911534-33022",
+			"judge_type": "none",
+			"kind": "food",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 16.5,
+			"duration_beats": 0.0,
+			"id": "2089662203-55485",
+			"judge_type": "none",
+			"kind": "food",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 17.0,
+			"duration_beats": 0.0,
+			"id": "2099212515-31592",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 17.5,
+			"duration_beats": 0.0,
+			"id": "2091320012-10996",
+			"judge_type": "none",
+			"kind": "food",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 18.0,
+			"duration_beats": 0.0,
+			"id": "2091924668-28750",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 18.5,
+			"duration_beats": 0.0,
+			"id": "2101429387-28208",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 19.0,
+			"duration_beats": 0.0,
+			"id": "2100346157-27591",
+			"judge_type": "tap",
+			"kind": "bill",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 21.0,
+			"duration_beats": 0.0,
+			"id": "r-game-01",
+			"judge_type": "none",
+			"kind": "food",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		}
+	],
+	"tracks": [
+		{
+			"color": "#ef4444",
+			"id": "node",
+			"name": "Node"
+		},
+		{
+			"color": "#777777",
+			"id": "decoy",
+			"name": "Non-node"
+		}
+	]
+}

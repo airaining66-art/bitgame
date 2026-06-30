@@ -1,0 +1,593 @@
+{
+	"meta": {
+		"bpm_curve_exp": 1.5,
+		"duration_beats": 55.0,
+		"end_bpm": 110.0,
+		"level_id": "1-2",
+		"level_name": "Mango",
+		"music_id": "mango",
+		"music_path": "res://lofi.gd",
+		"start_bpm": 70.0,
+		"subdivisions": 4.0,
+		"variant": "normal",
+		"version": 1.0
+	},
+	"node_kinds": [
+		{
+			"color": "#f3c200",
+			"id": "mango",
+			"name": "Mango"
+		},
+		{
+			"color": "#38bdf8",
+			"id": "water",
+			"name": "Water"
+		}
+	],
+	"notes": [
+		{
+			"beat": 0.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-0",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 1.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-1",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 2.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-2",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 3.0,
+			"duration_beats": 0.0,
+			"id": "10351345069-77898",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 3.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-3",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 4.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-4",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 5.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-5",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 6.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-6",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 7.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-7",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 8.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-8",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 9.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-9",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 10.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-10",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 11.0,
+			"duration_beats": 3.0,
+			"id": "migrated-1-2-11",
+			"judge_type": "hold",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 14.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-12",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 15.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-13",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 16.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-14",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 17.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-15",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 18.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-16",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 19.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-17",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 20.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-18",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 21.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-19",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 22.0,
+			"duration_beats": 3.0,
+			"id": "migrated-1-2-20",
+			"judge_type": "hold",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 25.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-21",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 26.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-22",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 27.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-23",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 28.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-24",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 29.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-25",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 30.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-26",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 31.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-27",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 32.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-28",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 33.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-29",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 34.0,
+			"duration_beats": 3.0,
+			"id": "migrated-1-2-30",
+			"judge_type": "hold",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 37.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-31",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 38.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-32",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 39.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-33",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 40.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-34",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 41.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-35",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 42.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-36",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 43.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-37",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 44.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-38",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 45.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-39",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 46.0,
+			"duration_beats": 3.0,
+			"id": "migrated-1-2-40",
+			"judge_type": "hold",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 49.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-41",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 50.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-42",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 51.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-2-43",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 52.0,
+			"duration_beats": 3.0,
+			"id": "migrated-1-2-44",
+			"judge_type": "hold",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		}
+	],
+	"tracks": [
+		{
+			"color": "#ef4444",
+			"id": "node",
+			"name": "Node"
+		},
+		{
+			"color": "#777777",
+			"id": "decoy",
+			"name": "Non-node"
+		}
+	]
+}

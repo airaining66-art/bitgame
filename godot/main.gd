@@ -1,4 +1,8 @@
 extends LevelBase
+
+const RhythmChartScript := preload("res://rhythm/rhythm_chart.gd")
+const BeatSlotJudgementScript := preload("res://rhythm/beat_slot_judgement.gd")
+const ChiptuneScript := preload("res://chiptune.gd")
 ## Bit Reaction Rhythm — Level 1.
 ## Two bits slide to center each beat; press if they match, hold off if they
 ## differ. Timing -> Perfect / Good / Bad. Everything pulses to the Conductor.
@@ -38,18 +42,18 @@ const EXTREME_TUTORIAL := [
 ]
 
 # --- systems ----------------------------------------------------------------
-var chiptune: Chiptune
+var chiptune: Node
 var binary_stream: BinaryStream
 
 # --- game state (level-specific) --------------------------------------------
 var combo_scale := 1.0
 var current_beat := 0
-var last_judged_beat := -1
 var current_beat_data: Dictionary = {}
 var queue: Array[Dictionary] = []
+var active_chart_beats: Array = []
+var chart_i := 0
+var beat_judgement := BeatSlotJudgementScript.new()
 var beat_outcome := "neutral"  # outcome of the current beat for the binary stream
-var skip_run := 0
-var press_run := 0
 
 # --- juice ------------------------------------------------------------------
 var zoom_punch := 0.0
@@ -91,7 +95,6 @@ func make_cfg() -> Dictionary:
 	return {
 		"duration_ms": 45000.0, "start_bpm": 50.0, "end_bpm": 100.0,
 		"bpm_curve_exp": 1.6, "subdivisions": 4,
-		"press_ratio": 0.6, "max_skip_run": 2, "max_press_run": 3,
 	}
 
 
@@ -99,7 +102,7 @@ func make_cfg() -> Dictionary:
 # LevelBase hooks
 # ===========================================================================
 func _make_music() -> Node:
-	chiptune = Chiptune.new()
+	chiptune = setup_chart_music("1-1", ChiptuneScript)
 	return chiptune
 
 
@@ -408,24 +411,13 @@ func _on_press_button() -> void:
 ## never get long clumps of the same type (the failure mode of plain coin
 ## flips). Keeps the chart even but still varied. Tunable per level.
 func make_beat() -> Dictionary:
-	# Quiet wind-down at the very end so the last press is clearly the last.
-	if conductor.running and conductor.progress() > 0.9:
-		return {"top": 0, "bottom": 1, "should_press": false}
-	var should_press: bool
-	if skip_run >= int(level.get("max_skip_run", 2)):
-		should_press = true
-	elif press_run >= int(level.get("max_press_run", 3)):
-		should_press = false
-	else:
-		should_press = randf() < float(level.get("press_ratio", 0.6))
-	if should_press:
-		press_run += 1
-		skip_run = 0
-	else:
-		skip_run += 1
-		press_run = 0
-	var top := 1 if randf() < 0.5 else 0
-	return {"top": top, "bottom": top if should_press else 1 - top, "should_press": should_press}
+	if not active_chart_beats.is_empty():
+		if chart_i >= active_chart_beats.size():
+			return {"top": 0, "bottom": 1, "should_press": false}
+		var beat_data: Dictionary = active_chart_beats[chart_i]
+		chart_i += 1
+		return beat_data.duplicate(true)
+	return {"top": 0, "bottom": 1, "should_press": false}
 
 
 func ensure_queue() -> void:
@@ -435,11 +427,32 @@ func ensure_queue() -> void:
 
 func prepare_beats() -> void:
 	queue = []
-	skip_run = 0
-	press_run = 0
+	active_chart_beats = _load_editor_chart_beats()
+	if active_chart_beats.is_empty():
+		push_warning("Missing RhythmChart for 1-1; level has no random fallback chart.")
+	chart_i = 0
 	ensure_queue()
 	current_beat_data = queue.pop_front()
 	ensure_queue()
+
+
+func _load_editor_chart_beats() -> Array:
+	return chart_slots_for("1-1", 1,
+		Callable(self, "_chart_note_to_beat"),
+		{"top": 0, "bottom": 1, "should_press": false, "_priority": 0},
+		{"top": 0, "bottom": 1, "should_press": false, "end": true})
+
+
+func _chart_note_to_beat(note: Dictionary) -> Dictionary:
+	var top := 1 if str(note.get("kind", "bit0")) == "bit1" else 0
+	var should_press := str(note.get("judge_type", RhythmChartScript.JUDGE_NONE)) != RhythmChartScript.JUDGE_NONE \
+		and str(note.get("lane", RhythmChartScript.LANE_NODE)) != RhythmChartScript.LANE_DECOY
+	return {
+		"top": top,
+		"bottom": top if should_press else 1 - top,
+		"should_press": should_press,
+		"_priority": 2 if should_press else 1,
+	}
 
 
 # ===========================================================================
@@ -454,35 +467,42 @@ func good_window() -> float:
 
 
 func judge_press() -> void:
-	if phase != "running" or last_judged_beat == current_beat:
+	if phase != "running":
 		return
-	flash_button()
 	var elapsed := conductor.beat_phase() * conductor.cycle_duration
 	var stop_start := conductor.cycle_duration * SLIDE_RATIO
 	var judge_center := stop_start + (conductor.cycle_duration - stop_start) * 0.5
 	var delta := absf(elapsed - judge_center)
-	last_judged_beat = current_beat
-
-	if not current_beat_data["should_press"]:
-		_penalty("Wrong", "wrong")
+	var result := beat_judgement.judge_press(current_beat,
+		bool(current_beat_data.get("should_press", false)),
+		delta, perfect_window(), good_window())
+	var kind := str(result.get("result", ""))
+	if kind == BeatSlotJudgementScript.RESULT_REPEAT:
 		return
-	if delta <= perfect_window():
+	flash_button()
+	if kind == BeatSlotJudgementScript.RESULT_WRONG:
+		_penalty("Wrong", "wrong")
+	elif kind == BeatSlotJudgementScript.RESULT_PERFECT:
 		reward("Perfect", 120)
-	elif delta <= good_window():
+	elif kind == BeatSlotJudgementScript.RESULT_GOOD:
 		reward("Good", 80)
 	else:
 		_penalty("Bad", "wrong")
 
 
 func miss_or_skip_if_needed() -> void:
-	if phase != "running" or last_judged_beat == current_beat:
+	if phase != "running":
 		return
-	last_judged_beat = current_beat
-	if current_beat_data["should_press"]:
+	var result := beat_judgement.resolve_slot(current_beat,
+		bool(current_beat_data.get("should_press", false)))
+	var kind := str(result.get("result", ""))
+	if kind == BeatSlotJudgementScript.RESULT_REPEAT:
+		return
+	if kind == BeatSlotJudgementScript.RESULT_MISS:
 		_penalty("Miss", "miss")
-		return
-	beat_outcome = "skip"
-	set_feedback("Skip", COL_MUTED)
+	else:
+		beat_outcome = "skip"
+		set_feedback("Skip", COL_MUTED)
 
 
 func reward(kind: String, points: int) -> void:
@@ -604,8 +624,8 @@ func _on_beat(_cycle_index: int) -> void:
 	current_beat_data = queue.pop_front()
 	ensure_queue()
 	current_beat += 1
-	if conductor.progress() > 0.85:
-		chiptune.finale = true   # audible wind-down before the level ends
+	if conductor.progress() > 0.85 and chiptune:
+		chiptune.set("finale", true)   # audible wind-down before the level ends
 
 
 func _countdown_tick(last: bool) -> void:
@@ -618,7 +638,7 @@ func _countdown_tick(last: bool) -> void:
 # ===========================================================================
 func _reset_level() -> void:
 	current_beat = 0
-	last_judged_beat = -1
+	beat_judgement.reset()
 	beat_outcome = "neutral"
 	prepare_beats()
 	binary_stream.clear()
@@ -642,7 +662,7 @@ func _enter_countdown() -> void:
 
 func _begin_play() -> void:
 	current_beat = 0
-	last_judged_beat = -1
+	beat_judgement.reset()
 	set_tiles_visible(true)
 	set_feedback("Start", COL_MUTED)
 
