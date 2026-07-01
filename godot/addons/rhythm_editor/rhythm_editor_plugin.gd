@@ -43,6 +43,7 @@ class RhythmEditorDock:
 	const PX_PER_BEAT := 68.0
 	const MIN_PX_PER_BEAT := 34.0
 	const MAX_PX_PER_BEAT := 132.0
+	const DEFAULT_JUDGE_OFFSET := 0.75
 
 	var chart
 	var chart_path := "res://charts/1-5.chart.json"
@@ -60,6 +61,7 @@ class RhythmEditorDock:
 	var playhead_beat := 0.0
 	var last_preview_beat := -999.0
 	var selected_id := ""
+	var waveform_cache: Array[float] = []
 
 	var level_opt: OptionButton
 	var variant_opt: OptionButton
@@ -80,6 +82,8 @@ class RhythmEditorDock:
 	var bpm_spin: SpinBox
 	var seconds_spin: SpinBox
 	var shift_spin: SpinBox
+	var judge_offset_spin: SpinBox
+	var duration_mode_opt: OptionButton
 	var zoom_slider: HSlider
 	var snap_spin: SpinBox
 	var beat_spin: SpinBox
@@ -99,6 +103,20 @@ class RhythmEditorDock:
 		_build_ui()
 		_load_or_create_chart(chart_path)
 		set_process(true)
+
+
+	func _get_judge_offset() -> float:
+		if chart and chart.meta:
+			return float(chart.meta.get("judge_offset", DEFAULT_JUDGE_OFFSET))
+		return DEFAULT_JUDGE_OFFSET
+
+
+	func _get_eighth_judge_offset() -> float:
+		if _is_schrodinger_chart():
+			if chart and chart.meta:
+				return float(chart.meta.get("judge_e", 1.5))
+			return 1.5
+		return _get_judge_offset() * 2.0
 
 
 	func _build_audio() -> void:
@@ -207,6 +225,25 @@ class RhythmEditorDock:
 		shift_forward.custom_minimum_size = Vector2(34, 38)
 		shift_forward.pressed.connect(func() -> void: _shift_all_notes(float(shift_spin.value)))
 		toolbar.add_child(shift_forward)
+
+		toolbar.add_child(_vline())
+		toolbar.add_child(_label("Judge"))
+		judge_offset_spin = SpinBox.new()
+		judge_offset_spin.min_value = 0.0
+		judge_offset_spin.max_value = 1.0
+		judge_offset_spin.step = 0.01
+		judge_offset_spin.custom_minimum_size.x = 72
+		judge_offset_spin.value_changed.connect(_on_judge_offset_changed)
+		toolbar.add_child(judge_offset_spin)
+
+		toolbar.add_child(_vline())
+		toolbar.add_child(_label("Duration"))
+		duration_mode_opt = OptionButton.new()
+		duration_mode_opt.add_item("Manual", 0)
+		duration_mode_opt.add_item("Music", 1)
+		duration_mode_opt.custom_minimum_size.x = 96
+		duration_mode_opt.item_selected.connect(_on_duration_mode_changed)
+		toolbar.add_child(duration_mode_opt)
 
 		var music_toolbar := HBoxContainer.new()
 		music_toolbar.custom_minimum_size.y = 42
@@ -333,7 +370,7 @@ class RhythmEditorDock:
 		toolbar.add_child(_label("Snap"))
 		snap_spin = SpinBox.new()
 		snap_spin.min_value = 1
-		snap_spin.max_value = 16
+		snap_spin.max_value = 32
 		snap_spin.step = 1
 		snap_spin.value = 4
 		snap_spin.custom_minimum_size.x = 68
@@ -446,6 +483,7 @@ class RhythmEditorDock:
 		selected_id = ""
 		playhead_beat = 0.0
 		dirty = false
+		_cache_waveform()
 		_update_timeline_size()
 		_update_validation_status("Loaded %s" % path)
 
@@ -583,6 +621,7 @@ class RhythmEditorDock:
 		_sync_timing_controls_from_chart()
 		_mark_dirty()
 		_stop_preview()
+		_cache_waveform()
 		_update_timeline_size()
 
 
@@ -651,6 +690,14 @@ class RhythmEditorDock:
 			bpm_spin.set_value_no_signal(bpm)
 		if seconds_spin:
 			seconds_spin.set_value_no_signal(chart.duration_seconds())
+		if judge_offset_spin:
+			judge_offset_spin.set_value_no_signal(float(chart.meta.get("judge_offset", DEFAULT_JUDGE_OFFSET)))
+		if duration_mode_opt:
+			var mode := str(chart.meta.get("duration_mode", ""))
+			if mode == "music":
+				duration_mode_opt.select(1)
+			else:
+				duration_mode_opt.select(0)
 
 
 	func _set_duration_from_music_if_possible(mark := true) -> void:
@@ -690,6 +737,13 @@ class RhythmEditorDock:
 			if res is AudioStream:
 				return res
 		if FileAccess.file_exists(path):
+			var detected := _detect_audio_format(path)
+			if detected == "mp3":
+				return AudioStreamMP3.load_from_file(path)
+			if detected == "ogg":
+				return AudioStreamOggVorbis.load_from_file(path)
+			if detected == "wav":
+				return AudioStreamWAV.load_from_file(path)
 			var lower := path.to_lower()
 			if lower.ends_with(".mp3"):
 				return AudioStreamMP3.load_from_file(path)
@@ -698,6 +752,119 @@ class RhythmEditorDock:
 			if lower.ends_with(".wav"):
 				return AudioStreamWAV.load_from_file(path)
 		return null
+
+
+	func _detect_audio_format(path: String) -> String:
+		var file := FileAccess.open(path, FileAccess.READ)
+		if file == null:
+			return ""
+		var header := file.get_buffer(4)
+		if header.size() < 4:
+			return ""
+		if header[0] == 0x49 and header[1] == 0x44 and header[2] == 0x33:
+			return "mp3"
+		if header[0] == 0x4F and header[1] == 0x67 and header[2] == 0x67 and header[3] == 0x53:
+			return "ogg"
+		if header[0] == 0x52 and header[1] == 0x49 and header[2] == 0x46 and header[3] == 0x46:
+			return "wav"
+		return ""
+
+
+	func _cache_waveform() -> void:
+		waveform_cache.clear()
+		if not chart:
+			return
+		var music_path := str(chart.meta.get("music_path", ""))
+		if not _is_audio_path(music_path):
+			return
+		var stream := _load_audio_stream(music_path)
+		if stream == null:
+			return
+		var samples: PackedVector2Array = []
+		var stream_length := 0.0
+		if stream is AudioStreamWAV:
+			samples = _extract_wav_samples(stream)
+			stream_length = stream.length
+		elif stream is AudioStreamMP3:
+			samples = _extract_mp3_samples(stream)
+			stream_length = stream.length
+		elif stream is AudioStreamOggVorbis:
+			samples = _extract_ogg_samples(stream)
+			stream_length = stream.length
+		if samples.is_empty():
+			return
+		var target_bins := 420
+		var samples_per_bin := maxi(1, int(samples.size()) / target_bins)
+		for i in target_bins:
+			var sum := 0.0
+			var count := 0
+			for j in range(samples_per_bin):
+				var idx := i * samples_per_bin + j
+				if idx >= samples.size():
+					break
+				sum += abs(samples[idx].x)
+				if stream is AudioStreamWAV and stream.stereo:
+					sum += abs(samples[idx].y)
+					count += 1
+				count += 1
+			if count > 0:
+				waveform_cache.append(sum / float(count))
+			else:
+				waveform_cache.append(0.0)
+		var max_val := 0.0
+		for v in waveform_cache:
+			max_val = maxf(max_val, v)
+		if max_val > 0.0:
+			for i in range(waveform_cache.size()):
+				waveform_cache[i] /= max_val
+
+
+	func _extract_wav_samples(stream: AudioStreamWAV) -> PackedVector2Array:
+		var samples := PackedVector2Array()
+		var data := stream.data
+		if data.is_empty():
+			return samples
+		var bytes_per_sample := 2 if stream.format == AudioStreamWAV.FORMAT_16_BITS else 1
+		var channels := 2 if stream.stereo else 1
+		var sample_count := data.size() / (bytes_per_sample * channels)
+		var stride := bytes_per_sample * channels
+		for i in range(int(sample_count)):
+			var offset := i * stride
+			var left := 0.0
+			var right := 0.0
+			if bytes_per_sample == 2:
+				left = data.decode_s16(offset) / 32767.0
+				if channels == 2:
+					right = data.decode_s16(offset + 2) / 32767.0
+				else:
+					right = left
+			else:
+				left = (data.get(offset) - 128) / 127.0
+				if channels == 2:
+					right = (data.get(offset + 1) - 128) / 127.0
+				else:
+					right = left
+			samples.append(Vector2(left, right))
+		return samples
+
+
+	func _extract_mp3_samples(stream: AudioStreamMP3) -> PackedVector2Array:
+		return _fallback_waveform(chart.duration_seconds())
+
+
+	func _extract_ogg_samples(stream: AudioStreamOggVorbis) -> PackedVector2Array:
+		return _fallback_waveform(chart.duration_seconds())
+
+
+	func _fallback_waveform(duration: float) -> PackedVector2Array:
+		var samples := PackedVector2Array()
+		var sample_rate := 44100
+		var sample_count := int(duration * sample_rate)
+		for i in range(sample_count):
+			var t := float(i) / float(sample_rate)
+			var val := sin(t * TAU * 80.0) * 0.3 + sin(t * TAU * 160.0) * 0.2
+			samples.append(Vector2(val, val))
+		return samples
 
 
 	func _on_bpm_changed(value: float) -> void:
@@ -722,6 +889,29 @@ class RhythmEditorDock:
 		chart.meta["duration_ms"] = seconds * 1000.0
 		var bpm: float = float(chart.meta.get("start_bpm", 80.0))
 		chart.meta["duration_beats"] = maxf(1.0, seconds * bpm / 60.0)
+		_sync_timing_controls_from_chart()
+		_mark_dirty()
+		_stop_preview()
+		_update_timeline_size()
+
+
+	func _on_judge_offset_changed(value: float) -> void:
+		if not chart:
+			return
+		chart.meta["judge_offset"] = float(value)
+		_mark_dirty()
+		if timeline:
+			timeline.queue_redraw()
+
+
+	func _on_duration_mode_changed(index: int) -> void:
+		if not chart or not duration_mode_opt:
+			return
+		if index == 1:
+			chart.meta["duration_mode"] = "music"
+			_set_duration_from_music_if_possible()
+		else:
+			chart.meta.erase("duration_mode")
 		_sync_timing_controls_from_chart()
 		_mark_dirty()
 		_stop_preview()
@@ -796,6 +986,12 @@ class RhythmEditorDock:
 		var preview_offset_us := int(chart.beat_to_seconds(playhead_beat) * 1000000.0)
 		conductor.start()
 		conductor.start_us -= preview_offset_us
+		# 同步调整 cycle_start 和 cycle_index，确保音乐从正确的位置开始
+		var preview_offset_ms := preview_offset_us / 1000.0
+		conductor.cycle_index = int(floor(playhead_beat))
+		var cycle_start_ms: float = chart.beat_to_seconds(float(conductor.cycle_index)) * 1000.0
+		conductor.cycle_duration = conductor.beat_duration_at(cycle_start_ms)
+		conductor.cycle_start = cycle_start_ms
 		playing = true
 		play_btn.text = "Pause"
 		_update_status("Playing with judgement preview")
@@ -833,9 +1029,11 @@ class RhythmEditorDock:
 
 
 	func _preview_judgement_sfx(from_beat: float, to_beat: float) -> void:
+		var judge_offset := _get_judge_offset()
 		for note in chart.notes:
 			var beat := float(note.get("beat", 0.0))
-			if beat <= from_beat or beat > to_beat:
+			var judge_time := beat + judge_offset
+			if judge_time <= from_beat or judge_time > to_beat:
 				continue
 			match str(note.get("judge_type", RhythmChartScript.JUDGE_NONE)):
 				RhythmChartScript.JUDGE_TAP:
@@ -955,7 +1153,7 @@ class RhythmEditorDock:
 		_update_timeline_size()
 
 
-	func add_or_select_at(pos: Vector2, create_if_empty := false) -> bool:
+	func add_or_select_at(pos: Vector2, create_if_empty := false, free := false) -> bool:
 		if not chart:
 			return false
 		var hit := _hit_note(pos)
@@ -966,13 +1164,17 @@ class RhythmEditorDock:
 			selected_id = ""
 			timeline.queue_redraw()
 			return false
-		var beat := _snap_beat(_x_to_beat(pos.x))
+		var beat := _snap_beat(_x_to_beat(pos.x), free)
 		if beat < 0.0:
 			return false
 		var lane := RhythmChartScript.LANE_NODE if pos.y < WAVE_H + TRACK_H else RhythmChartScript.LANE_DECOY
 		var judge := judge_opt.get_item_text(judge_opt.selected)
 		if lane == RhythmChartScript.LANE_DECOY:
 			judge = RhythmChartScript.JUDGE_NONE
+		else:
+			if judge == RhythmChartScript.JUDGE_NONE:
+				judge = RhythmChartScript.JUDGE_TAP
+				_select_option_by_text(judge_opt, RhythmChartScript.JUDGE_TAP)
 		var kind := str(kind_opt.get_item_metadata(maxi(kind_opt.selected, 0)))
 		if _is_schrodinger_chart() and lane == RhythmChartScript.LANE_DECOY and kind == "empty":
 			kind = "trap"
@@ -989,11 +1191,11 @@ class RhythmEditorDock:
 		return true
 
 
-	func drag_selected_to(pos: Vector2) -> void:
+	func drag_selected_to(pos: Vector2, free := false) -> void:
 		var note := _selected_note()
 		if note.is_empty():
 			return
-		note["beat"] = _snap_beat(_x_to_beat(pos.x))
+		note["beat"] = _snap_beat(_x_to_beat(pos.x), free)
 		note["lane"] = RhythmChartScript.LANE_NODE if pos.y < WAVE_H + TRACK_H else RhythmChartScript.LANE_DECOY
 		note["track"] = note["lane"]
 		if note["lane"] == RhythmChartScript.LANE_DECOY:
@@ -1003,12 +1205,12 @@ class RhythmEditorDock:
 		select_note(str(note["id"]))
 
 
-	func resize_selected_to(pos: Vector2) -> void:
+	func resize_selected_to(pos: Vector2, free := false) -> void:
 		var note := _selected_note()
 		if note.is_empty():
 			return
 		var beat := float(note.get("beat", 0.0))
-		var tail := _snap_beat(_x_to_beat(pos.x))
+		var tail := _snap_beat(_x_to_beat(pos.x), free)
 		note["duration_beats"] = maxf(0.25, tail - beat)
 		if str(note.get("judge_type", RhythmChartScript.JUDGE_TAP)) == RhythmChartScript.JUDGE_TAP:
 			note["judge_type"] = RhythmChartScript.JUDGE_HOLD
@@ -1049,7 +1251,9 @@ class RhythmEditorDock:
 		return WAVE_H + TRACK_H * 0.5 if lane == RhythmChartScript.LANE_NODE else WAVE_H + TRACK_H * 1.5
 
 
-	func _snap_beat(raw: float) -> float:
+	func _snap_beat(raw: float, free := false) -> float:
+		if free:
+			return maxf(0.0, raw)
 		var sub := maxf(1.0, float(snap_spin.value if snap_spin else chart.meta.get("subdivisions", 4)))
 		return maxf(0.0, round(raw * sub) / sub)
 
@@ -1211,7 +1415,7 @@ class TimelineView:
 							editor.select_note(tail_hit)
 							drag_mode = "resize"
 						else:
-							var active := editor.add_or_select_at(event.position, event.shift_pressed)
+							var active := editor.add_or_select_at(event.position, event.shift_pressed, event.alt_pressed)
 							drag_mode = "move" if active else ""
 						dragging = drag_mode != ""
 					grab_focus()
@@ -1219,10 +1423,11 @@ class TimelineView:
 					dragging = false
 					drag_mode = ""
 		elif event is InputEventMouseMotion and dragging:
+			var free: bool = event.alt_pressed
 			if drag_mode == "resize":
-				editor.resize_selected_to(event.position)
+				editor.resize_selected_to(event.position, free)
 			elif drag_mode == "move":
-				editor.drag_selected_to(event.position)
+				editor.drag_selected_to(event.position, free)
 			elif drag_mode == "seek":
 				editor.seek_to(event.position)
 		elif event is InputEventKey and event.pressed and not event.echo:
@@ -1275,22 +1480,132 @@ class TimelineView:
 		for y in [RhythmEditorDock.WAVE_H, RhythmEditorDock.WAVE_H + RhythmEditorDock.TRACK_H,
 				RhythmEditorDock.WAVE_H + RhythmEditorDock.TRACK_H * 2.0]:
 			draw_line(Vector2(0, y), Vector2(size.x, y), Color("25131d"), 4.0)
+		# 绘制音符位置标记（朝上三角形），在 Music track 区域标记判定位置
+		# 对于第三关（八分音符系统），标记在八分音符位置
+		var eighth_sub := 2  # 八分音符对应的 subdivision
+		if editor._is_schrodinger_chart():
+			for tick in int(ceil(dur * float(eighth_sub))) + 1:
+				var beat := float(tick) / float(eighth_sub)
+				var x := editor._beat_to_x(beat)
+				if x < RhythmEditorDock.LEFT_GUTTER or x > size.x:
+					continue
+				var tri_size := 5.0
+				var tri_y := RhythmEditorDock.WAVE_H * 0.5
+				var tri := PackedVector2Array([
+					Vector2(x, tri_y - tri_size * 0.7),
+					Vector2(x - tri_size, tri_y + tri_size * 0.4),
+					Vector2(x + tri_size, tri_y + tri_size * 0.4),
+				])
+				var is_whole := tick % eighth_sub == 0
+				var alpha := 0.6 if is_whole else 0.3
+				draw_colored_polygon(tri, Color("ffe9b0", alpha))
+		else:
+			var judge_offset := editor._get_judge_offset()
+			for cycle in int(ceil(dur)) + 1:
+				var beat := float(cycle)
+				var x := editor._beat_to_x(beat)
+				if x < RhythmEditorDock.LEFT_GUTTER or x > size.x:
+					continue
+				var tri_size := 7.0
+				var tri_y := RhythmEditorDock.WAVE_H * 0.5
+				var tri := PackedVector2Array([
+					Vector2(x, tri_y - tri_size * 0.7),
+					Vector2(x - tri_size, tri_y + tri_size * 0.4),
+					Vector2(x + tri_size, tri_y + tri_size * 0.4),
+				])
+				draw_colored_polygon(tri, Color("d71920", 0.6))
 
 
 	func _draw_wave(chart) -> void:
 		var y_mid := RhythmEditorDock.WAVE_H * 0.52
-		var points := PackedVector2Array()
-		var music_hash := str(chart.meta.get("music_id", "rent")).hash()
 		var x0 := RhythmEditorDock.LEFT_GUTTER + 18.0
 		var x1 := size.x - 28.0
-		for i in 420:
-			var t := float(i) / 419.0
+		if editor.waveform_cache.size() > 0:
+			_draw_audio_waveform(y_mid, x0, x1)
+		else:
+			_draw_beat_markers(chart, y_mid, x0, x1)
+
+
+	func _draw_audio_waveform(y_mid: float, x0: float, x1: float) -> void:
+		var points := PackedVector2Array()
+		var bins := editor.waveform_cache.size()
+		var max_amp := y_mid - 12.0
+		for i in bins:
+			var t := float(i) / float(bins - 1)
 			var x := lerpf(x0, x1, t)
-			var amp := sin(t * TAU * 8.0 + float(music_hash % 17)) * 22.0
-			amp += sin(t * TAU * 21.0 + float(music_hash % 11)) * 11.0
-			amp += sin(t * TAU * 43.0) * 5.0
+			var amp := editor.waveform_cache[i] * max_amp
+			points.append(Vector2(x, y_mid - amp))
+		for i in range(bins - 1, -1, -1):
+			var t := float(i) / float(bins - 1)
+			var x := lerpf(x0, x1, t)
+			var amp := editor.waveform_cache[i] * max_amp
 			points.append(Vector2(x, y_mid + amp))
-		draw_polyline(points, Color("1238ff"), 4.0)
+		if points.size() >= 3:
+			draw_colored_polygon(points, Color("1238ff", 0.6))
+		var line_points := PackedVector2Array()
+		for i in bins:
+			var t := float(i) / float(bins - 1)
+			var x := lerpf(x0, x1, t)
+			var amp := editor.waveform_cache[i] * max_amp
+			line_points.append(Vector2(x, y_mid - amp))
+		draw_polyline(line_points, Color("1238ff"), 2.0)
+		var line_points_bot := PackedVector2Array()
+		for i in bins:
+			var t := float(i) / float(bins - 1)
+			var x := lerpf(x0, x1, t)
+			var amp := editor.waveform_cache[i] * max_amp
+			line_points_bot.append(Vector2(x, y_mid + amp))
+		draw_polyline(line_points_bot, Color("1238ff"), 2.0)
+
+
+	func _draw_beat_markers(chart, y_mid: float, x0: float, x1: float) -> void:
+		var dur: float = chart.duration_beats()
+		var sub := maxi(1, int(chart.meta.get("subdivisions", 4)))
+		var y_top := 8.0
+		var y_bot := RhythmEditorDock.WAVE_H - 8.0
+		var center_y := (y_top + y_bot) * 0.5
+		var total_h := y_bot - y_top
+		var bar_points := PackedVector2Array()
+		var beat_points := PackedVector2Array()
+		var sub_points := PackedVector2Array()
+		var beat_count := int(ceil(dur))
+		for beat in range(beat_count + 1):
+			var x := editor._beat_to_x(float(beat))
+			if x < x0 - 2.0 or x > x1 + 2.0:
+				continue
+			var is_bar := beat % 4 == 0
+			var is_beat := beat % 2 == 0
+			if is_bar:
+				bar_points.append(Vector2(x, y_top))
+				bar_points.append(Vector2(x, y_bot))
+			elif is_beat:
+				beat_points.append(Vector2(x, y_top + total_h * 0.15))
+				beat_points.append(Vector2(x, y_bot - total_h * 0.15))
+			else:
+				beat_points.append(Vector2(x, y_top + total_h * 0.3))
+				beat_points.append(Vector2(x, y_bot - total_h * 0.3))
+		for sub_beat in range(int(ceil(dur * float(sub)))):
+			var beat := float(sub_beat) / float(sub)
+			var x := editor._beat_to_x(beat)
+			if x < x0 - 2.0 or x > x1 + 2.0:
+				continue
+			if int(sub_beat) % sub == 0:
+				continue
+			sub_points.append(Vector2(x, center_y - total_h * 0.18))
+			sub_points.append(Vector2(x, center_y + total_h * 0.18))
+		draw_multiline(sub_points, Color("1238ff", 0.12), 1.0)
+		draw_multiline(beat_points, Color("1238ff", 0.45), 1.5)
+		draw_multiline(bar_points, Color("1238ff", 0.95), 3.0)
+		var bg_rect := Rect2(x0, center_y - 2.0, x1 - x0, 4.0)
+		draw_rect(bg_rect, Color("e8eefc", 0.8))
+		var bar_num := 0
+		for beat in range(beat_count + 1):
+			if beat % 4 == 0:
+				var x := editor._beat_to_x(float(beat))
+				if x >= x0 and x <= x1:
+					bar_num += 1
+					draw_string(ThemeDB.fallback_font, Vector2(x + 6.0, y_top + 18.0),
+						str(bar_num), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("1238ff", 0.7))
 
 
 	func _draw_notes(chart) -> void:

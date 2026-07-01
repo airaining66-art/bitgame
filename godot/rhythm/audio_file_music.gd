@@ -4,12 +4,14 @@ extends Node
 
 var stream_path := ""
 var fade_in_seconds := 0.0
-var fade_out_seconds := 0.0
+var fade_out_seconds := 2.0
 var finale := false
 
 var player: AudioStreamPlayer
 var conductor_ref: Conductor
 var started := false
+var outro_started := false
+var outro_start_time := 0.0
 
 
 func _ready() -> void:
@@ -26,10 +28,17 @@ func setup(conductor: Conductor) -> void:
 
 func reset() -> void:
 	started = false
+	outro_started = false
+	outro_start_time = 0.0
 	if player:
 		player.stop()
 		player.volume_db = -80.0 if fade_in_seconds > 0.0 else 0.0
 	finale = false
+
+
+func play_outro() -> void:
+	outro_started = true
+	outro_start_time = Time.get_ticks_msec() / 1000.0
 
 
 func _process(_delta: float) -> void:
@@ -37,7 +46,7 @@ func _process(_delta: float) -> void:
 		return
 	if conductor_ref.running and not started:
 		_play()
-	elif not conductor_ref.running and started:
+	elif not conductor_ref.running and started and not outro_started:
 		reset()
 	if not started or player == null:
 		return
@@ -49,8 +58,11 @@ func _process(_delta: float) -> void:
 	var total := conductor_ref.duration_ms() / 1000.0
 	if fade_in_seconds > 0.0:
 		volume = minf(volume, seconds / fade_in_seconds)
-	if fade_out_seconds > 0.0:
+	if fade_out_seconds > 0.0 and not outro_started:
 		volume = minf(volume, maxf((total - seconds) / fade_out_seconds, 0.0))
+	if outro_started and fade_out_seconds > 0.0:
+		var elapsed := (Time.get_ticks_msec() / 1000.0) - outro_start_time
+		volume = maxf(1.0 - elapsed / fade_out_seconds, 0.0)
 	player.volume_db = linear_to_db(clampf(volume, 0.0001, 1.0))
 
 

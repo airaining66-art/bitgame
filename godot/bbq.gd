@@ -1,4 +1,4 @@
-﻿extends LevelBase
+extends LevelBase
 
 const RhythmChartScript := preload("res://rhythm/rhythm_chart.gd")
 const BeatSlotJudgementScript := preload("res://rhythm/beat_slot_judgement.gd")
@@ -53,14 +53,7 @@ const JUDGE_OFFSET := 0.75
 const MIN_PERFECT_MS := 120.0
 const MIN_GOOD_MS := 230.0
 
-const ORDERS := [
-	[BEEF, PEPPER, ONION],
-	[MUSHROOM, BEEF, PEPPER, ONION],
-	[BEEF, PEPPER, MUSHROOM, ONION, BREAD],
-	[BEEF, PEPPER, ONION, MUSHROOM],
-	[LEEK, BEEF, MUSHROOM, PEPPER, ONION, BREAD],
-	[BEEF, PEPPER, ONION, MUSHROOM, BREAD, LEEK],
-]
+var ORDERS: Array = []
 
 # --- BBQ-specific state -----------------------------------------------------
 var bbq_music: Node
@@ -72,7 +65,7 @@ var prev_beat_data: Dictionary = {}
 var queue: Array[Dictionary] = []
 var chart_i := 0
 var chart_total_beats := 0
-var active_chart_beats: Array = []
+var _active_chart_beats: Array = []
 var beat_judgement := BeatSlotJudgementScript.new()
 var skewer_items: Array[int] = []
 var grilled: Array = []
@@ -322,10 +315,10 @@ func _verdict(hearts_lost: int, won: bool) -> Dictionary:
 # Beat generation
 # ===========================================================================
 func make_beat() -> Dictionary:
-	if not active_chart_beats.is_empty():
-		if chart_i >= active_chart_beats.size():
+	if not _active_chart_beats.is_empty():
+		if chart_i >= _active_chart_beats.size():
 			return {"ingredient": -1, "is_flip": false, "should_press": false, "end": true}
-		var beat_data: Dictionary = active_chart_beats[chart_i]
+		var beat_data: Dictionary = _active_chart_beats[chart_i]
 		chart_i += 1
 		return beat_data.duplicate(true)
 	return {"ingredient": -1, "is_flip": false, "should_press": false, "end": true}
@@ -347,14 +340,33 @@ func ensure_queue() -> void:
 
 func prepare_beats() -> void:
 	queue = []
-	active_chart_beats = _load_editor_chart_beats()
-	if active_chart_beats.is_empty():
+	_active_chart_beats = _load_editor_chart_beats()
+	if _active_chart_beats.is_empty():
 		push_warning("Missing RhythmChart for 1-4; level has no script fallback chart.")
 	chart_i = 0
-	chart_total_beats = active_chart_beats.size()
+	chart_total_beats = _active_chart_beats.size()
+	_build_orders_from_chart()
 	ensure_queue()
 	current_beat_data = queue.pop_front()
 	ensure_queue()
+
+
+func _build_orders_from_chart() -> void:
+	ORDERS.clear()
+	var current_order: Array = []
+	for beat_data in _active_chart_beats:
+		if beat_data.get("is_flip", false):
+			if current_order.size() > 0:
+				ORDERS.append(current_order.duplicate())
+				current_order.clear()
+		else:
+			var ing := int(beat_data.get("ingredient", -1))
+			if ing >= 0 and beat_data.get("should_press", false):
+				current_order.append(ing)
+	if current_order.size() > 0:
+		ORDERS.append(current_order.duplicate())
+	if ORDERS.is_empty():
+		ORDERS.append([BEEF, PEPPER, ONION])
 
 
 func _load_editor_chart_beats() -> Array:

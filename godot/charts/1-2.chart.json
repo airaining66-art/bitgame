@@ -1,12 +1,14 @@
 {
 	"meta": {
 		"bpm_curve_exp": 1.5,
-		"duration_beats": 55.0,
+		"duration_beats": 296.939969380697,
+		"duration_mode": "music",
+		"duration_ms": 254519.973754883,
 		"end_bpm": 110.0,
 		"level_id": "1-2",
 		"level_name": "Mango",
-		"music_id": "mango",
-		"music_path": "res://lofi.gd",
+		"music_id": "Jungle Monkey.mp3",
+		"music_path": "res://assets/Jungle Monkey.mp3",
 		"start_bpm": 70.0,
 		"subdivisions": 4.0,
 		"variant": "normal",

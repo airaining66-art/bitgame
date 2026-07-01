@@ -1,2005 +1,2706 @@
-﻿{
-    "meta":  {
-                 "version":  1,
-                 "level_id":  "1-3",
-                 "level_name":  "Schrodinger",
-                 "music_id":  "romance",
-                 "music_path":  "res://romance.gd",
-                 "start_bpm":  84,
-                 "end_bpm":  116,
-                 "bpm_curve_exp":  1.5,
-                 "subdivisions":  4,
-                 "duration_beats":  81,
-                 "variant":  "normal"
-             },
-    "tracks":  [
-                   {
-                       "id":  "node",
-                       "name":  "Node",
-                       "color":  "#ef4444"
-                   },
-                   {
-                       "id":  "decoy",
-                       "name":  "Non-node",
-                       "color":  "#777777"
-                   }
-               ],
-    "node_kinds":  [
-                       {
-                           "id":  "food_correct",
-                           "name":  "Food C",
-                           "color":  "#f4c45a"
-                       },
-                       {
-                           "id":  "face_correct",
-                           "name":  "Face C",
-                           "color":  "#e0708a"
-                       },
-                       {
-                           "id":  "both_correct",
-                           "name":  "Both C",
-                           "color":  "#8fcf7a"
-                       },
-                       {
-                           "id":  "trap",
-                           "name":  "Trap",
-                           "color":  "#e2584f"
-                       },
-                       {
-                           "id":  "hold",
-                           "name":  "Hold",
-                           "color":  "#38bdf8"
-                       },
-                       {
-                           "id":  "roll",
-                           "name":  "Roll",
-                           "color":  "#f97316"
-                       },
-                       {
-                           "id":  "baby",
-                           "name":  "Baby",
-                           "color":  "#a855f7"
-                       },
-                       {
-                           "id":  "empty",
-                           "name":  "Empty",
-                           "color":  "#777777"
-                       }
-                   ],
-    "notes":  [
-                  {
-                      "id":  "migrated-1-3-0",
-                      "beat":  0,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-1",
-                      "beat":  0.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-2",
-                      "beat":  1,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-3",
-                      "beat":  1.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-4",
-                      "beat":  2,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-5",
-                      "beat":  2.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-6",
-                      "beat":  3,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-7",
-                      "beat":  3.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-8",
-                      "beat":  4,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-9",
-                      "beat":  4.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-10",
-                      "beat":  5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-11",
-                      "beat":  5.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-12",
-                      "beat":  6,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-13",
-                      "beat":  6.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-14",
-                      "beat":  7,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-15",
-                      "beat":  7.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-16",
-                      "beat":  8,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-17",
-                      "beat":  8.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-18",
-                      "beat":  9,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-19",
-                      "beat":  9.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-20",
-                      "beat":  10,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-21",
-                      "beat":  10.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-22",
-                      "beat":  11,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-23",
-                      "beat":  11.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-24",
-                      "beat":  12,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-25",
-                      "beat":  12.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-26",
-                      "beat":  13,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-27",
-                      "beat":  13.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-28",
-                      "beat":  14,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-29",
-                      "beat":  14.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-30",
-                      "beat":  15,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-31",
-                      "beat":  15.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-32",
-                      "beat":  16,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-33",
-                      "beat":  16.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-34",
-                      "beat":  17,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-35",
-                      "beat":  17.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-36",
-                      "beat":  18,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-37",
-                      "beat":  18.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-38",
-                      "beat":  19,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-39",
-                      "beat":  19.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-40",
-                      "beat":  20,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-41",
-                      "beat":  20.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-42",
-                      "beat":  21,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-43",
-                      "beat":  21.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-44",
-                      "beat":  22,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-45",
-                      "beat":  22.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-46",
-                      "beat":  23,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-47",
-                      "beat":  23.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-48",
-                      "beat":  24,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-49",
-                      "beat":  24.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-50",
-                      "beat":  25,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  2,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-51",
-                      "beat":  25.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-52",
-                      "beat":  26,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-53",
-                      "beat":  26.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-54",
-                      "beat":  27,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-55",
-                      "beat":  27.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-56",
-                      "beat":  28,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-57",
-                      "beat":  28.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-58",
-                      "beat":  29,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  2,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-59",
-                      "beat":  29.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-60",
-                      "beat":  30,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-61",
-                      "beat":  30.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-62",
-                      "beat":  31,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-63",
-                      "beat":  31.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-64",
-                      "beat":  32,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-65",
-                      "beat":  32.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-66",
-                      "beat":  33,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-67",
-                      "beat":  33.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-68",
-                      "beat":  34,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-69",
-                      "beat":  34.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-70",
-                      "beat":  35,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-71",
-                      "beat":  35.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-72",
-                      "beat":  36,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-73",
-                      "beat":  36.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-74",
-                      "beat":  37,
-                      "duration_beats":  3,
-                      "judge_type":  "hold",
-                      "lane":  "node",
-                      "kind":  "hold",
-                      "track":  "node",
-                      "payload":  {
+{
+	"meta": {
+		"bpm_curve_exp": 1.5,
+		"duration_beats": 123.9,
+		"duration_ms": 88500.0,
+		"end_bpm": 116.0,
+		"level_id": "1-3",
+		"level_name": "Schrodinger",
+		"music_id": "告白の季節.mp3",
+		"music_path": "res://assets/告白の季節.mp3",
+		"start_bpm": 84.0,
+		"subdivisions": 6.0,
+		"variant": "normal",
+		"version": 1.0
+	},
+	"node_kinds": [
+		{
+			"color": "#f4c45a",
+			"id": "food_correct",
+			"name": "Food C"
+		},
+		{
+			"color": "#e0708a",
+			"id": "face_correct",
+			"name": "Face C"
+		},
+		{
+			"color": "#8fcf7a",
+			"id": "both_correct",
+			"name": "Both C"
+		},
+		{
+			"color": "#e2584f",
+			"id": "trap",
+			"name": "Trap"
+		},
+		{
+			"color": "#38bdf8",
+			"id": "hold",
+			"name": "Hold"
+		},
+		{
+			"color": "#f97316",
+			"id": "roll",
+			"name": "Roll"
+		},
+		{
+			"color": "#a855f7",
+			"id": "baby",
+			"name": "Baby"
+		},
+		{
+			"color": "#777777",
+			"id": "empty",
+			"name": "Empty"
+		}
+	],
+	"notes": [
+		{
+			"beat": 0.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-0",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 0.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-1",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 1.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-2",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 1.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-3",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 2.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-4",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 2.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-5",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 3.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-6",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 3.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-7",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 4.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-8",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 4.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-9",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 5.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-10",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 5.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-11",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 6.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-12",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 6.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-13",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 7.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-14",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 7.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-15",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 8.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-16",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 8.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-17",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 9.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-18",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 9.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-19",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 10.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-20",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 10.5,
+			"duration_beats": 0.0,
+			"id": "4330592711-66579",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 11.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-21",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 11.5,
+			"duration_beats": 0.0,
+			"id": "865826234-85622",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 12.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-24",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 12.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-25",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 13.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-26",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 13.5,
+			"duration_beats": 0.0,
+			"id": "832550457-22207",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 14.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-28",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 14.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-29",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 15.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-30",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 15.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-31",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 16.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-32",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 16.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-33",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 17.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-34",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 17.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-35",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 18.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-36",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 18.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-37",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 19.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-38",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 19.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-39",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 20.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-40",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 20.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-41",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 21.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-42",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 1.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 21.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-43",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 22.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-44",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 22.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-45",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 23.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-46",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 23.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-47",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 24.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-48",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 24.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-49",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 25.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-50",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 2.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 25.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-51",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 26.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-52",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 26.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-53",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 27.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-54",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 27.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-55",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 28.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-56",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 28.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-57",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 29.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-58",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 2.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 29.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-59",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 30.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-60",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 30.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-61",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 31.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-62",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 1.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 31.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-63",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 32.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-64",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 32.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-65",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 33.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-66",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 33.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-67",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 34.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-68",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 34.5,
+			"duration_beats": 4.00000000000001,
+			"id": "migrated-1-3-74",
+			"judge_type": "hold",
+			"kind": "hold",
+			"lane": "node",
+			"payload": {
 
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-75",
-                      "beat":  40,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-76",
-                      "beat":  40.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-77",
-                      "beat":  41,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-78",
-                      "beat":  41.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-79",
-                      "beat":  42,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-80",
-                      "beat":  42.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-81",
-                      "beat":  43,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-82",
-                      "beat":  43.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-83",
-                      "beat":  44,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-84",
-                      "beat":  44.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-85",
-                      "beat":  45,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-86",
-                      "beat":  45.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-87",
-                      "beat":  46,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-88",
-                      "beat":  46.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-89",
-                      "beat":  47,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-90",
-                      "beat":  47.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-91",
-                      "beat":  48,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-92",
-                      "beat":  48.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-93",
-                      "beat":  49,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-94",
-                      "beat":  49.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-95",
-                      "beat":  50,
-                      "duration_beats":  3,
-                      "judge_type":  "roll",
-                      "lane":  "node",
-                      "kind":  "roll",
-                      "track":  "node",
-                      "payload":  {
+			},
+			"track": "node"
+		},
+		{
+			"beat": 39.5,
+			"duration_beats": 0.0,
+			"id": "251843166-36989",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 40.0000000000001,
+			"duration_beats": 0.0,
+			"id": "252961228-7166",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 40.5000000000001,
+			"duration_beats": 0.0,
+			"id": "269070771-63585",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 41.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-78",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 42.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-79",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 42.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-80",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 43.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-81",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 43.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-82",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 44.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-83",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 44.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-84",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 45.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-85",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 45.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-86",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 46.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-87",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 46.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-88",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 47.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-89",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 47.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-90",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 48.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-91",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 48.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-92",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 49.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-93",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 49.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-94",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 50.0,
+			"duration_beats": 3.0,
+			"id": "migrated-1-3-95",
+			"judge_type": "roll",
+			"kind": "roll",
+			"lane": "node",
+			"payload": {
 
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-96",
-                      "beat":  53,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-97",
-                      "beat":  53.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-98",
-                      "beat":  54,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-99",
-                      "beat":  54.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-100",
-                      "beat":  55,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-101",
-                      "beat":  55.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-102",
-                      "beat":  56,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-103",
-                      "beat":  56.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-104",
-                      "beat":  57,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-105",
-                      "beat":  57.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-106",
-                      "beat":  58,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-107",
-                      "beat":  58.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-108",
-                      "beat":  59,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-109",
-                      "beat":  59.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-110",
-                      "beat":  60,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-111",
-                      "beat":  60.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-112",
-                      "beat":  61,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-113",
-                      "beat":  61.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-114",
-                      "beat":  62,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-115",
-                      "beat":  62.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-116",
-                      "beat":  63,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  2,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-117",
-                      "beat":  63.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-118",
-                      "beat":  64,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-119",
-                      "beat":  64.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-120",
-                      "beat":  65,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-121",
-                      "beat":  65.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-122",
-                      "beat":  66,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-123",
-                      "beat":  66.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-124",
-                      "beat":  67,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-125",
-                      "beat":  67.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-126",
-                      "beat":  68,
-                      "duration_beats":  2,
-                      "judge_type":  "hold",
-                      "lane":  "node",
-                      "kind":  "hold",
-                      "track":  "node",
-                      "payload":  {
+			},
+			"track": "node"
+		},
+		{
+			"beat": 53.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-97",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 54.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-98",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 54.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-99",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 55.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-100",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 55.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-101",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 56.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-102",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 56.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-103",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 57.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-104",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 57.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-105",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 58.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-106",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 58.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-107",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 59.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-108",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 1.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 59.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-109",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 60.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-110",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 60.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-111",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 61.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-112",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 61.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-113",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 62.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-114",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 62.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-115",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 63.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-116",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 2.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 63.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-117",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 64.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-118",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 64.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-119",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 65.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-120",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 65.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-121",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 66.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-122",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 66.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-123",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 67.0000000000001,
+			"duration_beats": 0.0,
+			"id": "1268055130-19978",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 68.0,
+			"duration_beats": 3.50000000000001,
+			"id": "migrated-1-3-126",
+			"judge_type": "hold",
+			"kind": "hold",
+			"lane": "node",
+			"payload": {
 
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-127",
-                      "beat":  70,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-128",
-                      "beat":  70.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-129",
-                      "beat":  71,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-130",
-                      "beat":  71.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-131",
-                      "beat":  72,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-132",
-                      "beat":  72.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-133",
-                      "beat":  73,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-134",
-                      "beat":  73.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-135",
-                      "beat":  74,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-136",
-                      "beat":  74.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-137",
-                      "beat":  75,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-138",
-                      "beat":  75.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-139",
-                      "beat":  76,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-140",
-                      "beat":  76.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "trap",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  2
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-141",
-                      "beat":  77,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-142",
-                      "beat":  77.5,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-143",
-                      "beat":  78,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "food_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  1
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-144",
-                      "beat":  78.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-145",
-                      "beat":  79,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-146",
-                      "beat":  79.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-147",
-                      "beat":  80,
-                      "duration_beats":  0,
-                      "judge_type":  "tap",
-                      "lane":  "node",
-                      "kind":  "face_correct",
-                      "track":  "node",
-                      "payload":  {
-                                      "bottom":  1,
-                                      "top":  0
-                                  }
-                  },
-                  {
-                      "id":  "migrated-1-3-148",
-                      "beat":  80.5,
-                      "duration_beats":  0,
-                      "judge_type":  "none",
-                      "lane":  "decoy",
-                      "kind":  "empty",
-                      "track":  "decoy",
-                      "payload":  {
-                                      "bottom":  0,
-                                      "top":  0
-                                  }
-                  }
-              ]
+			},
+			"track": "node"
+		},
+		{
+			"beat": 72.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-131",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 72.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-132",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 73.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-133",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 73.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-134",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 74.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-135",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 74.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-136",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 75.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-137",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 75.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-138",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 76.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-139",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 76.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-140",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 2.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 77.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-141",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 77.5000000000002,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-142",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 78.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-143",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0.0,
+				"top": 1.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 78.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-144",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 79.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-145",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 79.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-146",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 80.0,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-147",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1.0,
+				"top": 0.0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 80.5,
+			"duration_beats": 0.0,
+			"id": "migrated-1-3-148",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0.0,
+				"top": 0.0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 81.0000000000002,
+			"duration_beats": 0.0,
+			"id": "1295365454-33767",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 81.5,
+			"duration_beats": 0.0,
+			"id": "1301408545-69443",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 82.0,
+			"duration_beats": 0.0,
+			"id": "1302504054-67520",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 82.5,
+			"duration_beats": 0.0,
+			"id": "1311476724-91936",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 83.0000000000002,
+			"duration_beats": 0.0,
+			"id": "1322588641-77901",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 83.5000000000002,
+			"duration_beats": 0.0,
+			"id": "1338555542-35642",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 2,
+				"top": 1
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 84.0000000000002,
+			"duration_beats": 0.0,
+			"id": "1347195059-87159",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 2,
+				"top": 1
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 84.5,
+			"duration_beats": 0.0,
+			"id": "1350476299-13916",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 85.0,
+			"duration_beats": 0.0,
+			"id": "1356225202-67273",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 85.5000000000002,
+			"duration_beats": 0.0,
+			"id": "1370495521-23110",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 86.0,
+			"duration_beats": 0.0,
+			"id": "1365194732-82519",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 86.5,
+			"duration_beats": 0.0,
+			"id": "1378643918-68391",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 87.0000000000002,
+			"duration_beats": 0.0,
+			"id": "1382813148-4525",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 87.5000000000002,
+			"duration_beats": 0.0,
+			"id": "1383965792-20556",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 88.0000000000002,
+			"duration_beats": 0.0,
+			"id": "1384706614-36943",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 88.5000000000002,
+			"duration_beats": 2.5,
+			"id": "1473540689-90440",
+			"judge_type": "tap",
+			"kind": "hold",
+			"lane": "node",
+			"payload": {
+				"bottom": 0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 91.5000000000002,
+			"duration_beats": 0.0,
+			"id": "1981579135-56332",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 92.0000000000002,
+			"duration_beats": 0.0,
+			"id": "1980778560-17266",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 92.5000000000002,
+			"duration_beats": 0.0,
+			"id": "2002113139-6581",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 93.0000000000002,
+			"duration_beats": 0.0,
+			"id": "2005205746-58636",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 1,
+				"top": 2
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 93.5000000000002,
+			"duration_beats": 0.0,
+			"id": "2006384473-44067",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 2,
+				"top": 1
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 94.0,
+			"duration_beats": 0.0,
+			"id": "2035161009-62791",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 94.5000000000002,
+			"duration_beats": 0.0,
+			"id": "2042438183-83664",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 95.0000000000002,
+			"duration_beats": 0.0,
+			"id": "2046941718-85647",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 95.5000000000002,
+			"duration_beats": 0.0,
+			"id": "2050757431-97268",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 96.0,
+			"duration_beats": 0.0,
+			"id": "2060766701-13623",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 96.5000000000002,
+			"duration_beats": 2.5,
+			"id": "2067504522-51183",
+			"judge_type": "tap",
+			"kind": "roll",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 99.5000000000002,
+			"duration_beats": 0.0,
+			"id": "2123344902-34642",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 100.0,
+			"duration_beats": 0.0,
+			"id": "2130292411-76155",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 100.5,
+			"duration_beats": 0.0,
+			"id": "2131340453-57069",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 101.0,
+			"duration_beats": 0.0,
+			"id": "2132021367-93528",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 101.5,
+			"duration_beats": 0.0,
+			"id": "2134262982-19120",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 102.0,
+			"duration_beats": 0.0,
+			"id": "2140048994-29666",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 102.5,
+			"duration_beats": 0.0,
+			"id": "2144885510-2538",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 0
+			},
+			"track": "node"
+		},
+		{
+			"beat": 103.0,
+			"duration_beats": 0.0,
+			"id": "2177926363-13345",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 103.5,
+			"duration_beats": 0.0,
+			"id": "2182867643-82546",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 104.0,
+			"duration_beats": 0.0,
+			"id": "2190646165-68782",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 104.5,
+			"duration_beats": 0.0,
+			"id": "2195314436-55949",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 105.0,
+			"duration_beats": 0.0,
+			"id": "2201935922-41112",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 1,
+				"top": 2
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 105.5,
+			"duration_beats": 0.0,
+			"id": "2207777063-30712",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 2
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 106.0,
+			"duration_beats": 0.0,
+			"id": "2216683236-61407",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 106.5,
+			"duration_beats": 0.0,
+			"id": "2223476262-46840",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 107.0,
+			"duration_beats": 0.0,
+			"id": "2228528703-73156",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 107.5,
+			"duration_beats": 0.0,
+			"id": "2237596062-69140",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 108.0,
+			"duration_beats": 0.0,
+			"id": "2242366067-5918",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 108.5,
+			"duration_beats": 0.0,
+			"id": "2243440767-99258",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 109.0,
+			"duration_beats": 0.0,
+			"id": "2244279279-65072",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 109.5,
+			"duration_beats": 0.0,
+			"id": "2247045239-69649",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 110.0,
+			"duration_beats": 0.0,
+			"id": "2252682177-57148",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 110.5,
+			"duration_beats": 0.0,
+			"id": "2257417992-97174",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 111.0,
+			"duration_beats": 0.0,
+			"id": "2258464836-75563",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 111.5,
+			"duration_beats": 0.0,
+			"id": "2264123322-1385",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 1,
+				"top": 2
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 112.0,
+			"duration_beats": 0.0,
+			"id": "2269732134-78482",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 2
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 112.5,
+			"duration_beats": 0.0,
+			"id": "2273595591-50973",
+			"judge_type": "tap",
+			"kind": "face_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 113.0,
+			"duration_beats": 0.0,
+			"id": "2279621495-14949",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 113.5,
+			"duration_beats": 0.0,
+			"id": "2284844450-7832",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 114.0,
+			"duration_beats": 0.0,
+			"id": "2290084997-91128",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 114.5,
+			"duration_beats": 0.0,
+			"id": "2292387257-23811",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 0,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 115.0,
+			"duration_beats": 2.0,
+			"id": "2297150043-71392",
+			"judge_type": "tap",
+			"kind": "hold",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 117.5,
+			"duration_beats": 0.0,
+			"id": "2319187581-82655",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 118.0,
+			"duration_beats": 0.0,
+			"id": "2328725325-85128",
+			"judge_type": "tap",
+			"kind": "food_correct",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		},
+		{
+			"beat": 118.5,
+			"duration_beats": 0.0,
+			"id": "2329677825-28800",
+			"judge_type": "none",
+			"kind": "empty",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 119.0,
+			"duration_beats": 0.0,
+			"id": "2335886990-8352",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 119.5,
+			"duration_beats": 0.0,
+			"id": "2337098576-98398",
+			"judge_type": "none",
+			"kind": "trap",
+			"lane": "decoy",
+			"payload": {
+				"bottom": 0,
+				"top": 0
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 120.0,
+			"duration_beats": 2.0,
+			"id": "2339076770-18634",
+			"judge_type": "tap",
+			"kind": "roll",
+			"lane": "node",
+			"payload": {
+				"bottom": 1,
+				"top": 1
+			},
+			"track": "node"
+		}
+	],
+	"tracks": [
+		{
+			"color": "#ef4444",
+			"id": "node",
+			"name": "Node"
+		},
+		{
+			"color": "#777777",
+			"id": "decoy",
+			"name": "Non-node"
+		}
+	]
 }
