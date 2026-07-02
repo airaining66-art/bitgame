@@ -547,11 +547,11 @@ func _start_outro() -> void:
 	if phase != "running":
 		return
 	phase = "outro"
-	conductor.stop()
-	conductor.tempo_scale = 1.0
 	_end_fever()
 	if music and music.has_method("play_outro"):
 		music.play_outro()
+	conductor.stop()
+	conductor.tempo_scale = 1.0
 	_outro_fx()
 	get_tree().create_timer(2.2).timeout.connect(func() -> void:
 		if is_instance_valid(self):

@@ -1,9 +1,8 @@
 {
 	"meta": {
 		"bpm_curve_exp": 1.5,
-		"duration_beats": 296.939969380697,
-		"duration_mode": "music",
-		"duration_ms": 254519.973754883,
+		"duration_beats": 114.333333333333,
+		"duration_ms": 98000.0,
 		"end_bpm": 110.0,
 		"level_id": "1-2",
 		"level_name": "Mango",
@@ -28,18 +27,6 @@
 	],
 	"notes": [
 		{
-			"beat": 0.0,
-			"duration_beats": 0.0,
-			"id": "migrated-1-2-0",
-			"judge_type": "tap",
-			"kind": "mango",
-			"lane": "node",
-			"payload": {
-
-			},
-			"track": "node"
-		},
-		{
 			"beat": 1.0,
 			"duration_beats": 0.0,
 			"id": "migrated-1-2-1",
@@ -52,7 +39,7 @@
 			"track": "decoy"
 		},
 		{
-			"beat": 2.0,
+			"beat": 1.5,
 			"duration_beats": 0.0,
 			"id": "migrated-1-2-2",
 			"judge_type": "tap",
@@ -124,7 +111,7 @@
 			"track": "decoy"
 		},
 		{
-			"beat": 7.0,
+			"beat": 6.75,
 			"duration_beats": 0.0,
 			"id": "migrated-1-2-7",
 			"judge_type": "tap",
@@ -136,7 +123,7 @@
 			"track": "node"
 		},
 		{
-			"beat": 8.0,
+			"beat": 7.75,
 			"duration_beats": 0.0,
 			"id": "migrated-1-2-8",
 			"judge_type": "tap",
@@ -173,10 +160,10 @@
 		},
 		{
 			"beat": 11.0,
-			"duration_beats": 3.0,
-			"id": "migrated-1-2-11",
+			"duration_beats": 2.0,
+			"id": "509205915-56141",
 			"judge_type": "hold",
-			"kind": "mango",
+			"kind": "water",
 			"lane": "node",
 			"payload": {
 
@@ -186,7 +173,7 @@
 		{
 			"beat": 14.0,
 			"duration_beats": 0.0,
-			"id": "migrated-1-2-12",
+			"id": "530195625-39877",
 			"judge_type": "tap",
 			"kind": "water",
 			"lane": "node",
@@ -571,6 +558,618 @@
 			"beat": 52.0,
 			"duration_beats": 3.0,
 			"id": "migrated-1-2-44",
+			"judge_type": "hold",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 56.0,
+			"duration_beats": 0.0,
+			"id": "606960105-76700",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 57.0,
+			"duration_beats": 0.0,
+			"id": "608688874-48447",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 58.0,
+			"duration_beats": 0.0,
+			"id": "613646800-24385",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 59.0,
+			"duration_beats": 0.0,
+			"id": "625707199-19211",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 60.0,
+			"duration_beats": 0.0,
+			"id": "627729761-98691",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 61.0,
+			"duration_beats": 0.0,
+			"id": "628938876-18787",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 62.0,
+			"duration_beats": 0.0,
+			"id": "630742956-33155",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 63.0,
+			"duration_beats": 0.0,
+			"id": "633881512-85836",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 64.0,
+			"duration_beats": 0.0,
+			"id": "634847046-98095",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 65.0,
+			"duration_beats": 0.0,
+			"id": "636252778-46108",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 66.0,
+			"duration_beats": 2.0,
+			"id": "804120706-23677",
+			"judge_type": "hold",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 69.0,
+			"duration_beats": 0.0,
+			"id": "814771761-52841",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 70.0,
+			"duration_beats": 0.0,
+			"id": "818328688-85604",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 71.0,
+			"duration_beats": 0.0,
+			"id": "819374270-24636",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 72.0,
+			"duration_beats": 0.0,
+			"id": "822912296-14789",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 73.0,
+			"duration_beats": 2.0,
+			"id": "834672466-72775",
+			"judge_type": "hold",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 76.0,
+			"duration_beats": 0.0,
+			"id": "919376323-72499",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 77.0,
+			"duration_beats": 0.0,
+			"id": "920359454-20303",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 78.0,
+			"duration_beats": 0.0,
+			"id": "921212617-1955",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 79.0,
+			"duration_beats": 0.0,
+			"id": "921874874-84939",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 80.0,
+			"duration_beats": 0.0,
+			"id": "922670245-36135",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 81.0,
+			"duration_beats": 0.0,
+			"id": "923596826-57751",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 82.0,
+			"duration_beats": 0.0,
+			"id": "925920017-86709",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 83.0,
+			"duration_beats": 0.0,
+			"id": "945081421-68404",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 84.0,
+			"duration_beats": 0.0,
+			"id": "946246164-38091",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 85.0,
+			"duration_beats": 0.0,
+			"id": "963245990-5861",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 86.0,
+			"duration_beats": 0.0,
+			"id": "963799536-24265",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 87.0,
+			"duration_beats": 0.0,
+			"id": "965344884-91976",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 88.0,
+			"duration_beats": 0.0,
+			"id": "1032309495-99892",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 89.0,
+			"duration_beats": 0.0,
+			"id": "1033010658-9631",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 90.0,
+			"duration_beats": 0.0,
+			"id": "1041545609-81111",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 91.0,
+			"duration_beats": 0.0,
+			"id": "1044501620-66284",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 92.0,
+			"duration_beats": 0.0,
+			"id": "1045653531-25379",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 93.0,
+			"duration_beats": 0.0,
+			"id": "1046479753-26882",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 94.0,
+			"duration_beats": 0.0,
+			"id": "1052735915-74131",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 95.0,
+			"duration_beats": 0.0,
+			"id": "1053367928-63869",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 96.0,
+			"duration_beats": 0.0,
+			"id": "1058922273-55515",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 97.0,
+			"duration_beats": 0.0,
+			"id": "1061633651-55772",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 98.0,
+			"duration_beats": 0.0,
+			"id": "1065008858-10166",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 99.0,
+			"duration_beats": 0.0,
+			"id": "1066524085-5367",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 100.0,
+			"duration_beats": 0.0,
+			"id": "1081177045-94591",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 101.0,
+			"duration_beats": 3.0,
+			"id": "1085673000-29388",
+			"judge_type": "hold",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 105.0,
+			"duration_beats": 0.0,
+			"id": "1104984672-7183",
+			"judge_type": "tap",
+			"kind": "mango",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 106.0,
+			"duration_beats": 0.0,
+			"id": "1106900766-55030",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 107.0,
+			"duration_beats": 0.0,
+			"id": "1112380145-38767",
+			"judge_type": "none",
+			"kind": "mango",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 108.0,
+			"duration_beats": 0.0,
+			"id": "1115570258-44829",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 109.0,
+			"duration_beats": 0.0,
+			"id": "1116996317-95308",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 110.0,
+			"duration_beats": 0.0,
+			"id": "1117727464-50841",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 111.0,
+			"duration_beats": 0.0,
+			"id": "1118460602-2573",
+			"judge_type": "none",
+			"kind": "water",
+			"lane": "decoy",
+			"payload": {
+
+			},
+			"track": "decoy"
+		},
+		{
+			"beat": 112.0,
+			"duration_beats": 0.0,
+			"id": "1119150510-86652",
+			"judge_type": "tap",
+			"kind": "water",
+			"lane": "node",
+			"payload": {
+
+			},
+			"track": "node"
+		},
+		{
+			"beat": 113.0,
+			"duration_beats": 3.5,
+			"id": "1126940971-15226",
 			"judge_type": "hold",
 			"kind": "mango",
 			"lane": "node",

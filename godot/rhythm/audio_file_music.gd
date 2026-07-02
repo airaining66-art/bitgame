@@ -44,9 +44,19 @@ func play_outro() -> void:
 func _process(_delta: float) -> void:
 	if conductor_ref == null:
 		return
+	if outro_started:
+		if player == null or player.stream == null:
+			return
+		var elapsed := (Time.get_ticks_msec() / 1000.0) - outro_start_time
+		var volume := maxf(1.0 - elapsed / fade_out_seconds, 0.0)
+		player.volume_db = linear_to_db(clampf(volume, 0.0001, 1.0))
+		if volume <= 0.0:
+			player.stop()
+			outro_started = false
+		return
 	if conductor_ref.running and not started:
 		_play()
-	elif not conductor_ref.running and started and not outro_started:
+	elif not conductor_ref.running and started:
 		reset()
 	if not started or player == null:
 		return
@@ -58,11 +68,8 @@ func _process(_delta: float) -> void:
 	var total := conductor_ref.duration_ms() / 1000.0
 	if fade_in_seconds > 0.0:
 		volume = minf(volume, seconds / fade_in_seconds)
-	if fade_out_seconds > 0.0 and not outro_started:
+	if fade_out_seconds > 0.0:
 		volume = minf(volume, maxf((total - seconds) / fade_out_seconds, 0.0))
-	if outro_started and fade_out_seconds > 0.0:
-		var elapsed := (Time.get_ticks_msec() / 1000.0) - outro_start_time
-		volume = maxf(1.0 - elapsed / fade_out_seconds, 0.0)
 	player.volume_db = linear_to_db(clampf(volume, 0.0001, 1.0))
 
 
