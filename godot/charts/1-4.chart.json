@@ -2,16 +2,16 @@
 	"meta": {
 		"bpm_curve_exp": 1.5,
 		"duration_beats": 119.7,
-		"duration_ms": 85500.0,
-		"end_bpm": 118.0,
+		"duration_ms": 85500,
+		"end_bpm": 118,
 		"level_id": "1-4",
 		"level_name": "BBQ",
-		"music_id": "西部狂想曲.mp3",
-		"music_path": "res://assets/西部狂想曲.mp3",
-		"start_bpm": 84.0,
+		"music_id": "western_rhapsody",
+		"music_path": "res://assets/music/western_rhapsody.mp3",
+		"start_bpm": 84,
 		"subdivisions": 6,
 		"variant": "normal",
-		"version": 1.0
+		"version": 1
 	},
 	"node_kinds": [
 		{
@@ -57,27 +57,23 @@
 	],
 	"notes": [
 		{
-			"beat": 0.0,
-			"duration_beats": 0.0,
+			"beat": 0,
+			"duration_beats": 0,
 			"id": "590220359-39350",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 1.16666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-4-3",
 			"judge_type": "tap",
 			"kind": "pepper",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
@@ -87,33 +83,27 @@
 			"judge_type": "hold",
 			"kind": "flip",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 5.0,
-			"duration_beats": 0.0,
+			"beat": 5,
+			"duration_beats": 0,
 			"id": "483248715-93119",
 			"judge_type": "tap",
 			"kind": "pepper",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 6.16666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "535992406-57200",
 			"judge_type": "tap",
 			"kind": "onion",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
@@ -123,93 +113,77 @@
 			"judge_type": "hold",
 			"kind": "flip",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 10.1666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "728009160-59258",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 11.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "1175384408-97852",
 			"judge_type": "tap",
 			"kind": "leek",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 13.0,
-			"duration_beats": 0.0,
+			"beat": 13,
+			"duration_beats": 0,
 			"id": "migrated-1-4-14",
 			"judge_type": "tap",
 			"kind": "onion",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 14.0,
-			"duration_beats": 0.0,
+			"beat": 14,
+			"duration_beats": 0,
 			"id": "migrated-1-4-15",
 			"judge_type": "none",
 			"kind": "leek",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 15.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "1224578532-20686",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 16.0,
-			"duration_beats": 0.0,
+			"beat": 16,
+			"duration_beats": 0,
 			"id": "511395284-10533",
 			"judge_type": "none",
 			"kind": "onion",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 16.8333333333333,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "515482594-16416",
 			"judge_type": "tap",
 			"kind": "bread",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
@@ -219,153 +193,127 @@
 			"judge_type": "hold",
 			"kind": "flip",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 20.6666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "1419358262-9866",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 21.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "1432665931-80223",
 			"judge_type": "none",
 			"kind": "bread",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 22.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2157395709-97349",
 			"judge_type": "none",
 			"kind": "mushroom",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 23.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2165266919-4178",
 			"judge_type": "tap",
 			"kind": "pepper",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 24.0,
-			"duration_beats": 0.0,
+			"beat": 24,
+			"duration_beats": 0,
 			"id": "migrated-1-4-25",
 			"judge_type": "none",
 			"kind": "leek",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
-			"beat": 26.0,
-			"duration_beats": 0.0,
+			"beat": 26,
+			"duration_beats": 0,
 			"id": "2281813362-2539",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 27.0,
-			"duration_beats": 0.0,
+			"beat": 27,
+			"duration_beats": 0,
 			"id": "1486904960-6757",
 			"judge_type": "none",
 			"kind": "onion",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
-			"beat": 28.0,
-			"duration_beats": 0.0,
+			"beat": 28,
+			"duration_beats": 0,
 			"id": "1497403811-60791",
 			"judge_type": "none",
 			"kind": "onion",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 28.8333333333333,
-			"duration_beats": 1.0,
+			"duration_beats": 1,
 			"id": "1536470273-69738",
 			"judge_type": "hold",
 			"kind": "flip",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 31.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "832842549-45249",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 32.8333333333333,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "847839698-84682",
 			"judge_type": "tap",
 			"kind": "pepper",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 34.1666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "675348334-28535",
 			"judge_type": "tap",
 			"kind": "mushroom",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
@@ -375,98 +323,82 @@
 			"judge_type": "hold",
 			"kind": "flip",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 37.0,
-			"duration_beats": 0.0,
+			"beat": 37,
+			"duration_beats": 0,
 			"id": "1609463093-96643",
 			"judge_type": "tap",
 			"kind": "pepper",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 38.3333333333333,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "1616211699-74381",
 			"judge_type": "tap",
 			"kind": "pepper",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 39.6666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-4-40",
 			"judge_type": "tap",
 			"kind": "leek",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 41.0000000000001,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2406248725-15216",
 			"judge_type": "none",
 			"kind": "onion",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
-			"beat": 42.0,
-			"duration_beats": 0.0,
+			"beat": 42,
+			"duration_beats": 0,
 			"id": "migrated-1-4-43",
 			"judge_type": "none",
 			"kind": "pepper",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
-			"beat": 43.0,
-			"duration_beats": 0.0,
+			"beat": 43,
+			"duration_beats": 0,
 			"id": "migrated-1-4-44",
 			"judge_type": "tap",
 			"kind": "mushroom",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 44.0,
-			"duration_beats": 0.0,
+			"beat": 44,
+			"duration_beats": 0,
 			"id": "migrated-1-4-45",
 			"judge_type": "none",
 			"kind": "leek",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 45.3333333333334,
-			"duration_beats": 2.0,
+			"duration_beats": 0,
 			"id": "2482662218-32229",
 			"judge_type": "tap",
 			"kind": "flip",
@@ -478,7 +410,7 @@
 		},
 		{
 			"beat": 48.6666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2527692025-43105",
 			"judge_type": "tap",
 			"kind": "beef",
@@ -489,8 +421,8 @@
 			"track": "node"
 		},
 		{
-			"beat": 50.0,
-			"duration_beats": 0.0,
+			"beat": 50,
+			"duration_beats": 0,
 			"id": "2563127721-1656",
 			"judge_type": "tap",
 			"kind": "onion",
@@ -502,242 +434,202 @@
 		},
 		{
 			"beat": 51.0000000000001,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3485802080-9806",
 			"judge_type": "none",
 			"kind": "bread",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
-			"beat": 52.0,
-			"duration_beats": 0.0,
+			"beat": 52,
+			"duration_beats": 0,
 			"id": "migrated-1-4-53",
 			"judge_type": "none",
 			"kind": "pepper",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 53.6666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-4-54",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 55.1666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-4-56",
 			"judge_type": "tap",
 			"kind": "pepper",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 56.6666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2608244816-17331",
 			"judge_type": "tap",
 			"kind": "onion",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 58.0000000000001,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3502449665-46407",
 			"judge_type": "none",
 			"kind": "pepper",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 59.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-4-60",
 			"judge_type": "tap",
 			"kind": "mushroom",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 61.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-4-62",
 			"judge_type": "tap",
 			"kind": "bread",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 62.1666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-4-63",
 			"judge_type": "none",
 			"kind": "onion",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
-			"beat": 63.0,
-			"duration_beats": 0.0,
+			"beat": 63,
+			"duration_beats": 0,
 			"id": "migrated-1-4-64",
 			"judge_type": "tap",
 			"kind": "leek",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 64.6666666666667,
-			"duration_beats": 1.0,
+			"duration_beats": 0,
 			"id": "migrated-1-4-65",
 			"judge_type": "tap",
 			"kind": "flip",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 67.0000000000001,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2891024212-8582",
 			"judge_type": "none",
 			"kind": "pepper",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
-			"beat": 68.0,
-			"duration_beats": 0.0,
+			"beat": 68,
+			"duration_beats": 0,
 			"id": "2899803668-26890",
 			"judge_type": "tap",
 			"kind": "onion",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 69.3333333333333,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2923570897-50731",
 			"judge_type": "none",
 			"kind": "mushroom",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 70.5000000000001,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2944026864-21126",
 			"judge_type": "none",
 			"kind": "leek",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 71.6666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2826320175-29973",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 73.0,
-			"duration_beats": 0.0,
+			"beat": 73,
+			"duration_beats": 0,
 			"id": "3582904742-59913",
 			"judge_type": "none",
 			"kind": "onion",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 74.0000000000001,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2963757554-48339",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 75.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3555740416-40346",
 			"judge_type": "tap",
 			"kind": "leek",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 77.0,
-			"duration_beats": 0.0,
+			"beat": 77,
+			"duration_beats": 0,
 			"id": "3590487866-94583",
 			"judge_type": "tap",
 			"kind": "onion",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
@@ -747,189 +639,157 @@
 			"judge_type": "hold",
 			"kind": "flip",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 81.0000000000002,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3690577960-31868",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 82.6666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3701483680-36679",
 			"judge_type": "none",
 			"kind": "pepper",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
-			"beat": 84.0,
-			"duration_beats": 0.0,
+			"beat": 84,
+			"duration_beats": 0,
 			"id": "3727122346-60016",
 			"judge_type": "tap",
 			"kind": "onion",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 85.6666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3735813705-48978",
 			"judge_type": "tap",
 			"kind": "mushroom",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 87.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3747417519-80540",
 			"judge_type": "tap",
 			"kind": "bread",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 89.0000000000002,
-			"duration_beats": 2.0,
+			"duration_beats": 2,
 			"id": "3782791129-82665",
 			"judge_type": "hold",
 			"kind": "flip",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 93.0,
-			"duration_beats": 0.0,
+			"beat": 93,
+			"duration_beats": 0,
 			"id": "3942927917-31080",
 			"judge_type": "none",
 			"kind": "pepper",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 94.0000000000002,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3945555921-5310",
 			"judge_type": "none",
 			"kind": "bread",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
-			"beat": 95.0,
-			"duration_beats": 0.0,
+			"beat": 95,
+			"duration_beats": 0,
 			"id": "3954196022-12937",
 			"judge_type": "none",
 			"kind": "bread",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 96.3333333333335,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3956727608-89328",
 			"judge_type": "none",
 			"kind": "onion",
 			"lane": "decoy",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "decoy"
 		},
 		{
 			"beat": 98.6666666666669,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2998340068-40425",
 			"judge_type": "tap",
 			"kind": "beef",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 100.833333333333,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3025341542-74476",
 			"judge_type": "tap",
 			"kind": "pepper",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 103.166666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3058202617-36638",
 			"judge_type": "tap",
 			"kind": "onion",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 105.666666666667,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3086144986-41422",
 			"judge_type": "tap",
 			"kind": "mushroom",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 108.333333333334,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "3111238393-16827",
 			"judge_type": "tap",
 			"kind": "pepper",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
@@ -939,9 +799,7 @@
 			"judge_type": "hold",
 			"kind": "flip",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		}
 	],

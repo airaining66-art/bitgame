@@ -344,9 +344,9 @@ func _build_scene() -> void:
 	base.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(base)
 
-	girls_tex = _load_tex(["res://assets/girlsphoto.png"])
-	emoji_tex = _load_tex(["res://assets/emoji.png"])
-	baby_tex = _load_tex(["res://assets/baby.png"])
+	girls_tex = _load_tex(["res://assets/levels/1-3_schrodinger/girls_photo.png"])
+	emoji_tex = _load_tex(["res://assets/levels/1-3_schrodinger/emoji.png"])
+	baby_tex = _load_tex(["res://assets/levels/1-3_schrodinger/baby.png"])
 
 	stage = Control.new()
 	stage.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

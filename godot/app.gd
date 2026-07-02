@@ -3,6 +3,7 @@ extends Node
 ## scene-flow helpers (Title -> Level Select -> Game).
 
 const LevelChartBridgeScript := preload("res://rhythm/level_chart_bridge.gd")
+const EXTREME_ENABLED := false
 
 var ui_theme: Theme
 var levels: Array = []
@@ -77,7 +78,7 @@ func has_extreme_chart(index: int) -> bool:
 
 
 func can_play_extreme(index: int) -> bool:
-	return is_3star(index) and has_extreme_chart(index)
+	return EXTREME_ENABLED and is_3star(index) and has_extreme_chart(index)
 
 
 ## The current level's config, scaled to 1.5x for an Extreme run.

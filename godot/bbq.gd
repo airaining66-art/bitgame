@@ -103,15 +103,15 @@ var sparks: _Sparks
 var complete_pop: _CompletePop
 var next_hint: _NextHint
 # --- textures ---------------------------------------------------------------
-var ingredient_sheet_path := "res://assets/bbq_ingredients.png"
+var ingredient_sheet_path := "res://assets/levels/1-4_bbq/bbq_ingredients.png"
 var ingredient_sheet: Texture2D
-var flip_sheet_path := "res://assets/bbq_flip.png"
+var flip_sheet_path := "res://assets/levels/1-4_bbq/bbq_flip.png"
 var flip_sheet: Texture2D
-var skewer_stick_path := "res://assets/bbq_stick.png"
+var skewer_stick_path := "res://assets/levels/1-4_bbq/bbq_stick.png"
 var skewer_stick_tex: Texture2D
-var full_skewer_path := "res://assets/bbq_full_skewer.png"
+var full_skewer_path := "res://assets/levels/1-4_bbq/bbq_full_skewer.png"
 var full_skewer_tex: Texture2D
-var bbq_background_path := "res://assets/bbq_background.png"
+var bbq_background_path := "res://assets/levels/1-4_bbq/bbq_background.png"
 var bbq_background_tex: Texture2D
 
 # --- sfx --------------------------------------------------------------------

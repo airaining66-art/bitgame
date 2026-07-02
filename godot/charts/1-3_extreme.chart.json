@@ -1,16 +1,16 @@
 {
 	"meta": {
 		"bpm_curve_exp": 1.5,
-		"duration_beats": 99.0,
-		"end_bpm": 116.0,
+		"duration_beats": 99,
+		"end_bpm": 116,
 		"level_id": "1-3",
 		"level_name": "Schrodinger Extreme",
 		"music_id": "romance",
 		"music_path": "res://romance.gd",
-		"start_bpm": 84.0,
-		"subdivisions": 4.0,
+		"start_bpm": 84,
+		"subdivisions": 4,
 		"variant": "extreme",
-		"version": 1.0
+		"version": 1
 	},
 	"node_kinds": [
 		{
@@ -56,2018 +56,1994 @@
 	],
 	"notes": [
 		{
-			"beat": 0.0,
-			"duration_beats": 0.0,
+			"beat": 0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-0",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 0.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2182835897-63656",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 0.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-1",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 1.0,
-			"duration_beats": 0.0,
+			"beat": 1,
+			"duration_beats": 0,
 			"id": "2128808014-85170",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 1.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-3",
 			"judge_type": "none",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 1.75,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2130291860-13526",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 2.0,
-			"duration_beats": 0.0,
+			"beat": 2,
+			"duration_beats": 0,
 			"id": "2178693278-47049",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 2.0,
-			"duration_beats": 0.0,
+			"beat": 2,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-4",
 			"judge_type": "none",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 2.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-5",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 3.0,
-			"duration_beats": 0.0,
+			"beat": 3,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-6",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 3.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2132867533-21315",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 4.0,
-			"duration_beats": 0.0,
+			"beat": 4,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-8",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 4.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-9",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 5.0,
-			"duration_beats": 0.0,
+			"beat": 5,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-10",
 			"judge_type": "none",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 5.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "2134987399-27948",
 			"judge_type": "tap",
 			"kind": "both_correct",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
 			"beat": 5.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-11",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 6.0,
-			"duration_beats": 0.0,
+			"beat": 6,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-12",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 6.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-13",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 7.0,
-			"duration_beats": 0.0,
+			"beat": 7,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-14",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 7.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-15",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 8.0,
-			"duration_beats": 0.0,
+			"beat": 8,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-16",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 8.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-17",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 9.0,
-			"duration_beats": 0.0,
+			"beat": 9,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-18",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 9.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-19",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 10.0,
-			"duration_beats": 0.0,
+			"beat": 10,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-20",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 10.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-21",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 11.0,
-			"duration_beats": 0.0,
+			"beat": 11,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-22",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 11.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-23",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 12.0,
-			"duration_beats": 0.0,
+			"beat": 12,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-24",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 12.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-25",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 13.0,
-			"duration_beats": 0.0,
+			"beat": 13,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-26",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 13.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-27",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 14.0,
-			"duration_beats": 0.0,
+			"beat": 14,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-28",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 14.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-29",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 15.0,
-			"duration_beats": 0.0,
+			"beat": 15,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-30",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 15.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-31",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 16.0,
-			"duration_beats": 0.0,
+			"beat": 16,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-32",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 16.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-33",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 17.0,
-			"duration_beats": 0.0,
+			"beat": 17,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-34",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 17.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-35",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 18.0,
-			"duration_beats": 0.0,
+			"beat": 18,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-36",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 18.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-37",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 19.0,
-			"duration_beats": 0.0,
+			"beat": 19,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-38",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 19.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-39",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 20.0,
-			"duration_beats": 0.0,
+			"beat": 20,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-40",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 20.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-41",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 21.0,
-			"duration_beats": 0.0,
+			"beat": 21,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-42",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 1.0,
-				"top": 2.0
+				"bottom": 1,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 21.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-43",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 22.0,
-			"duration_beats": 0.0,
+			"beat": 22,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-44",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 22.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-45",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 23.0,
-			"duration_beats": 0.0,
+			"beat": 23,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-46",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 23.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-47",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 24.0,
-			"duration_beats": 0.0,
+			"beat": 24,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-48",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 24.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-49",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 25.0,
-			"duration_beats": 0.0,
+			"beat": 25,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-50",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 2.0,
-				"top": 0.0
+				"bottom": 2,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 25.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-51",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 26.0,
-			"duration_beats": 0.0,
+			"beat": 26,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-52",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 26.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-53",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 27.0,
-			"duration_beats": 0.0,
+			"beat": 27,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-54",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 27.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-55",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 28.0,
-			"duration_beats": 0.0,
+			"beat": 28,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-56",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 28.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-57",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 29.0,
-			"duration_beats": 0.0,
+			"beat": 29,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-58",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 2.0,
-				"top": 0.0
+				"bottom": 2,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 29.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-59",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 30.0,
-			"duration_beats": 0.0,
+			"beat": 30,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-60",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 30.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-61",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 31.0,
-			"duration_beats": 0.0,
+			"beat": 31,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-62",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 1.0,
-				"top": 2.0
+				"bottom": 1,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 31.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-63",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 32.0,
-			"duration_beats": 0.0,
+			"beat": 32,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-64",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 32.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-65",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 33.0,
-			"duration_beats": 0.0,
+			"beat": 33,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-66",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 33.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-67",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 34.0,
-			"duration_beats": 0.0,
+			"beat": 34,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-68",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 34.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-69",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 35.0,
-			"duration_beats": 0.0,
+			"beat": 35,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-70",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 35.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-71",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 36.0,
-			"duration_beats": 6.0,
+			"beat": 36,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-72",
 			"judge_type": "tap",
 			"kind": "baby",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 42.0,
-			"duration_beats": 0.0,
+			"beat": 42,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-73",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 42.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-74",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 43.0,
-			"duration_beats": 3.0,
+			"beat": 43,
+			"duration_beats": 3,
 			"id": "migrated-1-3x-75",
 			"judge_type": "hold",
 			"kind": "hold",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 46.0,
-			"duration_beats": 0.0,
+			"beat": 46,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-76",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 46.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-77",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 47.0,
-			"duration_beats": 0.0,
+			"beat": 47,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-78",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 47.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-79",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 48.0,
-			"duration_beats": 0.0,
+			"beat": 48,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-80",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 48.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-81",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 49.0,
-			"duration_beats": 0.0,
+			"beat": 49,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-82",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 49.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-83",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 50.0,
-			"duration_beats": 0.0,
+			"beat": 50,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-84",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 50.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-85",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 51.0,
-			"duration_beats": 0.0,
+			"beat": 51,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-86",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 51.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-87",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 52.0,
-			"duration_beats": 0.0,
+			"beat": 52,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-88",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 52.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-89",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 53.0,
-			"duration_beats": 0.0,
+			"beat": 53,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-90",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 53.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-91",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 54.0,
-			"duration_beats": 0.0,
+			"beat": 54,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-92",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 54.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-93",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 55.0,
-			"duration_beats": 0.0,
+			"beat": 55,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-94",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 55.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-95",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 56.0,
-			"duration_beats": 3.0,
+			"beat": 56,
+			"duration_beats": 3,
 			"id": "migrated-1-3x-96",
 			"judge_type": "roll",
 			"kind": "roll",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 59.0,
-			"duration_beats": 0.0,
+			"beat": 59,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-97",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 59.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-98",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 60.0,
-			"duration_beats": 0.0,
+			"beat": 60,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-99",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 60.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-100",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 61.0,
-			"duration_beats": 0.0,
+			"beat": 61,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-101",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 61.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-102",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 62.0,
-			"duration_beats": 0.0,
+			"beat": 62,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-103",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 62.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-104",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 63.0,
-			"duration_beats": 6.0,
+			"beat": 63,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-105",
 			"judge_type": "tap",
 			"kind": "baby",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 69.0,
-			"duration_beats": 0.0,
+			"beat": 69,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-106",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 69.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-107",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 70.0,
-			"duration_beats": 0.0,
+			"beat": 70,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-108",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 70.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-109",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 71.0,
-			"duration_beats": 0.0,
+			"beat": 71,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-110",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 1.0,
-				"top": 2.0
+				"bottom": 1,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 71.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-111",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 72.0,
-			"duration_beats": 0.0,
+			"beat": 72,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-112",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 72.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-113",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 73.0,
-			"duration_beats": 0.0,
+			"beat": 73,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-114",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 73.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-115",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 74.0,
-			"duration_beats": 0.0,
+			"beat": 74,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-116",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 74.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-117",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 75.0,
-			"duration_beats": 0.0,
+			"beat": 75,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-118",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 2.0,
-				"top": 0.0
+				"bottom": 2,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 75.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-119",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 76.0,
-			"duration_beats": 0.0,
+			"beat": 76,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-120",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 76.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-121",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 77.0,
-			"duration_beats": 0.0,
+			"beat": 77,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-122",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 77.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-123",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 78.0,
-			"duration_beats": 0.0,
+			"beat": 78,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-124",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 78.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-125",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 79.0,
-			"duration_beats": 0.0,
+			"beat": 79,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-126",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 79.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-127",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 80.0,
-			"duration_beats": 2.0,
+			"beat": 80,
+			"duration_beats": 2,
 			"id": "migrated-1-3x-128",
 			"judge_type": "hold",
 			"kind": "hold",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 82.0,
-			"duration_beats": 0.0,
+			"beat": 82,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-129",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 82.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-130",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 83.0,
-			"duration_beats": 0.0,
+			"beat": 83,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-131",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 83.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-132",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 84.0,
-			"duration_beats": 0.0,
+			"beat": 84,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-133",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 84.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-134",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 85.0,
-			"duration_beats": 6.0,
+			"beat": 85,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-135",
 			"judge_type": "tap",
 			"kind": "baby",
 			"lane": "node",
-			"payload": {
-
-			},
+			"payload": {},
 			"track": "node"
 		},
 		{
-			"beat": 91.0,
-			"duration_beats": 0.0,
+			"beat": 91,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-136",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 91.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-137",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 92.0,
-			"duration_beats": 0.0,
+			"beat": 92,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-138",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 92.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-139",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 93.0,
-			"duration_beats": 0.0,
+			"beat": 93,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-140",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 93.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-141",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 94.0,
-			"duration_beats": 0.0,
+			"beat": 94,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-142",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 94.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-143",
 			"judge_type": "none",
 			"kind": "trap",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 2.0
+				"bottom": 0,
+				"top": 2
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 95.0,
-			"duration_beats": 0.0,
+			"beat": 95,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-144",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 95.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-145",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
-			"beat": 96.0,
-			"duration_beats": 0.0,
+			"beat": 96,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-146",
 			"judge_type": "tap",
 			"kind": "food_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 0.0,
-				"top": 1.0
+				"bottom": 0,
+				"top": 1
 			},
 			"track": "node"
 		},
 		{
 			"beat": 96.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-147",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 97.0,
-			"duration_beats": 0.0,
+			"beat": 97,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-148",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
 			"beat": 97.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-149",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		},
 		{
-			"beat": 98.0,
-			"duration_beats": 0.0,
+			"beat": 98,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-150",
 			"judge_type": "tap",
 			"kind": "face_correct",
 			"lane": "node",
 			"payload": {
-				"bottom": 1.0,
-				"top": 0.0
+				"bottom": 1,
+				"top": 0
 			},
 			"track": "node"
 		},
 		{
 			"beat": 98.5,
-			"duration_beats": 0.0,
+			"duration_beats": 0,
 			"id": "migrated-1-3x-151",
 			"judge_type": "none",
 			"kind": "empty",
 			"lane": "decoy",
 			"payload": {
-				"bottom": 0.0,
-				"top": 0.0
+				"bottom": 0,
+				"top": 0
 			},
 			"track": "decoy"
 		}

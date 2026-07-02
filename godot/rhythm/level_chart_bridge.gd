@@ -76,8 +76,8 @@ static func apply_meta_to_level(meta: Dictionary, level: Dictionary, conductor =
 	if not meta.has("duration_ms") and meta.has("duration_beats") and meta.has("start_bpm"):
 		var start := float(meta.get("start_bpm", 80.0))
 		var end := float(meta.get("end_bpm", start))
-		var exp := maxf(float(meta.get("bpm_curve_exp", 1.0)), 0.001)
-		var avg_bpm := start + (end - start) / (exp + 1.0)
+		var curve_exp := maxf(float(meta.get("bpm_curve_exp", 1.0)), 0.001)
+		var avg_bpm := start + (end - start) / (curve_exp + 1.0)
 		level["duration_ms"] = float(meta["duration_beats"]) * 60000.0 / maxf(avg_bpm, 1.0)
 	if conductor:
 		conductor.setup(level)

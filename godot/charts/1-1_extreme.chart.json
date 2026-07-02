@@ -4,7 +4,7 @@
 		"level_id": "1-1",
 		"level_name": "Binary Extreme",
 		"music_id": "neon_pulse",
-		"music_path": "res://assets/Neon Pulse.mp3",
+		"music_path": "res://assets/music/neon_pulse.mp3",
 		"start_bpm": 64,
 		"end_bpm": 64,
 		"bpm_curve_exp": 1,

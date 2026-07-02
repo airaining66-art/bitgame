@@ -9,7 +9,7 @@
 		"level_id": "1-1",
 		"level_name": "Binary",
 		"music_id": "Neon Pulse (Remove Section).mp3",
-		"music_path": "res://assets/Neon Pulse (Remove Section).mp3",
+		"music_path": "res://assets/music/neon_pulse_cut.mp3",
 		"start_bpm": 50.0,
 		"subdivisions": 5.0,
 		"variant": "normal",

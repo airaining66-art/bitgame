@@ -31,6 +31,7 @@ const STAGE_CENTER := Vector2(640, 360)
 
 const TILE_W := 150.0
 const TILE_H := 150.0
+const ICON_FRAME_SIZE := 150.0
 const MANGO := 0
 const WATER := 1
 
@@ -307,24 +308,24 @@ func _build_world() -> void:
 	track.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	world.add_child(track)
 
-	mango_icon_tex = _load_tex(["res://assets/mango.png"])
-	drop_tex = _load_tex(["res://assets/drop.png"])
-	background_tex = _load_tex(["res://assets/mango_background.png"])
-	grass_tex = _load_tex(["res://assets/mango_grass.png"])
-	leaves_tex = _load_tex(["res://assets/mango_leaves.png"])
-	bottom_tex = _load_tex(["res://assets/mango_bottom.png"])
-	perfect_tex = _load_tex(["res://assets/mango_perfect.png"])
-	good_tex = _load_tex(["res://assets/mango_good.png"])
-	stop_tex = _load_tex(["res://assets/mango_stop.png"])
-	logbox_tex = _load_tex(["res://assets/mango_logbox.png"])
-	rank_tex = _load_tex(["res://assets/mango_rank.png"])
-	bpm_tex = _load_tex(["res://assets/mango_bpm.png"])
-	hp_tex = _load_tex(["res://assets/mango_hp.png"])
+	mango_icon_tex = _load_tex(["res://assets/levels/1-2_mango/mango.png"])
+	drop_tex = _load_tex(["res://assets/levels/1-2_mango/drop.png"])
+	background_tex = _load_tex(["res://assets/levels/1-2_mango/mango_background.png"])
+	grass_tex = _load_tex(["res://assets/levels/1-2_mango/mango_grass.png"])
+	leaves_tex = _load_tex(["res://assets/levels/1-2_mango/mango_leaves.png"])
+	bottom_tex = _load_tex(["res://assets/levels/1-2_mango/mango_bottom.png"])
+	perfect_tex = _load_tex(["res://assets/levels/1-2_mango/mango_perfect.png"])
+	good_tex = _load_tex(["res://assets/levels/1-2_mango/mango_good.png"])
+	stop_tex = _load_tex(["res://assets/levels/1-2_mango/mango_stop.png"])
+	logbox_tex = _load_tex(["res://assets/levels/1-2_mango/mango_logbox.png"])
+	rank_tex = _load_tex(["res://assets/levels/1-2_mango/mango_rank.png"])
+	bpm_tex = _load_tex(["res://assets/levels/1-2_mango/mango_bpm.png"])
+	hp_tex = _load_tex(["res://assets/levels/1-2_mango/mango_hp.png"])
 	world.bg_tex = background_tex
 	world.grass_tex = grass_tex
 	world.leaves_tex = leaves_tex
 	world.drop_tex = drop_tex
-	world.hand_tex = _load_tex(["res://assets/mango_hand.png", "res://assets/mangohand.png"])
+	world.hand_tex = _load_tex(["res://assets/levels/1-2_mango/mango_hand.png", "res://assets/levels/1-2_mango/mango_hand.png"])
 
 	hold_frame = _HoldFrame.new()
 	hold_frame.icon_tex = mango_icon_tex
@@ -953,12 +954,20 @@ class _World:
 	var leaf_emit := 0.0
 	var t := 0.0
 
+	func _drop_frame_count() -> int:
+		if drop_tex == null:
+			return 1
+		return maxi(1, int(round(float(drop_tex.get_width()) / ICON_FRAME_SIZE)))
+
+	func _random_drop_frame() -> int:
+		return randi_range(0, _drop_frame_count() - 1)
+
 	func _ready() -> void:
 		for i in MAX_DROPS:
 			droplets.append({
 				"x": randf_range(30, 1250), "y": randf_range(-400, 720),
 				"speed": randf_range(90, 230), "size": randf_range(18, 38),
-				"frame": randi_range(0, 1), "drift": randf_range(-10, 10),
+				"frame": _random_drop_frame(), "drift": randf_range(-10, 10),
 			})
 
 	func _process(delta: float) -> void:
@@ -972,7 +981,7 @@ class _World:
 				d["x"] = randf_range(30, 1250)
 				d["speed"] = randf_range(90, 230)
 				d["size"] = randf_range(18, 38)
-				d["frame"] = randi_range(0, 1)
+				d["frame"] = _random_drop_frame()
 				d["drift"] = randf_range(-10, 10)
 		_update_fever_leaves(delta)
 		queue_redraw()
@@ -1039,9 +1048,10 @@ class _World:
 			var y: float = d["y"]
 			var s: float = d["size"]
 			if drop_tex:
-				var frame := int(d["frame"])
+				var frame := clampi(int(d["frame"]), 0, _drop_frame_count() - 1)
 				draw_texture_rect_region(drop_tex, Rect2(Vector2(x, y), Vector2(s, s)),
-					Rect2(frame * 150, 0, 150, 150), Color(1, 1, 1, av))
+					Rect2(frame * ICON_FRAME_SIZE, 0, ICON_FRAME_SIZE, ICON_FRAME_SIZE),
+					Color(1, 1, 1, av))
 			else:
 				draw_circle(Vector2(x, y), s * 0.28, Color(COL_WATER.r, COL_WATER.g, COL_WATER.b, av))
 		_draw_fever_leaves()
@@ -1087,7 +1097,8 @@ class IconTile:
 	func _draw() -> void:
 		var tex: Texture2D = icon_tex if kind == 0 else drop_tex
 		if tex:
-			draw_texture_rect_region(tex, Rect2(Vector2.ZERO, size), Rect2(0, 0, 150, 150))
+			draw_texture_rect_region(tex, Rect2(Vector2.ZERO, size),
+				Rect2(0, 0, ICON_FRAME_SIZE, ICON_FRAME_SIZE))
 			return
 		var c := size * 0.5
 		if kind == 0:
@@ -1147,11 +1158,13 @@ class _HitFx:
 		if tex == null:
 			return
 		var f := clampf(life / DUR, 0.0, 1.0)
-		var frame := clampi(int(f * 5.0), 0, 4)
+		var frame_count := maxi(1, int(round(float(tex.get_width()) / ICON_FRAME_SIZE)))
+		var frame := clampi(int(f * float(frame_count)), 0, frame_count - 1)
 		var a := 1.0 if f < 0.6 else (1.0 - (f - 0.6) / 0.4)
 		var dst := Vector2(SIZE, SIZE) * (1.0 + f * 0.3)
 		draw_texture_rect_region(tex, Rect2(fx_pos - dst * 0.5, dst),
-			Rect2(frame * 150, 0, 150, 150), Color(1, 1, 1, a))
+			Rect2(frame * ICON_FRAME_SIZE, 0, ICON_FRAME_SIZE, ICON_FRAME_SIZE),
+			Color(1, 1, 1, a))
 
 
 ## Hold "savor" capsule with a mango at each end.
@@ -1211,7 +1224,7 @@ class _HoldFrame:
 			return
 		var s := ICON * scale
 		draw_texture_rect_region(icon_tex, Rect2(Vector2(x, cy) - Vector2(s, s) * 0.5, Vector2(s, s)),
-			Rect2(0, 0, 150, 150))
+			Rect2(0, 0, ICON_FRAME_SIZE, ICON_FRAME_SIZE))
 
 
 ## Water-drop "heart" for health.
@@ -1230,7 +1243,8 @@ class _Droplet:
 	func _draw() -> void:
 		var a := 0.2 if lost else 1.0
 		if tex:
-			draw_texture_rect_region(tex, Rect2(Vector2.ZERO, size), Rect2(0, 0, 150, 150), Color(1, 1, 1, a))
+			draw_texture_rect_region(tex, Rect2(Vector2.ZERO, size),
+				Rect2(0, 0, ICON_FRAME_SIZE, ICON_FRAME_SIZE), Color(1, 1, 1, a))
 			return
 		var c := Color(COL_WATER.r, COL_WATER.g, COL_WATER.b, a)
 		var ctr := size * 0.5 + Vector2(0, 4)

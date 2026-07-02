@@ -1,8 +1,20 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://cubkog1kus8ys"]
 
-[ext_resource type="Script" path="res://level_select.gd" id="1_levelselect"]
+[ext_resource type="Script" uid="uid://ci0ndbae1nxpg" path="res://level_select.gd" id="1_levelselect"]
+[ext_resource type="Texture2D" uid="uid://ctmc1rgpinfxo" path="res://assets/common/ui/level_select_background.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://csah1stppbv4i" path="res://assets/common/ui/level_1_normal.png" id="3_l1n"]
+[ext_resource type="Texture2D" uid="uid://snbcnf6ra4y8" path="res://assets/common/ui/level_1_locked.png" id="4_l1l"]
+[ext_resource type="Texture2D" uid="uid://drc8rgqmpgall" path="res://assets/common/ui/level_2_normal.png" id="5_l2n"]
+[ext_resource type="Texture2D" uid="uid://dshlgkmdkl6qh" path="res://assets/common/ui/level_2_locked.png" id="6_l2l"]
+[ext_resource type="Texture2D" uid="uid://bx41il3qoflj4" path="res://assets/common/ui/level_3_normal.png" id="7_l3n"]
+[ext_resource type="Texture2D" uid="uid://cnns003eshijw" path="res://assets/common/ui/level_3_locked.png" id="8_l3l"]
+[ext_resource type="Texture2D" uid="uid://b3hel5w6rkwdy" path="res://assets/common/ui/level_4_normal.png" id="9_l4n"]
+[ext_resource type="Texture2D" uid="uid://b4trb0skralt2" path="res://assets/common/ui/level_4_locked.png" id="10_l4l"]
+[ext_resource type="Texture2D" uid="uid://dcifg71lpq4vg" path="res://assets/common/ui/level_5_normal.png" id="11_l5n"]
+[ext_resource type="Texture2D" uid="uid://bu6ylk8dgxctw" path="res://assets/common/ui/level_5_locked.png" id="12_l5l"]
+[ext_resource type="Texture2D" path="res://assets/common/ui/level_select_exit.png" id="13_exit"]
 
-[node name="LevelSelect" type="Control"]
+[node name="LevelSelect" type="Control" unique_id=708626484]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,3 +22,228 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_levelselect")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1144559915]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Cards" type="Control" parent="." unique_id=1395207358]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Level1" type="Control" parent="Cards" unique_id=1381477463]
+anchors_preset = 0
+offset_left = 375.0
+offset_top = 203.0
+offset_right = 489.0
+offset_bottom = 361.0
+
+[node name="Art" type="TextureRect" parent="Cards/Level1" unique_id=1541787448]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -90.0
+offset_right = 66.0
+offset_bottom = 45.84198
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_l1n")
+expand_mode = 1
+stretch_mode = 5
+metadata/normal_texture = ExtResource("3_l1n")
+metadata/locked_texture = ExtResource("4_l1l")
+
+[node name="Button" type="Button" parent="Cards/Level1" unique_id=85756466]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="Level2" type="Control" parent="Cards" unique_id=1800167506]
+anchors_preset = 0
+offset_left = 677.0
+offset_top = 86.0
+offset_right = 791.0
+offset_bottom = 244.0
+
+[node name="Art" type="TextureRect" parent="Cards/Level2" unique_id=593570102]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -79.0
+offset_right = 66.0
+offset_bottom = 56.84201
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_l2n")
+expand_mode = 1
+stretch_mode = 5
+metadata/normal_texture = ExtResource("5_l2n")
+metadata/locked_texture = ExtResource("6_l2l")
+
+[node name="Button" type="Button" parent="Cards/Level2" unique_id=1265552548]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="Level3" type="Control" parent="Cards" unique_id=1646718061]
+anchors_preset = 0
+offset_left = 1002.0
+offset_top = 179.0
+offset_right = 1116.0
+offset_bottom = 337.0
+
+[node name="Art" type="TextureRect" parent="Cards/Level3" unique_id=1185950501]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -59.0
+offset_top = -44.0
+offset_right = 67.0
+offset_bottom = 91.84201
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_l3n")
+expand_mode = 1
+stretch_mode = 5
+metadata/normal_texture = ExtResource("7_l3n")
+metadata/locked_texture = ExtResource("8_l3l")
+
+[node name="Button" type="Button" parent="Cards/Level3" unique_id=841172127]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="Level4" type="Control" parent="Cards" unique_id=1922740881]
+anchors_preset = 0
+offset_left = 885.0
+offset_top = 481.0
+offset_right = 999.0
+offset_bottom = 639.0
+
+[node name="Art" type="TextureRect" parent="Cards/Level4" unique_id=1093222454]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -59.0
+offset_top = -52.0
+offset_right = 67.0
+offset_bottom = 83.84201
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_l4n")
+expand_mode = 1
+stretch_mode = 5
+metadata/normal_texture = ExtResource("9_l4n")
+metadata/locked_texture = ExtResource("10_l4l")
+
+[node name="Button" type="Button" parent="Cards/Level4" unique_id=2066371056]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="Level5" type="Control" parent="Cards" unique_id=1115416354]
+anchors_preset = 0
+offset_left = 477.0
+offset_top = 462.0
+offset_right = 591.0
+offset_bottom = 620.0
+
+[node name="Art" type="TextureRect" parent="Cards/Level5" unique_id=1196893088]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -53.0
+offset_top = -74.0
+offset_right = 73.0
+offset_bottom = 61.84201
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("11_l5n")
+expand_mode = 1
+stretch_mode = 5
+metadata/normal_texture = ExtResource("11_l5n")
+metadata/locked_texture = ExtResource("12_l5l")
+
+[node name="Button" type="Button" parent="Cards/Level5" unique_id=1156836221]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="Hint" type="Label" parent="." unique_id=1359686301]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -34.0
+offset_right = 66.0
+offset_bottom = -12.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.721569, 0.713725, 0.690196, 1)
+theme_override_font_sizes/font_size = 16
+text = "ESC"
+
+[node name="ExitButton" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 151.0
+offset_bottom = 69.0
+mouse_default_cursor_shape = 2
+focus_mode = 0
+texture_normal = ExtResource("13_exit")

@@ -781,20 +781,16 @@ class RhythmEditorDock:
 		if stream == null:
 			return
 		var samples: PackedVector2Array = []
-		var stream_length := 0.0
 		if stream is AudioStreamWAV:
 			samples = _extract_wav_samples(stream)
-			stream_length = stream.length
 		elif stream is AudioStreamMP3:
 			samples = _extract_mp3_samples(stream)
-			stream_length = stream.length
 		elif stream is AudioStreamOggVorbis:
 			samples = _extract_ogg_samples(stream)
-			stream_length = stream.length
 		if samples.is_empty():
 			return
 		var target_bins := 420
-		var samples_per_bin := maxi(1, int(samples.size()) / target_bins)
+		var samples_per_bin := maxi(1, int(float(samples.size()) / float(target_bins)))
 		for i in target_bins:
 			var sum := 0.0
 			var count := 0
@@ -826,9 +822,9 @@ class RhythmEditorDock:
 			return samples
 		var bytes_per_sample := 2 if stream.format == AudioStreamWAV.FORMAT_16_BITS else 1
 		var channels := 2 if stream.stereo else 1
-		var sample_count := data.size() / (bytes_per_sample * channels)
+		var sample_count := int(float(data.size()) / float(bytes_per_sample * channels))
 		var stride := bytes_per_sample * channels
-		for i in range(int(sample_count)):
+		for i in range(sample_count):
 			var offset := i * stride
 			var left := 0.0
 			var right := 0.0
@@ -1442,14 +1438,14 @@ class TimelineView:
 	func _draw() -> void:
 		if editor == null or editor.chart == null:
 			return
-		var chart = editor.chart
+		var active_chart = editor.chart
 		var h := size.y
 		draw_rect(Rect2(Vector2.ZERO, size), Color("fbfaf7"))
 		_draw_left_labels(h)
-		_draw_grid(chart)
-		_draw_wave(chart)
-		_draw_notes(chart)
-		_draw_playhead(chart)
+		_draw_grid(active_chart)
+		_draw_wave(active_chart)
+		_draw_notes(active_chart)
+		_draw_playhead(active_chart)
 
 
 	func _draw_left_labels(h: float) -> void:

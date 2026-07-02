@@ -88,7 +88,7 @@ func was_judged(note: Dictionary) -> bool:
 
 static func load_runtime(path: String):
 	var rt := RhythmChartRuntime.new()
-	var chart = ChartScript.new()
-	chart.load_json_file(path)
-	rt.setup(chart)
+	var loaded_chart = ChartScript.new()
+	loaded_chart.load_json_file(path)
+	rt.setup(loaded_chart)
 	return rt

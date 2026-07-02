@@ -2,7 +2,7 @@ class_name NeonPulseMusic
 extends Node
 ## Runtime edit of assets/Neon Pulse.mp3 for chart preview and level play.
 
-const MUSIC_PATH := "res://assets/Neon Pulse.mp3"
+const MUSIC_PATH := "res://assets/music/neon_pulse.mp3"
 const CLIP_SECONDS := 90.0
 const FADE_IN_SECONDS := 2.5
 const FADE_OUT_SECONDS := 4.0

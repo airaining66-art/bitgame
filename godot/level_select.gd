@@ -1,35 +1,31 @@
 extends Control
-## Level-select map: a hand-drawn dashed path winding between the six level
-## nodes, a little ship marker, and 1-1's binary terminal. Only 1-1 is
-## playable for now; the rest are shown but locked.
 
-const COL_BG := Color("f5f5f2")
-const COL_INK := Color("21170d")
-const COL_LOCKED := Color("b8b6b0")
-const COL_ACCENT := Color("d71920")
-const COL_TERM_GREEN := Color("33ff66")
+const LEVEL_COUNT := 6
+const HOVER_SCALE := Vector2(1.08, 1.08)
+const PRESS_SCALE := Vector2(0.94, 0.94)
+const NORMAL_BRIGHTNESS := 1.0
+const NORMAL_SATURATION := 1.0
+const HOVER_BRIGHTNESS := 1.16
+const HOVER_SATURATION := 1.22
+const PRESS_BRIGHTNESS := 0.68
+const PRESS_SATURATION := 0.62
+const BUTTON_SHADER := """
+shader_type canvas_item;
 
-# Node centers, roughly matching the reference sketch (1280x720).
-const NODE_POS := [
-	Vector2(300, 235),   # 1-1
-	Vector2(605, 320),   # 1-2
-	Vector2(975, 215),   # 1-3
-	Vector2(1035, 545),  # 1-4
-	Vector2(615, 470),   # 1-5
-	Vector2(255, 600),   # 1-6
-]
-const SHIP_POS := Vector2(64, 430)
+uniform float brightness = 1.0;
+uniform float saturation = 1.0;
 
-## Mango "being eaten" sheet (5 frames of 150px). Looped on the level buttons.
-const MANGO_FRAMES := [0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 4, 4, 3, 2, 1]
+void fragment() {
+	vec4 tex = texture(TEXTURE, UV);
+	float gray = dot(tex.rgb, vec3(0.299, 0.587, 0.114));
+	vec3 saturated = mix(vec3(gray), tex.rgb, saturation);
+	COLOR = vec4(saturated * brightness, tex.a) * COLOR;
+}
+"""
 
-var _term_label: Label
-var _term_t := 0.0
-var _mango_tex: Texture2D
-var _anim_t := 0.0
-var _unlocked: Array = []
-var _armed := false   # ignore clicks for a moment so a leftover release from
-					  # the previous scene can't immediately launch a level
+var _armed := false
+var _level_tweens: Dictionary = {}
+var _level_shader: Shader
 
 
 func _ready() -> void:
@@ -37,230 +33,110 @@ func _ready() -> void:
 	if app:
 		theme = app.ui_theme
 
-	var bg := ColorRect.new()
-	bg.color = COL_BG
-	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(bg)
+	_level_shader = Shader.new()
+	_level_shader.code = BUTTON_SHADER
 
-	_mango_tex = _load_tex("res://assets/mango.png")
-	# Terminal first so it sits BEHIND the level nodes/buttons (it used to cover
-	# and block 1-1's Extreme button).
-	_build_terminal()
-	var levels: Array = app.levels if app else []
-	for i in NODE_POS.size():
-		var lvl_name := str(levels[i]["name"]) if i < levels.size() else ""
-		var lvl_id := str(levels[i]["id"]) if i < levels.size() else "1-%d" % (i + 1)
-		var unlocked := bool(levels[i]["unlocked"]) if i < levels.size() else (i == 0)
-		_unlocked.append(unlocked)
-		_add_node(i, NODE_POS[i], lvl_name, lvl_id, unlocked)
+	for i in LEVEL_COUNT:
+		_setup_level_button(i)
 
-	var hint := Label.new()
-	hint.text = "ESC 返回标题"
-	hint.add_theme_font_size_override("font_size", 16)
-	hint.add_theme_color_override("font_color", COL_LOCKED)
-	hint.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
-	hint.position = Vector2(16, -34)
-	add_child(hint)
+	var exit_button := get_node_or_null("ExitButton") as BaseButton
+	if exit_button:
+		exit_button.pressed.connect(_goto_title)
 
-	queue_redraw()
-	get_tree().create_timer(0.25).timeout.connect(func() -> void: _armed = true)
-
-
-func _process(delta: float) -> void:
-	_anim_t += delta
-	queue_redraw()   # animate the mango icons
-	# Keep the binary terminal alive.
-	_term_t += delta
-	if _term_t >= 0.35:
-		_term_t = 0.0
-		_term_label.text = _binary_rows()
+	get_tree().create_timer(0.25).timeout.connect(func() -> void:
+		_armed = true)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
-		var app = get_node_or_null("/root/App")
-		if app:
-			app.goto_title()
+		_goto_title()
 
 
-# ---------------------------------------------------------------------------
-func _add_node(index: int, center: Vector2, lvl_name: String, lvl_id: String, unlocked: bool) -> void:
-	var col := COL_INK if unlocked else COL_LOCKED
-
-	var name_lbl := Label.new()
-	name_lbl.text = lvl_name
-	name_lbl.add_theme_font_size_override("font_size", 28)
-	name_lbl.add_theme_color_override("font_color", col)
-	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_lbl.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	name_lbl.size = Vector2(220, 38)
-	name_lbl.position = center + Vector2(-110, -66)
-	add_child(name_lbl)
-
-	var id_lbl := Label.new()
-	id_lbl.text = lvl_id
-	id_lbl.add_theme_font_size_override("font_size", 52)
-	id_lbl.add_theme_color_override("font_color", col)
-	id_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	id_lbl.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	id_lbl.size = Vector2(220, 60)
-	id_lbl.position = center + Vector2(-110, -28)
-	add_child(id_lbl)
-
-	if unlocked:
-		id_lbl.pivot_offset = id_lbl.size * 0.5
-		name_lbl.pivot_offset = name_lbl.size * 0.5
-		var btn := Button.new()
-		btn.flat = true
-		btn.size = Vector2(220, 100)
-		btn.position = center + Vector2(-110, -66)
-		btn.focus_mode = Control.FOCUS_NONE
-		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		var empty := StyleBoxEmpty.new()
-		for s in ["normal", "hover", "pressed", "focus"]:
-			btn.add_theme_stylebox_override(s, empty)
-		# Hover / press feedback animates the level node itself.
-		btn.mouse_entered.connect(func() -> void: _node_hover(id_lbl, name_lbl, true))
-		btn.mouse_exited.connect(func() -> void: _node_hover(id_lbl, name_lbl, false))
-		btn.button_down.connect(func() -> void: _node_scale(id_lbl, name_lbl, 0.92))
-		btn.button_up.connect(func() -> void: _node_scale(id_lbl, name_lbl, 1.14))
-		btn.pressed.connect(func() -> void:
-			var app = get_node_or_null("/root/App")
-			if app and _armed:
-				app.play_level(index))
-		add_child(btn)
-
-		# Extreme-mode button appears once the level is 3-star cleared.
-		var app2 = get_node_or_null("/root/App")
-		if app2 and app2.can_play_extreme(index):
-			var ex := Button.new()
-			ex.text = "极限 1.5×"
-			ex.custom_minimum_size = Vector2(120, 38)
-			ex.position = center + Vector2(-60, 40)
-			ex.add_theme_font_size_override("font_size", 18)
-			var ec := StyleBoxFlat.new()
-			ec.bg_color = Color("3a0c0c")
-			ec.set_border_width_all(2)
-			ec.border_color = COL_ACCENT
-			ec.set_corner_radius_all(8)
-			ex.add_theme_stylebox_override("normal", ec)
-			var eh := ec.duplicate()
-			eh.bg_color = COL_ACCENT
-			ex.add_theme_stylebox_override("hover", eh)
-			ex.add_theme_stylebox_override("pressed", eh)
-			ex.add_theme_color_override("font_color", COL_ACCENT)
-			ex.add_theme_color_override("font_hover_color", Color.WHITE)
-			ex.focus_mode = Control.FOCUS_NONE
-			ex.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-			ex.pressed.connect(func() -> void:
-				var app = get_node_or_null("/root/App")
-				if app and _armed:
-					app.play_level(index, true))
-			add_child(ex)
+func _goto_title() -> void:
+	var app = get_node_or_null("/root/App")
+	if app:
+		app.goto_title()
 
 
-func _node_hover(id_lbl: Label, name_lbl: Label, on: bool) -> void:
-	var col := COL_ACCENT if on else COL_INK
-	id_lbl.add_theme_color_override("font_color", col)
-	name_lbl.add_theme_color_override("font_color", col)
-	_node_scale(id_lbl, name_lbl, 1.14 if on else 1.0)
-
-
-func _node_scale(id_lbl: Label, name_lbl: Label, to: float) -> void:
-	var tw := create_tween().set_parallel()
-	tw.tween_property(id_lbl, "scale", Vector2.ONE * to, 0.1)
-	tw.tween_property(name_lbl, "scale", Vector2.ONE * to, 0.1)
-
-
-func _build_terminal() -> void:
-	var box := Panel.new()
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color.BLACK
-	box.add_theme_stylebox_override("panel", sb)
-	box.size = Vector2(150, 120)
-	box.position = NODE_POS[0] + Vector2(-65, 30)
-	box.mouse_filter = Control.MOUSE_FILTER_IGNORE   # decorative — never block clicks
-	add_child(box)
-
-	_term_label = Label.new()
-	_term_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_term_label.add_theme_font_size_override("font_size", 16)
-	_term_label.add_theme_color_override("font_color", COL_TERM_GREEN)
-	_term_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_term_label.offset_left = 8
-	_term_label.offset_top = 6
-	_term_label.text = _binary_rows()
-	box.add_child(_term_label)
-
-
-func _binary_rows() -> String:
-	var rows := PackedStringArray()
-	for r in 5:
-		var s := ""
-		for c in 10:
-			s += "1" if randf() < 0.5 else "0"
-		rows.append(s)
-	return "\n".join(rows)
-
-
-# ---------------------------------------------------------------------------
-func _draw() -> void:
-	# Dashed path through the nodes, with a tail toward the ship.
-	for i in NODE_POS.size() - 1:
-		_dashed(NODE_POS[i], NODE_POS[i + 1])
-	_dashed(NODE_POS[5], Vector2(40, 545))
-
-	# Ship marker (stylised, pointing left).
-	draw_colored_polygon(PackedVector2Array([
-		SHIP_POS + Vector2(-34, 0),
-		SHIP_POS + Vector2(30, -28),
-		SHIP_POS + Vector2(14, 0),
-		SHIP_POS + Vector2(30, 28),
-	]), COL_INK)
-
-	# Animated mango on every level node (the button graphic).
-	for i in NODE_POS.size():
-		var on: bool = _unlocked[i] if i < _unlocked.size() else (i == 0)
-		_mango_icon(NODE_POS[i] + Vector2(0, -104), on)
-
-
-func _mango_icon(center: Vector2, unlocked: bool) -> void:
-	var s := 84.0
-	if _mango_tex:
-		var frame: int = MANGO_FRAMES[int(_anim_t * 9.0) % MANGO_FRAMES.size()]
-		var a := 1.0 if unlocked else 0.4
-		draw_texture_rect_region(_mango_tex, Rect2(center - Vector2(s, s) * 0.5, Vector2(s, s)),
-			Rect2(frame * 150, 0, 150, 150), Color(1, 1, 1, a))
-	else:
-		var body := PackedVector2Array()
-		for i in 26:
-			var ang := TAU * i / 26.0
-			body.append(center + Vector2(cos(ang) * 30.0, sin(ang) * 22.0))
-		draw_colored_polygon(body, Color("f3c200"))
-
-
-func _load_tex(path: String) -> Texture2D:
-	if ResourceLoader.exists(path):
-		var res := load(path)
-		if res is Texture2D:
-			return res
-	if FileAccess.file_exists(path):
-		var img := Image.new()
-		if img.load(path) == OK:
-			return ImageTexture.create_from_image(img)
-	return null
-
-
-func _dashed(a: Vector2, b: Vector2, dash := 20.0, gap := 14.0, width := 7.0) -> void:
-	var dir := (b - a)
-	var length := dir.length()
-	if length < 0.01:
+func _setup_level_button(index: int) -> void:
+	var level_node := get_node_or_null("Cards/Level%d" % [index + 1])
+	if not level_node:
 		return
-	dir = dir / length
-	var d := 0.0
-	while d < length:
-		var s := a + dir * d
-		var e := a + dir * minf(d + dash, length)
-		draw_line(s, e, COL_INK, width)
-		d += dash + gap
+
+	var app = get_node_or_null("/root/App")
+	var levels: Array = app.levels if app else []
+	var unlocked := bool(levels[index]["unlocked"]) if index < levels.size() else index == 0
+
+	var art := level_node.get_node_or_null("Art") as TextureRect
+	if art:
+		var normal: Variant = art.get_meta("normal_texture", null)
+		var locked: Variant = art.get_meta("locked_texture", null)
+		var tex: Variant = normal if unlocked else locked
+		if tex is Texture2D:
+			art.texture = tex
+		art.modulate = Color.WHITE if unlocked else Color(1, 1, 1, 0.45)
+		if unlocked:
+			art.material = _make_level_button_material()
+
+	var level_control := level_node as Control
+	if level_control:
+		level_control.pivot_offset = level_control.size * 0.5
+
+	var label := level_node.get_node_or_null("Label") as Label
+	if label:
+		label.modulate = Color.WHITE if unlocked else Color(1, 1, 1, 0.45)
+
+	var button := level_node.get_node_or_null("Button") as Button
+	if not button:
+		return
+	button.disabled = not unlocked
+	var state := {"hovering": false}
+	button.mouse_entered.connect(func() -> void:
+		state["hovering"] = true
+		_apply_level_button_state(index, level_control, art, HOVER_SCALE,
+			HOVER_BRIGHTNESS, HOVER_SATURATION))
+	button.mouse_exited.connect(func() -> void:
+		state["hovering"] = false
+		_apply_level_button_state(index, level_control, art, Vector2.ONE,
+			NORMAL_BRIGHTNESS, NORMAL_SATURATION))
+	button.button_down.connect(func() -> void:
+		_apply_level_button_state(index, level_control, art, PRESS_SCALE,
+			PRESS_BRIGHTNESS, PRESS_SATURATION))
+	button.button_up.connect(func() -> void:
+		var hovering := bool(state.get("hovering", false))
+		_apply_level_button_state(index, level_control, art,
+			HOVER_SCALE if hovering else Vector2.ONE,
+			HOVER_BRIGHTNESS if hovering else NORMAL_BRIGHTNESS,
+			HOVER_SATURATION if hovering else NORMAL_SATURATION))
+	button.pressed.connect(func() -> void:
+		var app2 = get_node_or_null("/root/App")
+		if app2 and _armed:
+			app2.play_level(index))
+
+
+func _apply_level_button_state(index: int, level_node: Control, art: CanvasItem,
+		target_scale: Vector2, target_brightness: float, target_saturation: float) -> void:
+	if not level_node:
+		return
+
+	var old_tween := _level_tweens.get(index) as Tween
+	if old_tween:
+		old_tween.kill()
+
+	var tw := create_tween().set_parallel()
+	_level_tweens[index] = tw
+	tw.tween_property(level_node, "scale", target_scale, 0.1).set_trans(Tween.TRANS_SINE)
+	if art and art.material is ShaderMaterial:
+		var mat := art.material as ShaderMaterial
+		tw.tween_property(mat, "shader_parameter/brightness",
+			target_brightness, 0.1).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(mat, "shader_parameter/saturation",
+			target_saturation, 0.1).set_trans(Tween.TRANS_SINE)
+
+
+func _make_level_button_material() -> ShaderMaterial:
+	var mat := ShaderMaterial.new()
+	mat.shader = _level_shader
+	mat.set_shader_parameter("brightness", NORMAL_BRIGHTNESS)
+	mat.set_shader_parameter("saturation", NORMAL_SATURATION)
+	return mat

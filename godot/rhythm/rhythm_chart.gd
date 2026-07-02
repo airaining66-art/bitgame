@@ -48,7 +48,7 @@ func set_default_for_level(level_id: String, variant := "normal") -> void:
 		"1-1":
 			meta["level_name"] = "Binary"
 			meta["music_id"] = "neon_pulse"
-			meta["music_path"] = "res://assets/Neon Pulse.mp3"
+			meta["music_path"] = "res://assets/music/neon_pulse.mp3"
 			meta["duration_mode"] = "music"
 			meta["start_bpm"] = 64.0
 			meta["end_bpm"] = 64.0
@@ -119,11 +119,11 @@ func set_default_for_level(level_id: String, variant := "normal") -> void:
 
 
 static func make_note(beat: float, judge_type: String, lane: String, kind: String,
-		duration_beats := 0.0, payload := {}) -> Dictionary:
+		note_duration_beats := 0.0, payload := {}) -> Dictionary:
 	return {
 		"id": _new_id(),
 		"beat": beat,
-		"duration_beats": duration_beats,
+		"duration_beats": note_duration_beats,
 		"judge_type": judge_type,
 		"lane": lane,
 		"kind": kind,
@@ -246,16 +246,16 @@ func seconds_to_beat(seconds: float) -> float:
 func _average_bpm() -> float:
 	var start := float(meta.get("start_bpm", 80.0))
 	var end := float(meta.get("end_bpm", start))
-	var exp := maxf(float(meta.get("bpm_curve_exp", 1.0)), 0.001)
-	return start + (end - start) / (exp + 1.0)
+	var curve_exp := maxf(float(meta.get("bpm_curve_exp", 1.0)), 0.001)
+	return start + (end - start) / (curve_exp + 1.0)
 
 
 func _beats_at_progress(progress: float, total_seconds: float) -> float:
 	var x := clampf(progress, 0.0, 1.0)
 	var start := float(meta.get("start_bpm", 80.0))
 	var end := float(meta.get("end_bpm", start))
-	var exp := maxf(float(meta.get("bpm_curve_exp", 1.0)), 0.001)
-	var bpm_integral := start * x + (end - start) * pow(x, exp + 1.0) / (exp + 1.0)
+	var curve_exp := maxf(float(meta.get("bpm_curve_exp", 1.0)), 0.001)
+	var bpm_integral := start * x + (end - start) * pow(x, curve_exp + 1.0) / (curve_exp + 1.0)
 	return total_seconds * bpm_integral / 60.0
 
 

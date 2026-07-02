@@ -182,12 +182,12 @@ func _conf() -> Dictionary:
 
 func _build_level() -> void:
 	role_sheet = _load_tex([
-		"res://assets/rent_characters_sheet_alpha.png",
-		"res://assets/rent_characters_sheet.png",
+		"res://assets/levels/1-5_rent/rent_characters_sheet_alpha.png",
+		"res://assets/levels/1-5_rent/rent_characters_sheet.png",
 	])
 	boss_tex = _load_tex([
-		"res://assets/rent_boss_greasy_alpha.png",
-		"res://assets/rent_boss_greasy.png",
+		"res://assets/levels/1-5_rent/rent_boss_greasy_alpha.png",
+		"res://assets/levels/1-5_rent/rent_boss_greasy.png",
 	])
 	_build_scene()
 	_build_items()
@@ -511,11 +511,13 @@ func _story_cfg_from_chart_note(note: Dictionary, warn_beats: float, active_beat
 	var judge := str(note.get("judge_type", RhythmChartScript.JUDGE_ROLL))
 	var payload: Dictionary = note.get("payload", {})
 	var is_boss: bool = judge == RhythmChartScript.JUDGE_ROLL
+	var hold_ms := float(payload.get("need_ms",
+		maxf(conductor.cycle_duration * active_beats - good_window(), good_window())))
 	return {
 		"kind": CHALLENGE_BOSS if is_boss else CHALLENGE_LANDLORD,
 		"warn_beats": float(warn_beats),
 		"beats": float(active_beats),
-		"need": float(payload.get("need", STORY_DEFAULT_TAPS)) if is_boss else float(payload.get("need_ms", STORY_DEFAULT_HOLD_MS)),
+		"need": float(payload.get("need", STORY_DEFAULT_TAPS)) if is_boss else hold_ms,
 		"strip_len": float(payload.get("strip_len", STORY_DEFAULT_LEN)),
 	}
 
@@ -805,6 +807,8 @@ func _start_challenge(kind: int, cfg: Dictionary = {}, head_beat := -999.0, tail
 		set_feedback("上司来了：连点确认！", COL_ORANGE)
 	else:
 		set_feedback("房东来了：按住别松！", COL_ORANGE)
+		if key_held:
+			_challenge_press_down()
 	play_sfx(snd_warn_stress, -8.0)
 
 

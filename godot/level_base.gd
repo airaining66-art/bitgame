@@ -232,18 +232,18 @@ func tone(freq: float, slide_to: float, dur: float, wave: String, gain: float) -
 	var data := PackedByteArray()
 	data.resize(n * 2)
 	var attack := 0.012
-	var phase := 0.0
+	var wave_phase := 0.0
 	for i in n:
 		var ti := float(i) / rate
 		var f := freq
 		if slide_to > 0.0:
 			f = freq * pow(slide_to / freq, ti / dur)
-		phase += TAU * f / rate
+		wave_phase += TAU * f / rate
 		var s := 0.0
 		match wave:
-			"sine": s = sin(phase)
-			"triangle": s = asin(sin(phase)) * (2.0 / PI)
-			"sawtooth": s = 2.0 * fposmod(phase / TAU, 1.0) - 1.0
+			"sine": s = sin(wave_phase)
+			"triangle": s = asin(sin(wave_phase)) * (2.0 / PI)
+			"sawtooth": s = 2.0 * fposmod(wave_phase / TAU, 1.0) - 1.0
 		var env := 0.0
 		if ti < attack:
 			env = ti / attack

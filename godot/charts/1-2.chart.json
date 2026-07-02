@@ -8,7 +8,7 @@
 		"level_id": "1-2",
 		"level_name": "Mango",
 		"music_id": "Jungle Monkey.mp3",
-		"music_path": "res://assets/Jungle Monkey.mp3",
+		"music_path": "res://assets/music/jungle_monkey.mp3",
 		"start_bpm": 70.0,
 		"subdivisions": 4.0,
 		"variant": "normal",
